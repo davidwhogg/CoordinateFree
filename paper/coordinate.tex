@@ -4,14 +4,27 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 
+% typesetting issues
+\setlength{\textwidth}{5.5in}
+\setlength{\textheight}{9.5in}
+\setlength{\oddsidemargin}{0.5\paperwidth}
+\addtolength{\oddsidemargin}{-1.0in} % latex oddity
+\addtolength{\oddsidemargin}{-0.5\textwidth}
+\setlength{\topmargin}{0.5\paperheight}
+\addtolength{\topmargin}{-1.0in} % latex oddity
+\addtolength{\topmargin}{-0.5\headheight}
+\addtolength{\topmargin}{-0.5\headsep}
+\addtolength{\topmargin}{-0.5\textheight}
+\frenchspacing\raggedbottom\sloppy\sloppypar
+
 \title{\bfseries%
-  Towards truly coordinate-free machine learning}
-\author{David W. Hogg}
-\author{Soledad Villar}
-\author{others}
+  Towards truly coordinate-free\\ machine learning}
+\author{%
+  David W. Hogg \and
+  Soledad Villar \and
+  others}
 \date{2022 June}
 
-\frenchspacing\raggedbottom\sloppy\sloppypar
 \begin{document}
 
 \maketitle\thispagestyle{empty}
@@ -29,5 +42,9 @@ And yet the laws can be expressed in a perfectly coordinate-free way by making u
 Coordinate freedom looks a lot like equivariance, but it only takes the precise form $f(g\cdot x)=g\cdot f(x)$ when certain geometric constants are included as inputs or learned.
 Here we explore these ideas, with toy asymmetric physics systems used as examples.
 We conjecture that coordinate-free methods will improve out-of-sample generalization even in cases in which the functions being learned are not equivariant.
+
+\section{Introduction}
+
+Hello World!
 
 \end{document}
