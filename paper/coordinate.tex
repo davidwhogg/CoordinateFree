@@ -1,0 +1,33 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[letterpaper]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\title{\bfseries%
+  Towards truly coordinate-free machine learning}
+\author{David W. Hogg}
+\author{Soledad Villar}
+\author{others}
+\date{2022 June}
+
+\frenchspacing\raggedbottom\sloppy\sloppypar
+\begin{document}
+
+\maketitle\thispagestyle{empty}
+
+\paragraph{Abstract:}
+There has been abundant work on making machine-learning methods exactly (or approximately) equivariant to group actions.
+That work structures functions such that $f(g\cdot x) = g\cdot f(x)$; that is, if the inputs $x$ are transformed by group element $g$, then the outputs $f(x)$ are similarly transformed.
+Equivariance is the correct goal when the rules of the game have symmetries, or when the input--output relationship is desired to be invariant to group operations.
+There have been successful implementations for translation (and subgroups), rotation (and subgroups), reflection, permutation, boost, and many others.
+The laws of physics contain a much deeper symmetry than any of these, however:
+Even in situations in which the physical law is not symmetric, it must be possible to describe the law in a coordinate-free way.
+These situations are common; for example the physics near the surface of the Earth is very strongly oriented:
+Free objects fall in the down direction, usually.
+And yet the laws can be expressed in a perfectly coordinate-free way by making use of the local gravitational acceleration vector.
+Coordinate freedom looks a lot like equivariance, but it only takes the precise form $f(g\cdot x)=g\cdot f(x)$ when certain geometric constants are included as inputs or learned.
+Here we explore these ideas, with toy asymmetric physics systems used as examples.
+We conjecture that coordinate-free methods will improve out-of-sample generalization even in cases in which the functions being learned are not equivariant.
+
+\end{document}
