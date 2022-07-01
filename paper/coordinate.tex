@@ -17,6 +17,10 @@
 \addtolength{\topmargin}{-0.5\textheight}
 \frenchspacing\raggedbottom\sloppy\sloppypar
 
+% math issues -- Hogg is trying to go all semantic here.
+\newcommand{\inv}{^{-1}}
+\newcommand{\R}{{\mathbb R}}
+
 \title{\bfseries%
   Towards truly coordinate-free\\ machine learning}
 \author{%
@@ -31,7 +35,7 @@
 
 \paragraph{Abstract:}
 There has been abundant work on making machine-learning methods exactly (or approximately) equivariant to group actions.
-That work structures functions such that $f(g\cdot x) = g\cdot f(x)$; that is, if the inputs $x$ are transformed by group element $g$, then the outputs $f(x)$ are similarly transformed.
+Equivariant functions obey relations like $f(g\cdot x) = g\cdot f(x)$; that is, if the inputs $x$ are transformed by group element $g$, then the outputs $f(x)$ are similarly transformed.
 Equivariance is the correct goal when the rules of the game have symmetries, or when the input--output relationship is desired to be invariant to group operations.
 There have been successful implementations for translation (and subgroups), rotation (and subgroups), reflection, permutation, boost, and many others.
 The laws of physics contain a much deeper symmetry than any of these, however:
@@ -39,12 +43,37 @@ Even in situations in which the physical law is not symmetric, it must be possib
 These situations are common; for example the physics near the surface of the Earth is very strongly oriented:
 Free objects fall in the down direction, usually.
 And yet the laws can be expressed in a perfectly coordinate-free way by making use of the local gravitational acceleration vector.
-Coordinate freedom looks a lot like equivariance, but it only takes the precise form $f(g\cdot x)=g\cdot f(x)$ when certain geometric constants are included as inputs or learned.
+Coordinate freedom looks a lot like equivariance, but it only takes the precise form $f(g\cdot x)=g\cdot f(x)$ when certain (hopefully learnable) geometric constants are included in the input $x$.
 Here we explore these ideas, with toy asymmetric physics systems used as examples.
 We conjecture that coordinate-free methods will improve out-of-sample generalization even in cases in which the functions being learned are not equivariant.
 
 \section{Introduction}
 
 Hello World!
+
+\paragraph{Our contributions:}
+
+\paragraph{Prior work:}
+
+\section{Problem setup and definitions}
+
+The problems we are interested in involve learning a function from data, as with machine learning and regression.
+The function we will learn takes scalar, vector, and tensor inputs, and delivers scalar, vector, and tensor outputs.
+Scalars, vectors, and tensors are defined by the transformation properties of their components under changes of coordinates.
+If $G$ is the group of rotations, reflections, and dilations (is there such a group?):
+\begin{itemize}
+  \item We say that $a\in\R$ is a scalar if, when the coordinate system is modified according to group element $g\in G$, $a$ does not change.
+  \item We say that $a\in\R^d$ is a vector if, when the coordinate system is modified according to group element $g\in G$, the components of $a$ change to $g\inv\cdot a$.
+  \item We say that $a\in(\R^d)^k$ is a $k$-tensor if, when the cordinate system is modified according to group element $g\in G$, the components of $a$ change to \ldots
+\end{itemize}
+[Obviously we have to mathify the above and be clear about what groups are in play.]
+
+It would be good to talk about translations too---Hogg believes that all of the above are invariant to translations.
+
+[Now define coordinate-freedom. What is a coordinate-free expression?]
+
+[Should we talk about units too? Is that a kind of coordinate freedom too?]
+
+We're going to think about natural-science applications, where there is no equivariance---the relevant functions we are trying to learn are not invariant or equivariant to translations and rotations (say)---but where we are exceedingly confident that the functions must be expressible in coordinate-free form.
 
 \end{document}
