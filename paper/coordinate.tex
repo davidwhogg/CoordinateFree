@@ -22,7 +22,9 @@
 
 % math issues -- Hogg is trying to go all semantic here.
 \newcommand{\inv}{^{-1}}
+\newcommand{\T}{^\top}
 \newcommand{\R}{{\mathbb R}}
+\newcommand{\surf}{{\mathrm{s}}}
 
 \title{\bfseries%
   Towards truly coordinate-free\\ machine learning}
@@ -91,14 +93,24 @@ We're going to think about natural-science applications, where there is no equiv
 \section{Experiments}
 
 \paragraph{Bouncing ball:}
-Our first experimental setup is the dynamics of an elastic particle, thrown or dropped near a hard surface.
-Written in terms of invariant scalar products, the Hamiltonian is
+Our first experimental setup is the dynamics of a particle, thrown or dropped near a uniformly moving planar elastic surface.
+The problem will be to predict the momentum and position $(p,q)$ of the particle at an elapsed time $T$ after an initial time at which the momentum and position were last known.
+
+Written in terms of invariant scalar products, the non-relativistic Hamiltonian $H(p,q)$ is
 \begin{align}
-    H &= K + V \\
-    K &= \frac{1}{2\,m}\,p\tran p \\
-    V &= m\,g\tran q + \frac{1}{2}\,k\,x^2\,I_{x < 0}
-    x &= foo
+    H(p,q) &= K + V \\
+    K(p) &= \frac{1}{2\,m}\,(p - m\,v_\surf)\T (p - m\,v_\surf) \\
+    V(q) &= m\,g\T (q_\surf - q) + \frac{1}{2}\,k\,x^2\,I_{x<0} \\
+    x &:= \frac{q_\surf\T}{\sqrt{q_\surf\T q_\surf}}\,(q_\surf - q) \\
+    I_{x<0} &:= \left\{\begin{array}{cl} 1 & x < 0 \\ 0 & x \geq 0\end{array}\right. ~,
 \end{align}
+where $p,q$ are the vector momentum and position (in some coordinate system), $m$ is the scalar particle mass, $v_\surf$ is the vector velocity of the planar (equilibrium) surface, $g$ is the vector acceleration due to gravity, $k$ is a scalar effective spring constant for the surface, $q_\surf$ is the vector pointing from the coordinate origin to the closest point on the planar (equilibrium) surface (this is a function of time if $v_\surf$ is non-zero), $I_{x<0}$ is a scalar indicator function, and $x$ is a scalar length which is the (signed) perpendicular distance between the particle and the surface.
+Some notes about this Hamiltonian:
+\begin{itemize}
+  \item The vectors are implicitly column vectors, such that products like $g\T (q_\surf - q)$ are scalars.
+  \item This expression for the Hamiltonian is explicitly constructed from classical-physics invariants, and these invariants are invariant to rotations, reflections, translations, and (Galilean) boosts.
+  \item This Hamiltonian is not time-invariant: If $v_\surf$ is non-zero, then $q_\surf$ varies with time. Thus in general the total mechanical energy will not be invariant.
+\end{itemize}
 
 \paragraph{Springy double pendulum:}
 Hello World!
