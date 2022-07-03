@@ -15,6 +15,9 @@
 \addtolength{\topmargin}{-0.5\headheight}
 \addtolength{\topmargin}{-0.5\headsep}
 \addtolength{\topmargin}{-0.5\textheight}
+\markboth{}{Hogg \& Villar / Coordinate-free machine learning}
+\pagestyle{myheadings}
+\linespread{1.08}
 \frenchspacing\raggedbottom\sloppy\sloppypar
 
 % math issues -- Hogg is trying to go all semantic here.
@@ -51,6 +54,13 @@ We conjecture that coordinate-free methods will improve out-of-sample generaliza
 
 Hello World!
 
+An illustrative example might be the following:
+In the study of equivariant machine learning, the springy double pendulum is often used as a toy problem for demonstrations \cite{Finzi}.
+The final conditions (position and velocity after elapsed time $T$) are related to the initial conditions (position and velocity at the initial time).
+The vectors are 3-dimensional, but the is problem is naturally $O(2)$-equivariant (equivariant with respect to rotations and reflections in the 2-d plane), since there is a gravitational vector that points downwards, breaking the 3-dimensional symmetry.
+However, if the gravitational vector is included as a feature in the problem, the problem becomes $O(3)$-equivariant; we showed that including this input and obtaining the higher symmetry is better for predictive accuracy both inside and outside of the support of the training set \cite{Yao}.
+The coordinate freedom of the problem is a kind of $O(3)$ equivariance, but this equivariance only appears when the geometric constants (the gravitational force vector in this case) are included as inputs.
+
 \paragraph{Our contributions:}
 
 \paragraph{Prior work:}
@@ -70,10 +80,31 @@ If $G$ is the group of rotations, reflections, and dilations (is there such a gr
 
 It would be good to talk about translations too---Hogg believes that all of the above are invariant to translations.
 
-[Now define coordinate-freedom. What is a coordinate-free expression?]
+[Now discuss the inputs to the function. Most known, a few unknown.]
+
+[Now define coordinate-freedom. What is a coordinate-free expression? I think it is something that is equivariant once all the unknown relevant quantities are included? But that seems wishy-washy. And I'd love a description that doesn't reduce to equivariance exactly.]
 
 [Should we talk about units too? Is that a kind of coordinate freedom too?]
 
 We're going to think about natural-science applications, where there is no equivariance---the relevant functions we are trying to learn are not invariant or equivariant to translations and rotations (say)---but where we are exceedingly confident that the functions must be expressible in coordinate-free form.
+
+\section{Experiments}
+
+\paragraph{Bouncing ball:}
+Our first experimental setup is the dynamics of an elastic particle, thrown or dropped near a hard surface.
+Written in terms of invariant scalar products, the Hamiltonian is
+\begin{align}
+    H &= K + V \\
+    K &= \frac{1}{2\,m}\,p\tran p \\
+    V &= m\,g\tran q + \frac{1}{2}\,k\,x^2\,I_{x < 0}
+    x &= foo
+\end{align}
+
+\paragraph{Springy double pendulum:}
+Hello World!
+
+\section{Discussion}
+
+Hello World!
 
 \end{document}
