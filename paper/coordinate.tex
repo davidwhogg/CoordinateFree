@@ -40,7 +40,7 @@
   David W. Hogg, 
   Soledad Villar, and
   others}
-\date{2022 June}
+\date{2022 July}
 
 \begin{document}
 
@@ -56,13 +56,19 @@ Even in situations in which the physical law is not symmetric, it must be possib
 These situations are common; for example the physics near the surface of the Earth is very strongly oriented:
 Free objects fall in the down direction, usually.
 And yet the laws can be expressed in a perfectly coordinate-free way by making use of the local gravitational acceleration vector.
-Coordinate freedom looks a lot like equivariance, but it only takes the precise form $f(g\cdot x)=g\cdot f(x)$ when certain (hopefully learnable) geometric constants are included in the input $x$.
+Coordinate freedom (for us) is defined to be an equivariance $f(g\cdot x; g\cdot\alpha)=g\cdot f(x; \alpha)$ but which only becomes exact when certain (hopefully learnable) geometric constants $\alpha$ are included as inputs to the function along with the original input $x$.
 Here we explore these ideas, with toy asymmetric physics systems used as examples.
 We conjecture that coordinate-free methods will improve out-of-sample generalization even in cases in which the functions being learned are not themselves equivariant.
 
 \section{Introduction}
 
-Hello World!
+Main points
+\begin{itemize}
+    \item Coordinate freedom is not a physically observable property of the universe. It refers to the mathematical choices one makes at describing it.
+    Example: units equivariance is not an observed property of the universe. Units equivariance can predict the need of an additional component in the theory. Example: Planck's constant. The gauge equivariance setting relates to this \cite{weiler}.
+    \item There is also the observed symmetries of the physical world: the laws of physics don't seem to depend on position, orientation, or time, which imply conservation of momentum, angular momentum and energy. This can be established experimentally. Example:  double pendulum toy dataset: the Hamiltonian symmetry may be observable the $O(2)$-equivariance is observable, but the fully $O(3)$-equivariance is not observable, it's a consequence of coordinate freedom. 
+    \item The language of group theory and equivariance can be used to explain both. And in particular it can be used to discover missing elements of the theory.
+\end{itemize}
 
 An illustrative example might be the following:
 In the study of equivariant machine learning, the springy double pendulum is often used as a toy problem for demonstrations \cite{Finzi}.
@@ -72,8 +78,15 @@ However, if the gravitational vector is included as a feature in the problem, th
 The coordinate freedom of the problem is a kind of $O(3)$ equivariance, but this equivariance only appears when the geometric constants (the gravitational force vector in this case) are included as inputs.
 
 \paragraph{Our contributions:}
+HOGG: We distinguish coordinate freedom from equivariance. Coordinate freedom is way way more general.
+
+HOGG: We produce a good, easy definition of coordinate freedom.
+
+HOGG: We demonstrate on toy problem(s) that this coordinate freedom definition is useful and can be incorporated into ML methods.
 
 \paragraph{Prior work:}
+HOGG thinks that the way ``coordinate free'' has been used in the literature is too GR-centric or gauge-centric or just identifying coordinate freedom with equivariance \cite{weiler}.
+That is just \emph{one kind} of coordinate freedom.
 
 \section{Problem setup and definitions}
 
@@ -86,7 +99,7 @@ If $G$ is the group of rotations, reflections, and dilations (is there such a gr
   \item We say that $a\in\R^d$ is a vector if, when the coordinate system is modified according to group element $g\in G$, the components of $a$ change to $g\inv\cdot a$.
   \item We say that $a\in(\R^d)^k$ is a $k$-tensor if, when the cordinate system is modified according to group element $g\in G$, the components of $a$ change to \ldots
 \end{itemize}
-[Obviously we have to mathify the above and be clear about what groups are in play.]
+[Obviously we have to mathify the above and be clear about what groups are in play.] Also we have to talk about odd-parity objects.
 
 It would be good to talk about translations too---Hogg believes that all of the above are invariant to translations.
 
@@ -123,8 +136,14 @@ Some notes about this Hamiltonian:
 \paragraph{Springy double pendulum:}
 Hello World!
 
+
+\paragraph{Learning Planck's constant:}
+
 \section{Discussion}
 
 Hello World!
 
+\bibliographystyle{plain}
+\raggedright
+\bibliography{coordinatefree}
 \end{document}
