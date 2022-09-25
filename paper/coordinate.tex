@@ -125,8 +125,9 @@ In contrast to the passive symmetries, the active symmetries of the Universe are
 The laws of physics do not seem (at current precision) to depend on position, orientation, or time, which in turn imply conservation of momentum, angular momentum and energy according to Noether's Theorem \cite{noether} (because the Universe appears also to be Lagrangian).
 
 Both passive and active symmetries can be illustrated by the commutative diagram in \eqref{eq.diagram}. The space $\mathcal X$ could be a world object, and $\Phi$ and $\Psi$ are encodings or representations of this object into a space $\mathcal H$ (here we mean representation in the broad sense, not the group theoretic notion, see next Section). Another interpretation of this diagram has $\mathcal X$ as a space of input data and $\mathcal H$ as the space of predictions.
+\vspace{-1ex}%
 \begin{equation}\label{eq.diagram}
-\begin{tikzcd}[]%[row sep=2.5em]
+\begin{tikzcd}[]
   {\cal X}\arrow[r,"\alpha"] \arrow[d,"\Phi",swap] & {\cal X}  \arrow[d,"\Psi"]\\
 {\cal H} \arrow[r,"\beta"]  & {\cal H} 
 \end{tikzcd}
@@ -158,9 +159,6 @@ Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X$ and $\rho_
 
 The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps(X,Y)}$ then $g\cdot f = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$. One can check that the equivariant maps are the fixed points of this action. This shows that equivariances define symmetries in the space of maps. 
 
-%Equivariance is related to covariance in that covariances (the symmetries created by invariance to passive diffeomorphisms) can be written in terms of equivariances.
-%But equivariance is a broader term, because the symmetries created by active transformations can also be described in terms of equivariances.
-
 \paragraph{invariance}
 \emph{Invariance} is the special case of equivariance, where the action in the output space is trivial.
 
@@ -169,7 +167,6 @@ When physical quantities are measured, or represented in a computer, they must b
 The redundancy of this representation---the fact that the investigator had many choices for the coordinate system---leads to a symmetry, which is known as \emph{coordinate freedom}.
 It can be stated roughly as follows:
 If the inputs to a physics problem are moved to a different coordinate system (because of a change in the origin or orientation), the outputs of the problem must be similarly moved.
-HOGG THIS SUGGESTS ANOTHER COMMUTATIVE DIAGRAM.
 The subject of coordinate freedom is most often discussed in the context of general relativity \cite{gr}, but in fact this symmetry appears in all of the laws of physics.
 
 \paragraph{geometric principle}
@@ -184,7 +181,6 @@ When physical law is written in a way that is consistent with invariance under \
 The covariance of relevance in general relativity \cite{einstein} is known as \emph{general covariance}.
 Because general relativity is a theory in $3+1$ spacetime dimensions with a non-trivial spatially varying metric, this covariance is a very strong symmetry.
 General covariance is sometimes called coordinate freedom, but it is a special case of coordinate freedom.
-
 
 \paragraph{conservation law}
 We say that a quantity obeys a \emph{conservation law} if changes in that quantity (with time) inside some small, closed volume can are quantitatively explained by fluxes of that quantity through the surface of that volume.
@@ -204,7 +200,6 @@ All quantities that can be similarly converted to units of joules have dimension
 \paragraph{units covariance} When physical quantities are measured, or represented in a computer, they must be measured in some unit system.
 The redundancy of this representation---the fact that the investigator had many choices for the unit system---leads to a symmetry that underlies the method of ``dimensional analysis'':
 The left-hand side and the right-hand side of any physical relation must have precisely the same units.
-HOGG: THIS SUGGESTS A COMMUTATIVE DIAGRAM.
 This symmetry is not trivial: It leads to important results (including some described below).
 
 \paragraph{gauge freedom}
@@ -256,7 +251,7 @@ It is shown in \cite{yao2021simple} that when the problem is treated with a mach
 That is, even though the dynamics of the double pendulum contains an explicit spatial anisotropy, the existence of the passive $O(3)$ symmetry is powerful for generalization.
 
 \section{Discussion and other random notes}
-BERNHARD: PLEASE MAKE SURE THAT THE POINTS YOU MAKE HERE APPEAR SOMEWHERE ABOVE. 
+BERNHARD: PLEASE MAKE SURE THAT THE POINTS YOU MAKE HERE APPEAR SOMEWHERE ABOVE. AND YOU AREN'T PERMITTED TO CHANGE THE LENGTH!!
 
 Four special cases:
 \begin{enumerate}
