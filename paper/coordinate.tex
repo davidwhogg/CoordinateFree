@@ -51,6 +51,7 @@
 \newcommand{\s}{\unit{s}}
 
 % text macros
+\renewcommand{\paragraph}[1]{\par\textbf{#1}~---~}
 \newcommand{\bernhard}[1]{~B: \textcolor{red}{\textbf{#1}}}
 
 \title{Representation-agnostic physics, passive symmetries,\\ and equivariant machine learning}
@@ -99,7 +100,7 @@
 
 \maketitle
 
-\paragraph{Abstract:} 
+\paragraph{Abstract} 
 There has been abundant work on making machine-learning methods exactly (or approximately) equivariant to group actions.
 Equivariant functions obey relations like $f(g\cdot x) = g\cdot f(x)$; that is, if the inputs $x$ are transformed by group element $g$, then the outputs $f(x)$ are similarly transformed.
 %Equivariance is the correct goal when the rules of the game have symmetries, or when the input--output relationship is desired to be invariant to group operations.
@@ -114,100 +115,105 @@ Our conjecture is that enforcing passive symmetries in the representations used 
 
 In physics there are two types of symmetries: passive symmetries arising from the arbitrariness of the mathematical representation (including symmetries arising from coordinate freedoms and equivalences of reparameterizations) and active symmetries empirically established by observations and experiments (including the symmetries that imply the fundamental conservation laws, like momentum, energy, and angular momentum). Both of these symmetries can be expressed in terms of group actions and equivariances, but the epistemological content and range of applicability are very different. 
 
-The physical world is independent of the mathematical choices we make to describe it. This is what in physics is sometimes called  \emph{covariance}. As a consequence of the existing redundancies in the space of representations and parameterizations of the world we obtain a large set of symmetries. Mathematically, this can be formulated as invariances or equivariances with respect to changes of coordinates or reparameterizations. In the physics literature this is called invariance under \emph{passive} diffeomorphisms (see Section 4.1 of \cite{rovelli2000loop}). This is, for instance, the case of gauge equivariance, and units equivariance. These symmetries can be theoretically established with no need of observations by definition. %They could also be verified through observations but they can be known a priori without them. 
-The groups involved in coordinate freedom can be very large and complicated (e.g.: reparameterizations). An extensive monograph by Weiler, Forré, Verlinde, and Welling describe the state of the art of coordinate independent machine learning \cite{weiler}.
+The redundancies in the representations and parameterizations of the world contain a large set of symmetries.
+Mathematically, this can be formulated as invariances or equivariances with respect to changes of coordinates or parameterizations (see, eg, Section 4.1 of \cite{rovelli2000loop}).
+These passive symmetries include gauge freedom, units covariance and general covariance.
+These symmetries can be theoretically established with no need of observations, as they arise solely from the principle that the physical world acts independently of the mathematical choices we make to describe it.
+The groups involved in coordinate freedom can be very large and complicated (eg, that of reparameterizations).
 
-The active symmetries of the universe are the ones that needed to be established experimentally. The laws of physics do not seem to depend on position, orientation, or time, which imply conservation of momentum, angular momentum and energy according to Noether's Theorem \cite{noether}. These symmetries can be expressed as group invariances and equivariances\bernhard{which of the two?} with respect to simple Lie groups such as the orthogonal group, the Lorentz group, the symplectic group, or the symmetric group (permutations). 
+In contrast to the passive symmetries, the active symmetries of the Universe are the ones that must be established experimentally.
+The laws of physics do not seem (at current precision) to depend on position, orientation, or time, which in turn imply conservation of momentum, angular momentum and energy according to Noether's Theorem \cite{noether} (because the Universe appears also to be Lagrangian).
 
-Both passive and active symmetries can be illustrated by the commutative diagram in \eqref{eq.diagram}. The space $\mathcal X$ could be a world object, and $\Phi$ and $\Psi$ are encodings or representations of this object into a space $\mathcal H$ (here we mean representation in the broad sense, not the group theoretic notion, see next Section).
+Both passive and active symmetries can be illustrated by the commutative diagram in \eqref{eq.diagram}. The space $\mathcal X$ could be a world object, and $\Phi$ and $\Psi$ are encodings or representations of this object into a space $\mathcal H$ (here we mean representation in the broad sense, not the group theoretic notion, see next Section). Another interpretation of this diagram has $\mathcal X$ as a space of input data and $\mathcal H$ as the space of predictions.
 \begin{equation}\label{eq.diagram}
 \begin{tikzcd}[]%[row sep=2.5em]
-  {\cal X}\arrow[r,"f"] \arrow[d,"\Phi",swap] & {\cal X}  \arrow[d,"\Psi"]\\
-{\cal H} \arrow[r,"h"]  & {\cal H} 
+  {\cal X}\arrow[r,"\alpha"] \arrow[d,"\Phi",swap] & {\cal X}  \arrow[d,"\Psi"]\\
+{\cal H} \arrow[r,"\beta"]  & {\cal H} 
 \end{tikzcd}
 \end{equation}
-%The symmetries are a consequence of the commutative diagram $\Psi\circ f = h \circ \Phi$. 
-The passive diffeomorphisms are the transformations $\{h:\mathcal H \to \mathcal H\}$ where $f$ is the taken to be the identity map, namely redundancies in the possible representations of the world that do not change the world (also known as covariances). The symmetries we obtain with non trivial $f$ and $\Phi\equiv \Psi$ are referred to as invariance with respect to \emph{active} diffeomorphisms. As discussed by Rovelli and Gaul in Section 4.1 of \cite{rovelli2000loop}, all theories are invariant with respect passive diffeomorphisms, but not all are invariant with respect to active diffeomorphisms. 
+The passive diffeomorphisms are the transformations $\{\beta:\mathcal H \to \mathcal H\}$ where $\alpha$ is the taken to be the identity map, namely redundancies in the possible representations of the world that do not change the world (also known as covariances). The active symmetries the transformations $\{\beta:\mathcal H \to \mathcal H\}$ with non trivial $\alpha$ in the same diagram when $\Phi\equiv \Psi$.
+Because of the indifference of the physical world to mathematicians' choices, all theories are invariant with respect passive diffeomorphisms.
+Not all contain invariances with respect to active symmetries. 
 
+When the transformations $\alpha$ and $\beta$ are actions by a certain group, then both active and passive symmetries can be expressed in terms of group equivariances. These group equivariances are useful for implementing machine learning models \cite{foo}. Equivariant machine learning models can predict properties and behaviour of physical systems (as argued in \cite{cheng2019covariance}), with the correct inductive bias, achieving smaller generalization error \cite{bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning} and allowing for out-of-distribution generalization \cite{villar2022dimensionless}. 
+The non-trivial symmetries of general relativity have even been considered for machine learning \cite{weiler}.
 
-When the transformations $f$ and $h$ are actions by a certain group, then both active and passive symmetries can be expressed in terms of group equivariances. These group equivariances are useful for implementing machine learning models that can predict properties and behaviour of physical systems (as argued in \cite{cheng2019covariance}), with the correct inductive bias, achieving smaller generalization error \cite{bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning} and allowing for out-of-distribution generalization \cite{villar2022dimensionless}. 
+Most importantly, imposing a passive symmetry on the structure of a machine-learning model can permit the discovery of potentially missing elements in the physical description of the problem. We illustrate these ideas with examples below, one in the context of units covariance, and one in the context of geometric coordinate freedom.
+The passive symmetries are seemingly trivial statements about the world, but they lead to strong constraints on the laws of physics, and deliver scaling arguments that solve real physics problems.
+They can constrain machine learning in valuable ways.
+\emph{We conjecture that enforcing passive symmetries in machine-learning and data-analysis tasks will lead to generalization improvements in a wide range of circumstances.}
+In particular, we make this conjecture even for problems in which no (or few) active symmetries are present.
+After all, most problems (like reading handwriting or predicting gravitational trajectories near the surface of the Earth) are not equivariant to rotations, reflections, and translations, but they are all, in their data-generating processes, exactly and precisely coordinate free.
 
-Most importantly, imposing the group equivariances in the problem formulation allow us to discover the existence of potentially missing elements in the physical description of the data problem. We illustrate these ideas with two examples: the $O(3)$-equivariance in the example of a double pendulum with springs from \cite{finzi2021practical, yao2021simple} that allows us to discover the direction of the gravity, and the units-equivariance in the black body radiation constant that allows us to predict the existence of a dimensional constant such as Planck's constant.
-
-These passive symmetries are straightforward but they lead to strong constraints in the laws of physics, scaling arguments that solve physics problems, and they can constraint machine learning in a non-trivial way. We conjecture that imposing the symmetries in ML will 
-
-MAKE A CONJECTURE that imposing coordinate freedom on ML and data-analysis tasks will be valuable in a much wider range of circumstances than imposing observation-based symmetries. After all, most problems (like reading handwriting or predicting gravitational trajectories near the surface of the Earth) are not equivariant to rotations, reflections, and translations, but they are all, by construction, exactly coordinate free.
-
-In what follows, we demonstrate these concepts with a few examples, and conclude with some outlook and conjectural bullshit.
+The goal of this note is to provide definitions for these concepts and to bolster the conjecture through a few examples.
 
 \section{Definitions and terminology}
 
-\paragraph{symmetry:} Let $X$ be a space and $\mathcal T= \{ T:X\to X \}$ a space of transformations of $X$. Then we say $X$ is \emph{symmetric} with respect to $\mathcal T$ if $T(X)=X$ for all $T\in \mathcal T$.   
+\paragraph{symmetry} Consider $V$ a vector space and $X\subseteq V$ a subset. Let $\mathcal T= \{ T:V\to V \}$ be a space of transformations of $V$. Then we say $X$ is \emph{symmetric} with respect to $\mathcal T$ if $T(X)=X$ for all $T\in \mathcal T$. For example, $X$ could be the sphere $X=\{x\in \mathbb R^3: \|x\|_2=1\}$ and $\mathcal T$ the space or rotations of $\mathbb R^3$ that fix the origin.
 
-\paragraph{coordinate freedom:}
-When physical quantities are measured, or represented in a computer, they must be measured in some coordinate system.
+\paragraph{representation} There are at least three meanings of the word \emph{representation}. One is the approximate way we describe the world objects in either a physics model or a computer. The second meaning corresponds with the different mathematically equivalent ways one can express a mathematical object: for instance, a vector can be expressed in cartesian or polar coordinates. The third meaning is the \emph{representation of a group} $G$: an action $\rho: G\to \text{GL}(V)$ where $V$ is a vector space and $\text{GL}(V)$ denotes the space of invertible linear transformations from $V$ to itself. Note that representations of the group allow us to understand the group multiplication in terms of matrix multiplication.
+
+\paragraph{equivariance}
+Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X$ and $\rho_Y$ respectively. We say that function $f:X\to Y$ is \emph{equivariant} if for any group element $g\in G$ and any possible input $x$, the function obeys $f( \rho_X(g) x) = \rho_Y(g)\cdot f(x)$.
+
+The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps(X,Y)}$ then $g\cdot f = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$. One can check that the equivariant maps are the fixed points of this action. This shows that equivariances define symmetries in the space of maps. 
+
+%Equivariance is related to covariance in that covariances (the symmetries created by invariance to passive diffeomorphisms) can be written in terms of equivariances.
+%But equivariance is a broader term, because the symmetries created by active transformations can also be described in terms of equivariances.
+
+\paragraph{invariance}
+\emph{Invariance} is the special case of equivariance, where the action in the output space is trivial.
+
+\paragraph{coordinate freedom}
+When physical quantities are measured, or represented in a computer, they must be expressed in some coordinate system.
 The redundancy of this representation---the fact that the investigator had many choices for the coordinate system---leads to a symmetry, which is known as \emph{coordinate freedom}.
 It can be stated roughly as follows:
 If the inputs to a physics problem are moved to a different coordinate system (because of a change in the origin or orientation), the outputs of the problem must be similarly moved.
 HOGG THIS SUGGESTS ANOTHER COMMUTATIVE DIAGRAM.
 The subject of coordinate freedom is most often discussed in the context of general relativity \cite{gr}, but in fact this symmetry appears in all of the laws of physics.
 
-\paragraph{geometric principle:}
+\paragraph{geometric principle}
 One of the many consequences of coordinate freedom is that the laws of physics obey a \emph{geometric principle} \cite{mcp}, in which the laws of physics must be described in terms of scalars, vectors, and tensors (and their odd-parity partners pseudoscalars, pseudovectors, and pseudotensors).
 These scalar, vector, and tensor quantities may only be combined in certain ways, encoded in detail by the Ricci--Levi-Civita (or Einstein) summation rules \cite{ricci, einsteinsummation}.
 These considerations have recently been exploited in machine learning contexts \cite{villar2021scalars}.
 
-\paragraph{covariance:}
+\paragraph{covariance}
 When physical law is written in a way that is consistent with invariance under \emph{passive diffeomorphisms} (as mentioned above), then the laws are sometimes said to be \emph{covariant}.
 
-\paragraph{general covariance:}
+\paragraph{general covariance}
 The covariance of relevance in general relativity \cite{einstein} is known as \emph{general covariance}.
 Because general relativity is a theory in $3+1$ spacetime dimensions with a non-trivial spatially varying metric, this covariance is a very strong symmetry.
 General covariance is sometimes called coordinate freedom, but it is a special case of coordinate freedom.
 
-\paragraph{representation:} There are at least three meanings of the word \emph{representation}. One is the approximate way we describe the world objects in either a physics model or a computer. The second meaning corresponds with the different mathematically equivalent ways one can express a mathematical object: for instance, a vector can be expressed in cartesian or polar coordinates. The third meaning is the \emph{representation of a group} $G$: an action $\rho: G\to \text{GL}(V)$ where $V$ is a vector space and $\text{GL}(V)$ denotes the space of invertible linear transformations from $V$ to itself. Note that representations of the group allow us to understand the group multiplication in terms of matrix multiplication.
 
-\paragraph{equivariance:}
-Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X$ and $\rho_Y$ respectively. We say that function $f:X\to Y$ is \emph{equivariant} if for any group element $g\in G$ and any possible input $x$, the function obeys $f( \rho_X(g) x) = \rho_Y(g)\cdot f(x)$.
-
-The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps(X,Y)}$ then $g\cdot f = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$. One can check that the equivariant maps are the fixed points of this action. This shows that equivariances define symmetries in the space of maps. 
-
-Equivariance is related to covariance in that covariances (the symmetries created by invariance to passive diffeomorphisms) can be written in terms of equivariances.
-But equivariance is a broader term, because the symmetries created by active transformations can also be described in terms of equivariances.
-
-\paragraph{invariance:}
-When applied to a function, the concept known as \emph{invariance} is a special case of equivariance:
-A function is invariant with respect to a group $G$ if, for any group element $g\in G$ and any possible input $x$, the function obeys $f(g\cdot x) = f(x)$.
-But invariance is used here also to be about physical relationships, laws, and concepts.
-
-\paragraph{conservation law:}
+\paragraph{conservation law}
 We say that a quantity obeys a \emph{conservation law} if changes in that quantity (with time) inside some small, closed volume can are quantitatively explained by fluxes of that quantity through the surface of that volume.
 Famously, Emmy Noether connected invariants to conservation laws \cite{noether}.
 Such results are not of direct relevance to what's being described in this contribution, because they are only relevant in the context of invariance with respect to \emph{active} transformations (not merely passive diffeomorphisms), and they are only relevant in systems that obey Lagrangian dynamics (or similar).
 
-\paragraph{units:} All physical quantities are measured with a system of what we call \emph{units}.
+\paragraph{units} All physical quantities are measured with a system of what we call \emph{units}.
 For example: A mass might be measured in $\kg$ or Solar masses.
 An energy might be measured in joules or BTUs.
 A quantity can be transformed from one unit system to another by multiplication by a dimensionless number (which, for example, might be the number of $\kg$ in a Solar mass.
 Almost all quantities---including almost all scalars, vectors, and tensors---have units.
 
-\paragraph{dimensions:} The equivalence classes of quantities with units are called \emph{dimensions}.
+\paragraph{dimensions} The equivalence classes of quantities with units are called \emph{dimensions}.
 For example, all quantities that have units that can be converted (by multiplication by a dimensionless number) to units of $\kg$ have dimensions of mass.
 All quantities that can be similarly converted to units of joules have dimensions of energy.
 
-\paragraph{units covariance:} When physical quantities are measured, or represented in a computer, they must be measured in some unit system.
+\paragraph{units covariance} When physical quantities are measured, or represented in a computer, they must be measured in some unit system.
 The redundancy of this representation---the fact that the investigator had many choices for the unit system---leads to a symmetry that underlies the method of ``dimensional analysis'':
 The left-hand side and the right-hand side of any physical relation must have precisely the same units.
 HOGG: THIS SUGGESTS A COMMUTATIVE DIAGRAM.
 This symmetry is not trivial: It leads to important results (including some described below).
 
-\paragraph{gauge freedom:}
+\paragraph{gauge freedom}
 Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
 These freedoms lead to additional symmetries which are known as gauge.
 
 \section{Examples}
 
-\paragraph{Free body in gravity:}
+\paragraph{Free body in gravity}
 Consider a mass $m$ near the surface of the Earth, in a location where the surface of the Earth can be considered as a horizontal plane, and close enough to the surface such that the gravitational field can be considered to be determined by a constant (not spatially varying) vector with magnitude $g$ and direction downwards.
 \textsl{Question~1:}~If this mass $m$ is dropped (released at rest) from a small height $h$ from above the ground, how much time $T$ does it take to fall to the ground?
 \textsl{Question~2:}~If this mass $m$ is launched from the surface at a low velocity of magnitude $v$ at an angle $\theta$ to the horizontal, how much horizontal distance $L$ will it fly before it hits the surface again?
@@ -221,63 +227,36 @@ The only possible combination of $m, g, v, \theta$ that has units of length is $
 That is, both Questions~1 and 2 can be answered up to a dimenionless constant (or function) without any considerations beyond the considerations of the units of the inputs and outputs.
 And both of those answers don't depend in any way on the input mass $m$, which is the symmetry or invariance that led to the discovery of general relativity \cite{gr}.
 
-To make this formal we can follow \cite{villar2022dimensionless} and define a XXX in $(\mathbb R, \mathbb Z^k)$ in which...
+This shows that the fundamental structure of physical law can be inferred from units covariance only, which is a passive symmetry.  Related ideas are explored more formally in \cite{villar2022dimensionless}.
 
-\paragraph{Black-body radiation:}
-An important moment in the history of physics was the discovery by Planck \cite{planck} that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation
+\paragraph{Black-body radiation}
+An important moment in the history of physics was the discovery by Planck that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation \cite{planck}
 \begin{equation}
     B_\lambda(\lambda) = \frac{2\,h\,c^2}{\lambda^5}\,\frac{1}{\exp\frac{h\,c}{\lambda\,k\,T} - 1}~,
 \end{equation}
-where (HOGG CHECK EQUATION)
-$h$ is Planck's constant,
+where $h$ is Planck's constant,
 $c$ is the speed of light,
 $\lambda$ is the wavelength of the electromagnetic radiation,
 $k$ is Boltzmann's constant,
 and $T$ is the temperature.
 In finding this formula, Planck had to posit the existence (and units) of the constant $h=6.6\times 10^{-34}\,\kg\,\m^2\,\s^{-1}$ (his original value was presented with different units, but the same dimensions).
-Prior to Planck's discovery and introduction of $h$, the only dimensionally acceptable expression for the black-body intensity was $B_\lambda(\lambda)=2\,c\,k\,T/\lambda^4$ (HOGG CHECK), which is the Rayleigh-Jeans Law, or the long-wavelength (infrared) or high-temperature limit of Planck's expression.
+Prior to Planck's discovery and introduction of $h$, the only dimensionally acceptable expression for the black-body intensity was $B_\lambda(\lambda)=2\,c\,k\,T/\lambda^4$, which is the Rayleigh-Jeans Law, or the long-wavelength (infrared) or high-temperature limit of Planck's expression.
 Planck's discovery was important because it solved the ``ultraviolet catastrophe'' of classical physics (the problem that thermal objects ought to have infinite heat capacity), and it seeded the theory of quantum mechanics, which is governed by Planck's constant $h$.
-Here we look at this problem through the lens of dimensional analysis, and the equivariance of physics with respect to changes of units.
 
-In the problem that Planck solved, the data were measurements of intensity $B_\lambda$ as a function of wavelength $\lambda$ for objects that were very close to being black bodies at different temperatures $T$.
-Data of this form are shown in FIGURE~WHAT?, along with both the true radiation law and the power-law form of the long-wavelength limit.
+This problem can be solved almost directly with the passive symmetry of units covariance.
+That is, the exponential cut-off of the intensity appears at a wavelength set by the temperature and a new constant, that must have units of action (or action times $c$, or action divided by $k$, or one of a set of other options.
+We have shown (\url{https://github.com/foo/bar/}), with a simple toy training set, that no units-covariant regression for the intensity as a function of $\lambda, T, c, k$ can reproduce accurately the intensity $B_\lambda$, but that when the regression is permitted to introduce a new dimensional constant (but remain units covariant given the new constant), it finds a constant with units (and, less precisely, magnitude) that is consistent with $h$ (or $h$ times a combination of $c$ and $k$).
+Again, this shows that the passive symmetry leads to powerful capability.
 
-The main point of the observational data is that they reveal that there is a missing input and that input has to have certain units in the mix. The second point is that we can learn from data a constant equivalent to Planck's in this problem. 
-
-Demo:
-
-Experiment 1: introducing Planck's constant makes the inference possible (otherwise it needs to be a linear function). 
-
-Experiment 2: we can ``learn" something equivalent to Planck's constant in a certain regime, but maybe comment that the need of Planck's constant is not observable if the observations are constrained to the infrared regime.
-
-
-\paragraph{Springy double pendulum:}
-The double pendulum connected by springs in 3D is a toy example often used in equivariant machine learning demonstrations \cite{finzi2021practical}. 
+\paragraph{Springy double pendulum}
+The double pendulum connected by springs in 3D is a toy example often used in equivariant machine learning demonstrations \cite{finzi2021practical; yao2021simple}. 
 The final conditions (position and velocities of both masses after elapsed time $T$) are related to the initial conditions (position and velocities of the masses at the initial time).
-The vectors are 3-dimensional, but the is problem is naturally $O(2)$-equivariant (equivariant with respect to rotations and reflections in the 2-d plane), since there is a gravitational vector that points downwards, breaking the 3-dimensional symmetry.
+The vectors are 3-dimensional, subject to a passive $O(3)$ equivariance, but the problem contains an \emph{active} $O(2)$ equivariance (the dynamics is equivariant with respect to rotations and reflections in the 2-d plane normal to gravity).
+It is shown in \cite{yao2021simple} that when the problem is treated with a machine-learning method that is restricted to be coordinate free for the full passive $O(3)$ symmetry, training and generalization are improved over the case in which the method is restricted to be equivariant for the smaller active $O(2)$ symmetry.
+That is, even though the dynamics of the double pendulum contains an explicit spatial anisotropy, the existence of the passive $O(3)$ symmetry is powerful for generalization.
 
-If the gravitational vector is included as a feature in the problem, the problem becomes $O(3)$-equivariant. Moreover it has been shown that including this input and obtaining the higher symmetry leads to a better predictive accuracy both inside and outside of the support of the training set \cite{yao2021simple}. The coordinate freedom of the problem is a kind of $O(3)$ equivariance, but this equivariance only appears when the geometric constants (the gravitational force vector in this case) are included as inputs. The models in \cite{finzi2021practical,yao2021simple, villar2022dimensionless} also impose a symplectic symmetry (or time translation?) coming from the fact that the system is Hamiltonian. Units equivariance is also imposed in \cite{villar2022dimensionless}.
-
-
-Experiment 2: Maybe doesn't exist (George?). Now we do the same the same thing, where we enforce the O(3) symmetry by adding 3 additional parameters, the components of an unknown vector. Can we learn it? Just as in the Planck thing we can only learn it up to a constant. We are not making it units equivariant, but that's an additional symmetry we could have added. 
-
-
-
-
-\section{Models and representation}
-abstract definition of what is a model so the geometric aspect of the physical law and the units aspect of the physical law are both instances of this. 
-
-
-
-$$
-\begin{tikzcd}[]%[row sep=2.5em]
-  {\cal H}\arrow[r,"\rho(g)"] & {\cal H}\\
-{\cal X} \arrow[u,"\Phi"] \arrow[r,"g"] & {\cal X} \arrow[u,"\Phi"]
-\end{tikzcd}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-$$
-
-General idea: $\cal X$ is the real world, $g$ is some mapping (algorithm, group action, dynamics, ...) in the real world, $\Phi$ is a map that in ML we would call a ``representation'' (which may or may not be a representation in the narrow mathematical sense), $\rho$ is a homomorphism from a structure in the world to a corresponding structure in the representation space $\cal H$.
+\section{Discussion and other random notes}
+BERNHARD: PLEASE MAKE SURE THAT THE POINTS YOU MAKE HERE APPEAR SOMEWHERE ABOVE. 
 
 Four special cases:
 \begin{enumerate}
@@ -289,88 +268,12 @@ Four special cases:
 
 xxx could also talk about equivariance with respect to sample size. Statistical inference procedures should be expressed s.t.\ they work independent of sample size
 
-
-
 Approximate symmetries and representations that are approximate.
 
 Any connection between this stuff and causality?
 Example of cannon ball where influence of $m$ can be ruled out based on dimensional analysis --- write an SCM: (1) two variables are the initial values of $v$, $m$, chosen independently, and the final value of $l$ (2) $g$ is considered constant, (3) $\theta$ is the noise affecting $l$. From time constraints we know that the only possible causal arrows are from $v, m$ to $l$. From dimensional analysis, the arrow $m\to l$ is excluded, so we have identified the causal graph $v\to l$.
 
-\section{Discussion}
-We introduced a dimensional constant in Planck's experiment, but we could have introduced a dimensional field. Comment on the observational properties of such a field.
-
-%Check this out http://www.oliverpooley.org/uploads/7/7/5/9/7759400/handout4.pdf (citation from book describing passive and active diffeomorphisms; we could use this language).
-%the original quote comes from this paper https://arxiv.org/pdf/gr-qc/9910079.pdf
-
-% \section{Other things we wrote (old)}
-
-% Main points
-% \begin{itemize}
-%     \item Coordinate freedom is not a physically observable property of the universe. It refers to the mathematical choices one makes at describing it. The gauge equivariance setting relates to this \cite{weiler}.
-%     Example: units equivariance is not an observed property of the universe. Units equivariance can predict the need of an additional component in the theory. Example: Planck's constant. 
-%     \item There is also the observed symmetries of the physical world: the laws of physics don't seem to depend on position, orientation, or time, which imply conservation of momentum, angular momentum and energy. This can be established experimentally. Example:  double pendulum toy dataset: the Hamiltonian symmetry may be observable the $O(2)$-equivariance is observable, but the fully $O(3)$-equivariance is not observable, it's a consequence of coordinate freedom. 
-%     \item The language of group theory and equivariance can be used to explain both. And in particular it can be used to discover missing elements of the theory.
-% \end{itemize}
-
-% An illustrative example might be the following:
-
-% \paragraph{Our contributions:}
-% HOGG: We distinguish coordinate freedom from equivariance. Coordinate freedom is way way more general.
-
-% HOGG: We produce a good, easy definition of coordinate freedom.
-
-% HOGG: We demonstrate on toy problem(s) that this coordinate freedom definition is useful and can be incorporated into ML methods.
-
-% \paragraph{Prior work:}
-% HOGG thinks that the way ``coordinate free'' has been used in the literature is too GR-centric or gauge-centric or just identifying coordinate freedom with equivariance \cite{weiler}.
-% That is just \emph{one kind} of coordinate freedom.
-
-% \section{Problem setup and definitions}
-
-% The problems we are interested in involve learning a function from data, as with machine learning and regression.
-% The function we will learn takes scalar, vector, and tensor inputs, and delivers scalar, vector, and tensor outputs.
-% Scalars, vectors, and tensors are defined by the transformation properties of their components under changes of coordinates.
-% If $G$ is the group of rotations, reflections, and dilations (is there such a group?):
-% \begin{itemize}
-%   \item We say that $a\in\R$ is a scalar if, when the coordinate system is modified according to group element $g\in G$, $a$ does not change.
-%   \item We say that $a\in\R^d$ is a vector if, when the coordinate system is modified according to group element $g\in G$, the components of $a$ change to $g\inv\cdot a$.
-%   \item We say that $a\in(\R^d)^k$ is a $k$-tensor if, when the cordinate system is modified according to group element $g\in G$, the components of $a$ change to \ldots
-% \end{itemize}
-% [Obviously we have to mathify the above and be clear about what groups are in play.] Also we have to talk about odd-parity objects.
-
-% It would be good to talk about translations too---Hogg believes that all of the above are invariant to translations.
-
-% [Now discuss the inputs to the function. Most known, a few unknown.]
-
-% [Now define coordinate-freedom. What is a coordinate-free expression? I think it is something that is equivariant once all the unknown relevant quantities are included? But that seems wishy-washy. And I'd love a description that doesn't reduce to equivariance exactly.]
-
-% [Should we talk about units too? Is that a kind of coordinate freedom too?]
-
-% We're going to think about natural-science applications, where there is no equivariance---the relevant functions we are trying to learn are not invariant or equivariant to translations and rotations (say)---but where we are exceedingly confident that the functions must be expressible in coordinate-free form.
-
-% \section{Experiments}
-
-% \paragraph{Bouncing ball:}
-% Our first experimental setup is the dynamics of a particle, thrown or dropped near a uniformly moving planar elastic surface.
-% The problem will be to predict the momentum and position $(p,q)$ of the particle at an elapsed time $T$ after an initial time at which the momentum and position were last known.
-
-% Written in terms of invariant scalar products, the non-relativistic Hamiltonian $H(p,q)$ is
-% \begin{align}
-%     H(p,q) &= K + V \\
-%     K(p) &= \frac{1}{2\,m}\,(p - m\,v_\surf)\T (p - m\,v_\surf) \\
-%     V(q) &= m\,g\T (q_\surf - q) + \frac{1}{2}\,k\,x^2\,I_{x<0} \\
-%     x &:= \frac{q_\surf\T}{\sqrt{q_\surf\T q_\surf}}\,(q_\surf - q) \\
-%     I_{x<0} &:= \left\{\begin{array}{cl} 1 & x < 0 \\ 0 & x \geq 0\end{array}\right. ~,
-% \end{align}
-% where $p,q$ are the vector momentum and position (in some coordinate system), $m$ is the scalar particle mass, $v_\surf$ is the vector velocity of the planar (equilibrium) surface, $g$ is the vector acceleration due to gravity, $k$ is a scalar effective spring constant for the surface, $q_\surf$ is the vector pointing from the coordinate origin to the closest point on the planar (equilibrium) surface (this is a function of time if $v_\surf$ is non-zero), $I_{x<0}$ is a scalar indicator function, and $x$ is a scalar length which is the (signed) perpendicular distance between the particle and the surface.
-% Some notes about this Hamiltonian:
-% \begin{itemize}
-%   \item The vectors are implicitly column vectors, such that products like $g\T (q_\surf - q)$ are scalars.
-%   \item This expression for the Hamiltonian is explicitly constructed from classical-physics invariants, and these invariants are invariant to rotations, reflections, translations, and (Galilean) boosts.
-%   \item This Hamiltonian is not time-invariant: If $v_\surf$ is non-zero, then $q_\surf$ varies with time. Thus in general the total mechanical energy will not be invariant.
-% \end{itemize}
-
-% \paragraph{Acknowledgments:}
+% \paragraph{Acknowledgments}
 %Some of this work was performed at Schloss Dagstuhl seminar 22382 on Machine Learning in the Sciences in 2022 September.
 
 \bibliographystyle{plain}
