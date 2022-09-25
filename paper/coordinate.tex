@@ -4,144 +4,369 @@
 % Notes to selves:
 % ----------------
 % - We need to infer multiple geometric objects (multiple vectors say) per problem. But these might have different *units* as well as different directions and magnitudes. So I (DWH) think we want to explicitly include units in this project.
-% - [write here]
+% George: Do we need a definition of representation Independences? What makes sense?
 
-\documentclass[12pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[letterpaper]{geometry}
+
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_2022
+
+% ready for submission
+\usepackage{neurips_2022}
+
+% to compile a preprint version, e.g., for submission to arXiv, add add the
+% [preprint] option:
+%     \usepackage[preprint]{neurips_2022}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_2022}
+
+% to avoid loading the natbib package, add option nonatbib:
+    %\usepackage[nonatbib]{neurips_2022}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+
+% math packages and definitions
 \usepackage{amsmath}
-\usepackage{amsfonts}
-
-% typesetting issues
-\setlength{\textwidth}{5.5in}
-\setlength{\textheight}{9.5in}
-\setlength{\oddsidemargin}{0.5\paperwidth}
-\addtolength{\oddsidemargin}{-1.0in} % latex oddity
-\addtolength{\oddsidemargin}{-0.5\textwidth}
-\setlength{\topmargin}{0.5\paperheight}
-\addtolength{\topmargin}{-1.0in} % latex oddity
-\addtolength{\topmargin}{-0.5\headheight}
-\addtolength{\topmargin}{-0.5\headsep}
-\addtolength{\topmargin}{-0.5\textheight}
-\markboth{}{Hogg \& Villar / Coordinate-free machine learning}
-\pagestyle{myheadings}
-\linespread{1.08}
-\frenchspacing\raggedbottom\sloppy\sloppypar
-
-% math issues -- Hogg is trying to go all semantic here.
+\usepackage{amssymb}
+\usepackage{tikz-cd}
+\tikzcdset{every label/.append style = {font = \normalsize}}
 \newcommand{\inv}{^{-1}}
 \newcommand{\T}{^\top}
 \newcommand{\R}{{\mathbb R}}
 \newcommand{\surf}{{\mathrm{s}}}
+\newcommand{\unit}[1]{\mathrm{#1}}
+\newcommand{\kg}{\unit{kg}}
+\newcommand{\m}{\unit{m}}
+\newcommand{\s}{\unit{s}}
 
-\title{\bfseries%
-  Towards truly coordinate-free\\ machine learning}
+% text macros
+\newcommand{\bernhard}[1]{~B: \textcolor{red}{\textbf{#1}}}
+
+\title{Representation-agnostic physics, passive symmetries,\\ and equivariant machine learning}
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
 \author{%
-  David W. Hogg, 
-  Soledad Villar, and
-  others}
-\date{2022 July}
+  David S.~Hippocampus\thanks{Use footnote for providing further information
+    about author (webpage, alternative address)---\emph{not} for acknowledging
+    funding agencies.} \\
+  Department of Computer Science\\
+  Cranberry-Lemon University\\
+  Pittsburgh, PA 15213 \\
+  \texttt{hippo@cs.cranberry-lemon.edu} \\
+  % examples of more authors
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \AND
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+  % \And
+  % Coauthor \\
+  % Affiliation \\
+  % Address \\
+  % \texttt{email} \\
+}
 
+\frenchspacing\sloppy\sloppypar\raggedbottom
 \begin{document}
 
-\maketitle\thispagestyle{empty}
+\maketitle
 
-\paragraph{Abstract:}
+\paragraph{Abstract:} 
 There has been abundant work on making machine-learning methods exactly (or approximately) equivariant to group actions.
 Equivariant functions obey relations like $f(g\cdot x) = g\cdot f(x)$; that is, if the inputs $x$ are transformed by group element $g$, then the outputs $f(x)$ are similarly transformed.
-Equivariance is the correct goal when the rules of the game have symmetries, or when the input--output relationship is desired to be invariant to group operations.
-There have been successful implementations for translation (and subgroups), rotation (and subgroups), reflection, permutation, boost, and many others.
-The laws of physics contain a much deeper symmetry than any of these, however:
-Even in situations in which the physical law is not symmetric, it must be possible to describe the law in a coordinate-free way.
-These situations are common; for example the physics near the surface of the Earth is very strongly oriented:
-Free objects fall in the down direction, usually.
-And yet the laws can be expressed in a perfectly coordinate-free way by making use of the local gravitational acceleration vector.
-Coordinate freedom (for us) is defined to be an equivariance $f(g\cdot x; g\cdot\alpha)=g\cdot f(x; \alpha)$ but which only becomes exact when certain (hopefully learnable) geometric constants $\alpha$ are included as inputs to the function along with the original input $x$.
-Here we explore these ideas, with toy asymmetric physics systems used as examples.
-We conjecture that coordinate-free methods will improve out-of-sample generalization even in cases in which the functions being learned are not themselves equivariant.
+%Equivariance is the correct goal when the rules of the game have symmetries, or when the input--output relationship is desired to be invariant to group operations.
+We emphasize that there are two different kinds of symmetries that can be encoded by these equivariances: active symmetries that are observed regularities in the laws of physics, and passive symmetries that arise from redundancies in the allowed representations of the physical objects. 
+In the first category are the symmetries that lead to conservation of momentum, energy and angular momentum. In the second category are coordinate freedom, units equivariance, and gauge symmetry, among others.  
+The passive symmetries always exist, even in situations in which the physical law is not actively symmetric.
+For example the physics near the surface of the Earth is very strongly oriented (free objects fall in the down direction, usually), and yet the laws can be expressed in a perfectly coordinate-free way by making use of the local gravitational acceleration vector.
+The passive symmetries seem trivial, but they can lead naturally to the discovery of geometric and dimensional quantities, even in very limited training data.
+Our conjecture is that enforcing passive symmetries in the representations used for data in machine learning will improve generalization (both in and out of sample) in all areas in engineering and the natural sciences.
 
 \section{Introduction}
 
-Main points
-\begin{itemize}
-    \item Coordinate freedom is not a physically observable property of the universe. It refers to the mathematical choices one makes at describing it.
-    Example: units equivariance is not an observed property of the universe. Units equivariance can predict the need of an additional component in the theory. Example: Planck's constant. The gauge equivariance setting relates to this \cite{weiler}.
-    \item There is also the observed symmetries of the physical world: the laws of physics don't seem to depend on position, orientation, or time, which imply conservation of momentum, angular momentum and energy. This can be established experimentally. Example:  double pendulum toy dataset: the Hamiltonian symmetry may be observable the $O(2)$-equivariance is observable, but the fully $O(3)$-equivariance is not observable, it's a consequence of coordinate freedom. 
-    \item The language of group theory and equivariance can be used to explain both. And in particular it can be used to discover missing elements of the theory.
-\end{itemize}
+In physics there are two types of symmetries: passive symmetries arising from the arbitrariness of the mathematical representation (including symmetries arising from coordinate freedoms and equivalences of reparameterizations) and active symmetries empirically established by observations and experiments (including the symmetries that imply the fundamental conservation laws, like momentum, energy, and angular momentum). Both of these symmetries can be expressed in terms of group actions and equivariances, but the epistemological content and range of applicability are very different. 
 
-An illustrative example might be the following:
-In the study of equivariant machine learning, the springy double pendulum is often used as a toy problem for demonstrations \cite{Finzi}.
-The final conditions (position and velocity after elapsed time $T$) are related to the initial conditions (position and velocity at the initial time).
+The physical world is independent of the mathematical choices we make to describe it. This is what in physics is sometimes called  \emph{covariance}. As a consequence of the existing redundancies in the space of representations and parameterizations of the world we obtain a large set of symmetries. Mathematically, this can be formulated as invariances or equivariances with respect to changes of coordinates or reparameterizations. In the physics literature this is called invariance under \emph{passive} diffeomorphisms (see Section 4.1 of \cite{rovelli2000loop}). This is, for instance, the case of gauge equivariance, and units equivariance. These symmetries can be theoretically established with no need of observations by definition. Note these symmetries can also by verified through observations but they can be known a priori without them. The groups involved in coordinate freedom can be very large and complicated (e.g.: reparameterizations). An extensive monograph by Weiler, Forré, Verlinde, and Welling describe the state of the art of coordinate independent machine learning \cite{weiler}.
+
+The active symmetries of the universe are the ones that needed to be established experimentally. The laws of physics do not seem to depend on position, orientation, or time, which imply conservation of momentum, angular momentum and energy according to Noether's Theorem \cite{noether}. These symmetries can be expressed as group invariances and equivariances\bernhard{which of the two?} with respect to simple Lie groups such as the orthogonal group, the Lorentz group, the symplectic group, or the symmetric group (permutations). 
+
+This concept can be explained through the commutative diagram in \eqref{eq.diagram}. The space $\mathcal X$ could be a world object, and $\Phi$ and $\Psi$ are encodings or representations of this object into a space $\mathcal H$ (here we mean representation in the broad sense, not the group theoretic notion).
+\begin{equation}\label{eq.diagram}
+\begin{tikzcd}[]%[row sep=2.5em]
+  {\cal X}\arrow[r,"f"] \arrow[d,"\Phi",swap] & {\cal X}  \arrow[d,"\Psi"]\\
+{\cal H} \arrow[r,"h"]  & {\cal H} 
+\end{tikzcd}
+\end{equation}
+The symmetries are a consequence of the commutative diagram $\Psi\circ f = h \circ \Phi$. The passive diffeomorphisms are the ones where $f$ is the taken to be the identity map, namely redundancies in the possible representations of the world that do not change the world (also known as covariances). The symmetries we obtain with non trivial $f$ and $\Phi\equiv \Psi$ are referred to as invariance with respect to \emph{active} diffeomorphisms. As discussed by Rovelli and Gaul in Section 4.1 of \cite{rovelli2000loop}, all theories are invariant with respect passive diffeomorphisms, but not all are invariant with respect to active diffeomorphisms. 
+
+
+When the transformations $f$ and $h$ are actions by a certain group, then both active and passive symmetries can be expressed in terms of group equivariances. These group equivariances are useful for implementing machine learning models that can predict properties and behaviour of physical systems (as argued in \cite{cheng2019covariance}), with the correct inductive bias, achieving smaller generalization error \cite{bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning} and allowing for out-of-distribution generalization \cite{villar2022dimensionless}. 
+
+Most importantly, imposing the group equivariances in the problem formulation allow us to discover the existence of potentially missing elements in the physical description of the data problem. We illustrate these ideas with two examples: the $O(3)$-equivariance in the example of a double pendulum with springs from \cite{finzi2021practical, yao2021simple} that allows us to discover the direction of the gravity, and the units-equivariance in the black body radiation constant that allows us to predict the existence of a dimensional constant such as Planck's constant.
+
+These passive symmetries are straightforward but they lead to strong constraints in the laws of physics, scaling arguments that solve physics problems, and they can constraint machine learning in a non-trivial way. We conjecture that imposing the symmetries in ML will 
+
+MAKE A CONJECTURE that imposing coordinate freedom on ML and data-analysis tasks will be valuable in a much wider range of circumstances than imposing observation-based symmetries. After all, most problems (like reading handwriting or predicting gravitational trajectories near the surface of the Earth) are not equivariant to rotations, reflections, and translations, but they are all, by construction, exactly coordinate free.
+
+In what follows, we demonstrate these concepts with a few examples, and conclude with some outlook and conjectural bullshit.
+
+\section{Definitions and terminology}
+
+\paragraph{coordinate freedom:}
+When physical quantities are measured, or represented in a computer, they must be measured in some coordinate system.
+The redundancy of this representation---the fact that the investigator had many choices for the coordinate system---leads to a symmetry, which is known as \emph{coordinate freedom}.
+It can be stated roughly as follows:
+If the inputs to a physics problem are moved to a different coordinate system (because of a change in the coordinate origin or orientation), the outputs of the problem must be similarly moved.
+HOGG THIS SUGGESTS ANOTHER COMMUTATIVE DIAGRAM.
+The subject of coordinate freedom is most often discussed in the context of general relativity \cite{gr}, but in fact this symmetry appears in all of the laws of physics.
+
+\paragraph{geometric principle:}
+One of the many consequences of coordinate freedom is that the laws of physics obey a \emph{geometric principle} \cite{mcp}, in which the laws of physics must be described in terms of scalars, vectors, and tensors (and their odd-parity partners pseudoscalars, pseudovectors, and pseudotensors).
+These scalar, vector, and tensor quantities may only be combined in certain ways, encoded in detail by the Ricci--Levi-Civita (or Einstein) summation rules \cite{ricci, einsteinsummation}.
+These considerations have recently been exploited in machine learning contexts \cite{villar2021scalars}.
+
+\paragraph{covariance:}
+When physical law is written in a way that is consistent with invariance under \emph{passive diffeomorphisms} (as mentioned above), then the laws are sometimes said to be \emph{covariant}.
+
+\paragraph{general covariance:}
+The covariance of relevance in general relativity \cite{einstein} is known as \emph{general covariance}.
+Because general relativity is a theory in $3+1$ spacetime dimensions with a non-trivial spatially varying metric, this covariance is a very strong symmetry.
+General covariance is sometimes called coordinate freedom, but it is a special case of coordinate freedom.
+
+\paragraph{representation:} There is at least three meaning of the world representation. One is the approximate way we describe world objects in either a physics model or a computer. The second meaning corresponds with the different mathematically equivalent ways one can express a mathematical object: for instance, a vector can be expressed in cartesian or polar coordinates. The third meaning, which we do not use in this paper but is used broadly in equivariant machine learning, is the representation of a group, namely an action of the group in the space of automorphisms of a vector space. 
+
+\paragraph{equivariance:}
+A function $f(x)$ is equivariant with respect to a group $G$ if, for any group element $g\in G$ and any possible input $x$, the function obeys $f(g\cdot x) = g\cdot f(x)$, where $g\cdot y$ is the action of group element $g$ on quantity $y$.
+Note that the group action might be different for the inputs and outputs of the function.
+Equivariance is related to covariance in that covariances (the symmetries created by invariance to passive diffeomorphisms) can be written in terms of equivariances.
+But equivariance is a broader term, because the symmetries created by active transformations can also be described in terms of equivariances.
+
+\paragraph{invariance:}
+When applied to a function, the concept known as \emph{invariance} is a special case of equivariance:
+A function is invariant with respect to a group $G$ if, for any group element $g\in G$ and any possible input $x$, the function obeys $f(g\cdot x) = f(x)$.
+But invariance is used here also to be about physical relationships, laws, and concepts.
+
+\paragraph{conservation law:}
+We say that a quantity obeys a \emph{conservation law} if changes in that quantity (with time) inside some small, closed volume can are quantitatively explained by fluxes of that quantity through the surface of that volume.
+Famously, Emmy Noether connected invariants to conservation laws \cite{noether}.
+Such results are not of direct relevance to what's being described in this contribution, because they are only relevant in the context of invariance with respect to \emph{active} transformations (not merely passive diffeomorphisms), and they are only relevant in systems that obey Lagrangian dynamics (or similar).
+
+\paragraph{units:} All physical quantities are measured with a system of what we call \emph{units}.
+For example: A mass might be measured in $\kg$ or Solar masses.
+An energy might be measured in joules or BTUs.
+A quantity can be transformed from one unit system to another by multiplication by a dimensionless number (which, for example, might be the number of $\kg$ in a Solar mass.
+Almost all quantities---including almost all scalars, vectors, and tensors---have units.
+
+\paragraph{dimensions:} The equivalence classes of quantities with units are called \emph{dimensions}.
+For example, all quantities that have units that can be converted (by multiplication by a dimensionless number) to units of $\kg$ have dimensions of mass.
+All quantities that can be similarly converted to units of joules have dimensions of energy.
+
+\paragraph{units covariance:} When physical quantities are measured, or represented in a computer, they must be measured in some unit system.
+The redundancy of this representation---the fact that the investigator had many choices for the unit system---leads to a symmetry that underlies the method of ``dimensional analysis'':
+The left-hand side and the right-hand side of any physical relation must have precisely the same units.
+HOGG: THIS SUGGESTS A COMMUTATIVE DIAGRAM.
+This symmetry is not trivial: It leads to important results (including some described below).
+
+\paragraph{gauge freedom:}
+Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
+These freedoms lead to additional symmetries which are known as gauge.
+
+\section{Ballistics}
+
+Consider a mass $m$ near the surface of the Earth, in a location where the surface of the Earth can be considered as a horizontal plane, and close enough to the surface such that the gravitational field can be considered to be determined by a constant (not spatially varying) vector with magnitude $g$ and direction downwards.
+\textsl{Question~1:}~If this mass $m$ is dropped (released at rest) from a small height $h$ from above the ground, how much time $T$ does it take to fall to the ground?
+\textsl{Question~2:}~If this mass $m$ is launched from the surface at a low velocity of magnitude $v$ at an angle $\theta$ to the horizontal, how much horizontal distance $L$ will it fly before it hits the surface again?
+Assume that the height $h$ and the velocity $v$ are both small enough that air resistance (ram pressure) can be ignored.
+
+The answer to these questions, it turns out, are almost completely determined by dimensional (or units-covariance) arguments.
+The mass $m$ has units of $\kg$, the gravitational acceleration magnitude $g$ has units of $\m\,\s^{-2}$, the velocity magnitude $v$ has units of $\m\,\s^{-1}$, the time $T$ has units of $\s$, and the lengths $h$ and $L$ have units of $\m$.
+The angle $\theta$ is dimensionless (it can be measured in radians or degrees, say, which can be converted to radians by a dimensionless constant).
+The only possible combination of $m, g, h$ that has units of time is $\alpha\,\sqrt{h/g}$, where $\alpha$ is a dimensionless constant, which doesn't depend on any of the inputs.
+The only possible combination of $m, g, v, \theta$ that has units of length is $\beta(\theta)\,v^2/g$, where $\beta(\theta)$ is a dimensionless function of a dimensionless input.
+That is, both Questions~1 and 2 can be answered up to a dimenionless constant (or function) without any considerations beyond the considerations of the units of the inputs and outputs.
+And both of those answers don't depend in any way on the input mass $m$, which is the symmetry or invariance that led to the discovery of general relativity \cite{gr}.
+
+To make this formal we can follow \cite{villar2022dimensionless} and define a XXX in $(\mathbb R, \mathbb Z^k)$ in which...
+
+\section{Black body radiation and Planck's constant}
+
+An important moment in the history of physics was the discovery by Planck \cite{planck} that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation
+\begin{equation}
+    B_\lambda(\lambda) = \frac{2\,h\,c^2}{\lambda^5}\,\frac{1}{\exp\frac{h\,c}{\lambda\,k\,T} - 1}~,
+\end{equation}
+where (HOGG CHECK EQUATION)
+$h$ is Planck's constant,
+$c$ is the speed of light,
+$\lambda$ is the wavelength of the electromagnetic radiation,
+$k$ is Boltzmann's constant,
+and $T$ is the temperature.
+In finding this formula, Planck had to posit the existence (and units) of the constant $h=6.6\times 10^{-34}\,\kg\,\m^2\,\s^{-1}$ (his original value was presented with different units).
+Prior to Planck's discovery and introduction of $h$, the only dimensionally acceptable expression for the black-body intensity was $B_\lambda(\lambda)=2\,\lambda\,k\,T/\lambda^5$ (HOGG CHECK), which is the Rayleigh-Jeans Law, or the long-wavelength (infrared) or high-temperature limit of Planck's expression.
+Planck's discovery was important because it solved the ``ultraviolet catastrophe'' of classical physics (the problem that thermal objects ought to have infinite heat capacity), and it seeded the theory of quantum mechanics, which is governed by Planck's constant $h$.
+Here we look at this problem through the lens of dimensional analysis, and the equivariance of physics with respect to changes of units.
+
+In the problem that Planck solved, the data were measurements of intensity $B_\lambda$ as a function of wavelength $\lambda$ for objects that were very close to being black bodies at different temperatures $T$.
+Data of this form are shown in FIGURE~WHAT?, along with both the true radiation law and the power-law form of the long-wavelength limit.
+
+The main point of the observational data is that they reveal that there is a missing input and that input has to have certain units in the mix. The second point is that we can learn from data a constant equivalent to Planck's in this problem. 
+
+Demo:
+
+Experiment 1: introducing Planck's constant makes the inference possible (otherwise it needs to be a linear function). 
+
+Experiment 2: we can ``learn" something equivalent to Planck's constant in a certain regime, but maybe comment that the need of Planck's constant is not observable if the observations are constrained to the infrared regime.
+
+
+\section{Double pendulum with springs and gravity direction}
+
+The double pendulum connected by springs in 3D is a toy example often used in equivariant machine learning demonstrations \cite{finzi2021practical}. 
+The final conditions (position and velocities of both masses after elapsed time $T$) are related to the initial conditions (position and velocities of the masses at the initial time).
 The vectors are 3-dimensional, but the is problem is naturally $O(2)$-equivariant (equivariant with respect to rotations and reflections in the 2-d plane), since there is a gravitational vector that points downwards, breaking the 3-dimensional symmetry.
-However, if the gravitational vector is included as a feature in the problem, the problem becomes $O(3)$-equivariant; we showed that including this input and obtaining the higher symmetry is better for predictive accuracy both inside and outside of the support of the training set \cite{Yao}.
-The coordinate freedom of the problem is a kind of $O(3)$ equivariance, but this equivariance only appears when the geometric constants (the gravitational force vector in this case) are included as inputs.
 
-\paragraph{Our contributions:}
-HOGG: We distinguish coordinate freedom from equivariance. Coordinate freedom is way way more general.
-
-HOGG: We produce a good, easy definition of coordinate freedom.
-
-HOGG: We demonstrate on toy problem(s) that this coordinate freedom definition is useful and can be incorporated into ML methods.
-
-\paragraph{Prior work:}
-HOGG thinks that the way ``coordinate free'' has been used in the literature is too GR-centric or gauge-centric or just identifying coordinate freedom with equivariance \cite{weiler}.
-That is just \emph{one kind} of coordinate freedom.
-
-\section{Problem setup and definitions}
-
-The problems we are interested in involve learning a function from data, as with machine learning and regression.
-The function we will learn takes scalar, vector, and tensor inputs, and delivers scalar, vector, and tensor outputs.
-Scalars, vectors, and tensors are defined by the transformation properties of their components under changes of coordinates.
-If $G$ is the group of rotations, reflections, and dilations (is there such a group?):
-\begin{itemize}
-  \item We say that $a\in\R$ is a scalar if, when the coordinate system is modified according to group element $g\in G$, $a$ does not change.
-  \item We say that $a\in\R^d$ is a vector if, when the coordinate system is modified according to group element $g\in G$, the components of $a$ change to $g\inv\cdot a$.
-  \item We say that $a\in(\R^d)^k$ is a $k$-tensor if, when the cordinate system is modified according to group element $g\in G$, the components of $a$ change to \ldots
-\end{itemize}
-[Obviously we have to mathify the above and be clear about what groups are in play.] Also we have to talk about odd-parity objects.
-
-It would be good to talk about translations too---Hogg believes that all of the above are invariant to translations.
-
-[Now discuss the inputs to the function. Most known, a few unknown.]
-
-[Now define coordinate-freedom. What is a coordinate-free expression? I think it is something that is equivariant once all the unknown relevant quantities are included? But that seems wishy-washy. And I'd love a description that doesn't reduce to equivariance exactly.]
-
-[Should we talk about units too? Is that a kind of coordinate freedom too?]
-
-We're going to think about natural-science applications, where there is no equivariance---the relevant functions we are trying to learn are not invariant or equivariant to translations and rotations (say)---but where we are exceedingly confident that the functions must be expressible in coordinate-free form.
-
-\section{Experiments}
-
-\paragraph{Bouncing ball:}
-Our first experimental setup is the dynamics of a particle, thrown or dropped near a uniformly moving planar elastic surface.
-The problem will be to predict the momentum and position $(p,q)$ of the particle at an elapsed time $T$ after an initial time at which the momentum and position were last known.
-
-Written in terms of invariant scalar products, the non-relativistic Hamiltonian $H(p,q)$ is
-\begin{align}
-    H(p,q) &= K + V \\
-    K(p) &= \frac{1}{2\,m}\,(p - m\,v_\surf)\T (p - m\,v_\surf) \\
-    V(q) &= m\,g\T (q_\surf - q) + \frac{1}{2}\,k\,x^2\,I_{x<0} \\
-    x &:= \frac{q_\surf\T}{\sqrt{q_\surf\T q_\surf}}\,(q_\surf - q) \\
-    I_{x<0} &:= \left\{\begin{array}{cl} 1 & x < 0 \\ 0 & x \geq 0\end{array}\right. ~,
-\end{align}
-where $p,q$ are the vector momentum and position (in some coordinate system), $m$ is the scalar particle mass, $v_\surf$ is the vector velocity of the planar (equilibrium) surface, $g$ is the vector acceleration due to gravity, $k$ is a scalar effective spring constant for the surface, $q_\surf$ is the vector pointing from the coordinate origin to the closest point on the planar (equilibrium) surface (this is a function of time if $v_\surf$ is non-zero), $I_{x<0}$ is a scalar indicator function, and $x$ is a scalar length which is the (signed) perpendicular distance between the particle and the surface.
-Some notes about this Hamiltonian:
-\begin{itemize}
-  \item The vectors are implicitly column vectors, such that products like $g\T (q_\surf - q)$ are scalars.
-  \item This expression for the Hamiltonian is explicitly constructed from classical-physics invariants, and these invariants are invariant to rotations, reflections, translations, and (Galilean) boosts.
-  \item This Hamiltonian is not time-invariant: If $v_\surf$ is non-zero, then $q_\surf$ varies with time. Thus in general the total mechanical energy will not be invariant.
-\end{itemize}
-
-\paragraph{Springy double pendulum:}
-Hello World!
+If the gravitational vector is included as a feature in the problem, the problem becomes $O(3)$-equivariant. Moreover it has been shown that including this input and obtaining the higher symmetry leads to a better predictive accuracy both inside and outside of the support of the training set \cite{yao2021simple}. The coordinate freedom of the problem is a kind of $O(3)$ equivariance, but this equivariance only appears when the geometric constants (the gravitational force vector in this case) are included as inputs. The models in \cite{finzi2021practical,yao2021simple, villar2022dimensionless} also impose a symplectic symmetry (or time translation?) coming from the fact that the system is Hamiltonian. Units equivariance is also imposed in \cite{villar2022dimensionless}.
 
 
-\paragraph{Learning Planck's constant:}
+Experiment 2: Maybe doesn't exist (George?). Now we do the same the same thing, where we enforce the O(3) symmetry by adding 3 additional parameters, the components of an unknown vector. Can we learn it? Just as in the Planck thing we can only learn it up to a constant. We are not making it units equivariant, but that's an additional symmetry we could have added. 
+
+
+
+
+\section{Models and representation}
+abstract definition of what is a model so the geometric aspect of the physical law and the units aspect of the physical law are both instances of this. 
+
+
+
+$$
+\begin{tikzcd}[]%[row sep=2.5em]
+  {\cal H}\arrow[r,"\rho(g)"] & {\cal H}\\
+{\cal X} \arrow[u,"\Phi"] \arrow[r,"g"] & {\cal X} \arrow[u,"\Phi"]
+\end{tikzcd}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+$$
+
+General idea: $\cal X$ is the real world, $g$ is some mapping (algorithm, group action, dynamics, ...) in the real world, $\Phi$ is a map that in ML we would call a ``representation'' (which may or may not be a representation in the narrow mathematical sense), $\rho$ is a homomorphism from a structure in the world to a corresponding structure in the representation space $\cal H$.
+
+Four special cases:
+\begin{enumerate}
+    \item the representation that retains dimensions but drops all numbers --- here the structure $\rho(g)$ is the graded algebra of dimensions...
+    \item the representation that discards all dimensions and just describes transformations of numerical quantities
+    \item a statistical representation --- here, $g$ could be 'prediction', and we may for instance want a $\Phi$ which makes prediction statistically or computationally easier
+    \item a causal representation --- here, $g$ could be a class of interventions, possibly described by a group (e.g., translations of objects)
+\end{enumerate}
+
+xxx could also talk about equivariance with respect to sample size. Statistical inference procedures should be expressed s.t.\ they work independent of sample size
+
+
+
+Approximate symmetries and representations that are approximate.
+
+Any connection between this stuff and causality?
+Example of cannon ball where influence of $m$ can be ruled out based on dimensional analysis --- write an SCM: (1) two variables are the initial values of $v$, $m$, chosen independently, and the final value of $l$ (2) $g$ is considered constant, (3) $\theta$ is the noise affecting $l$. From time constraints we know that the only possible causal arrows are from $v, m$ to $l$. From dimensional analysis, the arrow $m\to l$ is excluded, so we have identified the causal graph $v\to l$.
 
 \section{Discussion}
+We introduced a dimensioned constant in Planck's experiment, but we could have introduced a dimensioned field. Comment on the observational properties of such a field.  
 
-Hello World!
+%Check this out http://www.oliverpooley.org/uploads/7/7/5/9/7759400/handout4.pdf (citation from book describing passive and active diffeomorphisms; we could use this language).
+%the original quote comes from this paper https://arxiv.org/pdf/gr-qc/9910079.pdf
+
+% \section{Other things we wrote (old)}
+
+% Main points
+% \begin{itemize}
+%     \item Coordinate freedom is not a physically observable property of the universe. It refers to the mathematical choices one makes at describing it. The gauge equivariance setting relates to this \cite{weiler}.
+%     Example: units equivariance is not an observed property of the universe. Units equivariance can predict the need of an additional component in the theory. Example: Planck's constant. 
+%     \item There is also the observed symmetries of the physical world: the laws of physics don't seem to depend on position, orientation, or time, which imply conservation of momentum, angular momentum and energy. This can be established experimentally. Example:  double pendulum toy dataset: the Hamiltonian symmetry may be observable the $O(2)$-equivariance is observable, but the fully $O(3)$-equivariance is not observable, it's a consequence of coordinate freedom. 
+%     \item The language of group theory and equivariance can be used to explain both. And in particular it can be used to discover missing elements of the theory.
+% \end{itemize}
+
+% An illustrative example might be the following:
+
+% \paragraph{Our contributions:}
+% HOGG: We distinguish coordinate freedom from equivariance. Coordinate freedom is way way more general.
+
+% HOGG: We produce a good, easy definition of coordinate freedom.
+
+% HOGG: We demonstrate on toy problem(s) that this coordinate freedom definition is useful and can be incorporated into ML methods.
+
+% \paragraph{Prior work:}
+% HOGG thinks that the way ``coordinate free'' has been used in the literature is too GR-centric or gauge-centric or just identifying coordinate freedom with equivariance \cite{weiler}.
+% That is just \emph{one kind} of coordinate freedom.
+
+% \section{Problem setup and definitions}
+
+% The problems we are interested in involve learning a function from data, as with machine learning and regression.
+% The function we will learn takes scalar, vector, and tensor inputs, and delivers scalar, vector, and tensor outputs.
+% Scalars, vectors, and tensors are defined by the transformation properties of their components under changes of coordinates.
+% If $G$ is the group of rotations, reflections, and dilations (is there such a group?):
+% \begin{itemize}
+%   \item We say that $a\in\R$ is a scalar if, when the coordinate system is modified according to group element $g\in G$, $a$ does not change.
+%   \item We say that $a\in\R^d$ is a vector if, when the coordinate system is modified according to group element $g\in G$, the components of $a$ change to $g\inv\cdot a$.
+%   \item We say that $a\in(\R^d)^k$ is a $k$-tensor if, when the cordinate system is modified according to group element $g\in G$, the components of $a$ change to \ldots
+% \end{itemize}
+% [Obviously we have to mathify the above and be clear about what groups are in play.] Also we have to talk about odd-parity objects.
+
+% It would be good to talk about translations too---Hogg believes that all of the above are invariant to translations.
+
+% [Now discuss the inputs to the function. Most known, a few unknown.]
+
+% [Now define coordinate-freedom. What is a coordinate-free expression? I think it is something that is equivariant once all the unknown relevant quantities are included? But that seems wishy-washy. And I'd love a description that doesn't reduce to equivariance exactly.]
+
+% [Should we talk about units too? Is that a kind of coordinate freedom too?]
+
+% We're going to think about natural-science applications, where there is no equivariance---the relevant functions we are trying to learn are not invariant or equivariant to translations and rotations (say)---but where we are exceedingly confident that the functions must be expressible in coordinate-free form.
+
+% \section{Experiments}
+
+% \paragraph{Bouncing ball:}
+% Our first experimental setup is the dynamics of a particle, thrown or dropped near a uniformly moving planar elastic surface.
+% The problem will be to predict the momentum and position $(p,q)$ of the particle at an elapsed time $T$ after an initial time at which the momentum and position were last known.
+
+% Written in terms of invariant scalar products, the non-relativistic Hamiltonian $H(p,q)$ is
+% \begin{align}
+%     H(p,q) &= K + V \\
+%     K(p) &= \frac{1}{2\,m}\,(p - m\,v_\surf)\T (p - m\,v_\surf) \\
+%     V(q) &= m\,g\T (q_\surf - q) + \frac{1}{2}\,k\,x^2\,I_{x<0} \\
+%     x &:= \frac{q_\surf\T}{\sqrt{q_\surf\T q_\surf}}\,(q_\surf - q) \\
+%     I_{x<0} &:= \left\{\begin{array}{cl} 1 & x < 0 \\ 0 & x \geq 0\end{array}\right. ~,
+% \end{align}
+% where $p,q$ are the vector momentum and position (in some coordinate system), $m$ is the scalar particle mass, $v_\surf$ is the vector velocity of the planar (equilibrium) surface, $g$ is the vector acceleration due to gravity, $k$ is a scalar effective spring constant for the surface, $q_\surf$ is the vector pointing from the coordinate origin to the closest point on the planar (equilibrium) surface (this is a function of time if $v_\surf$ is non-zero), $I_{x<0}$ is a scalar indicator function, and $x$ is a scalar length which is the (signed) perpendicular distance between the particle and the surface.
+% Some notes about this Hamiltonian:
+% \begin{itemize}
+%   \item The vectors are implicitly column vectors, such that products like $g\T (q_\surf - q)$ are scalars.
+%   \item This expression for the Hamiltonian is explicitly constructed from classical-physics invariants, and these invariants are invariant to rotations, reflections, translations, and (Galilean) boosts.
+%   \item This Hamiltonian is not time-invariant: If $v_\surf$ is non-zero, then $q_\surf$ varies with time. Thus in general the total mechanical energy will not be invariant.
+% \end{itemize}
+
+\paragraph{Acknowledgments}
+Some of this work was performed at Schloss Dagstuhl seminar 22382 on Machine Learning in the Sciences in 2022 September.
 
 \bibliographystyle{plain}
 \raggedright
