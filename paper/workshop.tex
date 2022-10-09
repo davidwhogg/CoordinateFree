@@ -99,6 +99,7 @@ In contrast to the passive symmetries, the active symmetries of the Universe are
 The laws of physics do not seem (at current precision) to depend on position, orientation, or time, which in turn imply conservation of momentum, angular momentum and energy according to Noether's Theorem \cite{noether}.
 
 Both passive and active symmetries can be illustrated by the commutative diagram \eqref{eq.diagram}. 
+The space
 \begin{wrapfigure}{r}{3.3cm}
 \vspace{-3ex}
 \begin{equation}\label{eq.diagram}
@@ -109,7 +110,7 @@ Both passive and active symmetries can be illustrated by the commutative diagram
 \end{equation}
 \vspace{-3ex}
 \end{wrapfigure}
-The space $\mathcal X$ could be the space of all possible physical systems, and $\Phi$ and $\Psi$ are encodings of the systems into a space $\mathcal H$ of representations of systems (here we mean ``representation'' in the broad sense, not the group theoretic notion; see next Section).
+$\mathcal X$ could be the space of all possible physical systems, and $\Phi$ and $\Psi$ are encodings of the systems into a space $\mathcal H$ of representations of systems (here we mean ``representation'' in the broad sense, not the group theoretic notion; see next Section).
 The passive symmetries (diffeomorphisms, in the case where $\mathcal H$ is a manifold) are transformations $\{\beta:\mathcal H \to \mathcal H\}$ where $\alpha$ is taken to be the identity map.
 When the systems are the same, there can still be different representations, because there are redundancies, or multiple elements of $\mathcal H$ that represent the same element of $\mathcal X$.
 The active symmetries are transformations $\{\beta:\mathcal H \to \mathcal H\}$ that preserve some important properties of the representation (element of $\mathcal H$) even when $\alpha$ is non-trivial and $\Phi\equiv \Psi$.
@@ -203,7 +204,7 @@ The mass $m$ has units of $\kg$, the gravitational acceleration magnitude $g$ ha
 The angle $\theta$ is dimensionless (it can be measured in radians or degrees, say, which can be converted to radians by a dimensionless constant).
 The only possible combination of $m, g, h$ that has units of time is $\alpha\,\sqrt{h/g}$, where $\alpha$ is a dimensionless constant, which doesn't depend on any of the inputs.
 The only possible combination of $m, g, v, \theta$ that has units of length is $\beta(\theta)\,v^2/g$, where $\beta(\theta)$ is a dimensionless function of only one dimensionless input.
-That is, both Questions~1 and 2 can be answered up to a dimensionless constant (or function) without any considerations beyond those of the units of the inputs and outputs.
+That is, both Questions~1 and 2 can be answered up to a dimensionless constant (or function) without any considerations beyond those of the units of the inputs and outputs, and absolutely no training data.
 And both of those answers don't depend in any way on the input mass $m$, which is the symmetry or invariance that led to the discovery of general relativity \cite{gr}.
 
 This shows that the fundamental structure of physical law can sometimes be inferred from units covariance only, which is a passive symmetry.  Related ideas are explored in \cite{villar2022dimensionless}.
@@ -212,6 +213,7 @@ We note also that these arguments may contain information pertaining to the (har
 treating $g$ as a constant, we can construct a structural causal model with the following vertices: (a)~an initial value of $v$, (b)~a value of $m$, chosen independently, and (c)~a final value of $L$, affected by a noise term $\theta$.
 Time ordering implies that possible causal arrows are from $v, m, \theta$ to $L$.
 From dimensional analysis, the arrow $m\to l$ is excluded, leaving us with the non-trivial result that in the causal graph, only $v,\theta$ cause $L$.
+Again, this conclusion can be reached without training data.
 
 \paragraph{Black-body radiation}
 An important moment in the history of physics was the discovery by Planck that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation \cite{planck}
