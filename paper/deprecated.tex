@@ -80,7 +80,7 @@ There are two different kinds of symmetries that can be encoded by these equivar
 In the first category are the symmetries that lead to conservation of momentum, energy and angular momentum. In the second category are coordinate freedom, units equivariance, and gauge symmetry, among others.  
 Passive symmetries always exist, even in situations in which the physical law is not actively symmetric.
 For example, the physics near the surface of the Earth is very strongly oriented (free objects fall in the down direction, usually), and yet the laws can be expressed in a perfectly coordinate-free way by making use of the local gravitational acceleration vector.
-The passive symmetries seem trivial, but they can lead naturally to the discovery of scalings, mechanistic structures, and missing geometric and dimensional quantities, even with very limited training data.
+The passive symmetries seem trivial, but they can lead naturally to the discovery of scalings, mechanistic structures, and missing geometric and dimensional quantities, even with limited training data.
 Our conjecture is that enforcing passive symmetries in machine-learning models will improve generalization (both in and out of sample) in all areas of engineering and the natural sciences.
 
 \section{Redundancy and passive symmetries}
@@ -112,10 +112,10 @@ The space
 \end{wrapfigure}
 $\mathcal X$ could be the space of all possible physical systems, and $\Phi$ and $\Psi$ are encodings of the systems into a space $\mathcal H$ of representations of systems (here we mean ``representation'' in the broad sense, not the group theoretic notion; see next Section).
 The passive symmetries (diffeomorphisms, in the case where $\mathcal H$ is a manifold) are transformations $\{\beta:\mathcal H \to \mathcal H\}$ where $\alpha$ is taken to be the identity map.
-When the systems are the same, there can still be different representations, because there are redundancies, or multiple elements of $\mathcal H$ that represent the same element of $\mathcal X$.
+Even in this case, there can still be different representations, because there are redundancies, or multiple elements of $\mathcal H$ that represent the same element of $\mathcal X$.\bernhard{could add: e.g., $\Phi$ and $\Psi$ might map the same physical vector to two different coordinate representations.}
 The active symmetries are transformations $\{\beta:\mathcal H \to \mathcal H\}$ that preserve some important properties of the representation (element of $\mathcal H$) even when $\alpha$ is non-trivial and $\Phi\equiv \Psi$.
-Because of the indifference of the physical world to mathematicians' choices, all theories are invariant with respect to passive symmetries; some additionally have active symmetries.
-Not all contain invariances with respect to active symmetries. 
+Because of the indifference of the physical world to mathematicians' choices, all theories are invariant with respect to passive symmetries; some (but not all) additionally have active symmetries.
+%Not all contain invariances with respect to active symmetries. 
 
 When the transformations $\alpha$ and $\beta$ are actions by a certain group, then both active and passive symmetries can be expressed in terms of group equivariances.
 They are useful in machine-learning models \cite{cohen2016group, kondor2018convolution, thomas2018tensor, geiger2022e3nn, finzi2020generalizing, finzi2021practical} and have scientific applications \cite{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}.
@@ -123,7 +123,7 @@ Equivariant machine-learning models can predict the properties and behaviour of 
 Even the non-trivial diffeomorphism symmetries of general relativity have been considered for machine learning \cite{weiler}.
 
 The idea of homomorphic structure \eqref{eq.diagram} in the representation space $\cal H$ also applies to causal world models (eg, the brightness changes in the real world may be represented as retinal gain control mechanisms in the nervous system \cite{1911.10500}).
-Other instantiations of the commutative diagram \eqref{eq.diagram} include representations that retains the dimensions of system components but drops all numbers, or the representation that converts systems into physical equations.
+Other instantiations of the commutative diagram \eqref{eq.diagram} include representations that retains the dimensions of system components but drops all numbers,\bernhard{add: representations that drops the dimensions and only retains numeric values,} or the representation that converts systems into physical equations.
 
 Most importantly, imposing a passive symmetry on the structure of a machine-learning model can permit the discovery of scalings, structures, or missing elements in the physical description of, or predictions about, the problem.
 We illustrate these ideas with examples below.
@@ -197,7 +197,7 @@ These freedoms lead to additional symmetries which are known as \emph{gauge free
 Consider a mass $m$ near the surface of the Earth, in a location where the surface of the Earth can be considered as a horizontal plane, and close enough to the surface such that the gravitational field can be considered to be determined by a constant (not spatially varying) vector with magnitude $g$ and direction downwards.
 \textsl{Question~1:}~If this mass $m$ is dropped (released at rest) from a small height $h$ from above the ground, how much time $T$ does it take to fall to the ground?
 \textsl{Question~2:}~If this mass $m$ is launched from the surface at a low velocity of magnitude $v$ at an angle $\theta$ to the horizontal, how much horizontal distance $L$ will it fly before it hits the surface again?
-Assume that only $m, g, h$ come in to the solution; assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored.
+Assume that only $m, g, h$ come in to the solution; assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored. We shall return to this seemingly innocuous point below.
 
 The answers to these questions, it turns out, are almost completely determined by dimensional (or units-covariance) arguments.
 The mass $m$ has units of $\kg$, the gravitational acceleration magnitude $g$ has units of $\m\,\s^{-2}$, the velocity magnitude $v$ has units of $\m\,\s^{-1}$, the time $T$ has units of $\s$, and the lengths $h$ and $L$ have units of $\m$.
@@ -212,8 +212,11 @@ This shows that the fundamental structure of physical law can sometimes be infer
 We note also that these arguments may contain information pertaining to the (hard problem of) inference of causal structure:
 treating $g$ as a constant, we can construct a structural causal model with the following vertices: (a)~an initial value of $v$, (b)~a value of $m$, chosen independently, and (c)~a final value of $L$, affected by a noise term $\theta$.
 Time ordering implies that possible causal arrows are from $v, m, \theta$ to $L$.
-From dimensional analysis, the arrow $m\to l$ is excluded, leaving us with the non-trivial result that in the causal graph, only $v,\theta$ cause $L$.
+As argued above, dimensional analysis rules out the arrow $m\to l$, leaving us with the non-trivial result that in the causal graph, only $v,\theta$ cause $L$.
 Again, this conclusion can be reached without training data.
+
+\bernhard{New: There is another intriguing connection to causality that we have glossed over above.
+We made the assumption that only quantities come into the solution (in our case, $m, g, h$). How would we ascertain such an assumption in practice? In essence, this is not a probabilistic statement, but one about the behavior of a system under experimentation, i.e., intervention. A set of experiments can indicate that a certain outcome (or effect variable) depends on a certain set of input (cause) variables but is independent of certain other potential cause variables. The physical law is thus not inferred from dimensional arguments alone, but from a combination of dimensional and causal arguments.}
 
 \paragraph{Black-body radiation}
 An important moment in the history of physics was the discovery by Planck that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation \cite{planck}

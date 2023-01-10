@@ -1,0 +1,264 @@
+%%%%%%%% ICML 2023 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{booktabs} % for professional tables
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2023} with \usepackage[nohyperref]{icml2023} above.
+\usepackage{hyperref}
+
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+% Use the following line for the initial blind version submitted for review:
+\usepackage{icml2023}
+
+% If accepted, instead use the following line for the camera-ready submission:
+% \usepackage[accepted]{icml2023}
+
+% For theorems and such
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+% if you use cleveref..
+\usepackage[capitalize,noabbrev]{cleveref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THEOREMS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Todonotes is useful during development; simply uncomment the next line
+%    and comment out the line below the next line to turn off comments
+%\usepackage[disable,textsize=tiny]{todonotes}
+\usepackage[textsize=tiny]{todonotes}
+
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Submission and Formatting Instructions for ICML 2023}
+
+\frenchspacing
+\begin{document}
+
+\twocolumn[
+\icmltitle{Representation agnosticism, passive symmetries,\\ and equivariant machine learning}
+
+
+\icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+\icmlauthor{Firstname1 Lastname1}{equal,yyy}
+\icmlauthor{Firstname2 Lastname2}{equal,yyy,comp}
+\icmlauthor{Firstname3 Lastname3}{comp}
+\icmlauthor{Firstname4 Lastname4}{sch}
+\icmlauthor{Firstname5 Lastname5}{yyy}
+\icmlauthor{Firstname6 Lastname6}{sch,yyy,comp}
+\icmlauthor{Firstname7 Lastname7}{comp}
+%\icmlauthor{}{sch}
+\icmlauthor{Firstname8 Lastname8}{sch}
+\icmlauthor{Firstname8 Lastname8}{yyy,comp}
+%\icmlauthor{}{sch}
+%\icmlauthor{}{sch}
+\end{icmlauthorlist}
+
+\icmlaffiliation{yyy}{Department of XXX, University of YYY, Location, Country}
+\icmlaffiliation{comp}{Company Name, Location, Country}
+\icmlaffiliation{sch}{School of ZZZ, Institute of WWW, Location, Country}
+
+\icmlcorrespondingauthor{Firstname1 Lastname1}{first1.last1@xxx.edu}
+\icmlcorrespondingauthor{Firstname2 Lastname2}{first2.last2@www.uk}
+
+% You may provide any keywords that you
+% find helpful for describing your paper; these are used to populate
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{Machine Learning, ICML}
+
+\vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \icmlEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+%\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+
+\begin{abstract}
+This is a purely conceptual paper that substantially extends the applicability of group-equivariant methods in machine learning.
+Any representation of data involves arbitrary investigator choices.
+Because the choices are arbitrary, and external to the data-generating process, each choice leads to an exact symmetry.
+These are the \emph{passive symmetries}; they include coordinate freedom, gauge symmetry, and units equivariance, all of which are important in physics but have equivalents in essentially all data sets.
+The permutation equivariance enforced by graph neural network architectures is an example of an important passive symmetry.
+Our goal is to understand how passive symmetries might be used to improve machine learning methods.
+We develop conditions under which implementing exact passive symmetries will help (or not help) a learning problem, and we provide examples.
+Roughly speaking, they are always helpful, and can be implemented as group equivariances, except when there are relevant but hidden constants that are not included among the features in the learning problem.
+Even when there are hidden constants, in some cases you can learn them.
+The impact of implementing the passive symmetries is greatest when the goal of the learning problem is to generalize out of sample, perform symbolic regression, or obtain interpretable results, but they will help in many other circumstances.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+
+HOGG: This paper will be conceptual!
+
+Most of the literature on equivariant machine learning (and it is a big literature CITE THINGS) is implicitly or explicitly looking at what we call \emph{active symmetries}:
+If a data set has an equivariance with respect to rotations (say) then the machine-learning methods used on those data should be equivariant with respect to rotations.
+Introducing correct symmetries helps with training, predictive accuracy, and generalization.
+However, these cases of exact, active symmetries are rare; they only really appear in natural-science contexts like protein folding or cosmology.
+
+At the same time, almost all data-science problems---even those with no active symmetries acting---contain exact symmetries that emerge from the necessary but arbitrary choices involved in the data representation.
+For example, the data are measured in some units, even though the particular choice of units doesn't matter.
+For another, positions and velocities are measured in some coordinate system, the origin and orientation of which also don't matter.
+These choices lead to exact symmetries, which we call \emph{passive symmetries}.
+These symmetries include coordinate freedom, gauge, and units equivariance.
+These symmetries are exact, because the behavior of the world can't possibly depend on the representation we use to describe it, numerically.
+
+Because almost all data involve choices for representation (the ordering of pixels in an image file, the units used for weather data, and so on), almost all data sets obey exact passive symmetries.
+One example familiar to machine learners is the equivariance of functions on graphs to the relabeling of the graph nodes.
+This is an exact, passive symmetry, described by a permutation group:
+If the graph nodes are relabeled or reordered, nothing of significance about the graph changes.
+Famously, graph neural network architectures build this passive symmetry in by design.
+That has been incredibly important and useful in machine learning.
+
+One example familiar to physicists is what's sometimes called dimensional analysis:
+HOGG: EXAMPLE OF FALLING OBJECT.
+
+Not all symmetries are easy to implement... HOGG... Other symmetries may be even harder to implement such as diffeomorphisms, general relativity
+Equivariant Representation learning (https://arxiv.org/abs/2012.02771)
+   
+HOGG: All observables are classical scalars. The WORLD obeys extremely large symmetry groups, exactly. How to capitalize on that?
+
+HOGG: Unfortunately, passive symmetries are only useful if you know---or learn---housekeeping/external data. HOGG... gravitational force vector, Planck's constant
+
+\section{Units symmetries}
+HOGG:write the examples of the restrictions of the passive symmetries using symmeries. From the Dagstuhl talk.
+
+Example: timing of the fallen object.
+
+ MacKay's quote on PCA
+
+\section{Passive symmetries}\label{sec:definitions}
+
+   2.1 Careful definition of a passive symmetry.
+   
+   2.2 Commutative diagram and discussion thereof.
+   
+   2.3 Implementaton with equivariant representations or with equivariant function spaces (George point).
+
+
+\section{Experiments}\label{sec:experiments}
+
+   3.1 Springy double pendulum? Maybe learning the 
+   
+   3.2 Vegetation model?
+   
+   3.3 Blackbody radiation?
+
+\section{Applicability}\label{sec:applicability}
+
+In order for passive symmetries to be useful one needs to incorporate all relevant constants to the training data. If there exists unknown constants $K$ then the passive symmetry in play is the subgroup that fixes $K$.
+
+Example: the double pendulum is O(3)-equivariant if the gravity vector is part of the training data. If the gravity vector is not part of the training data then the double pendulum is invariant with respect to the subgroup of O(3) that fixes the gravity vector, namely O(2). The space invariant of functions in both cases coincide.
+
+Example: if the model is missing dimensional constants then 
+
+   2.4 Requirements on housekeeping data / Limitations of the approach.
+
+   2.5 When will passive symmetries most help us?
+   
+   Changing the coordinate system allows you to conjecture the existence of hidden constants and maybe to find them. 
+   
+   The formulation of the symmetry poses the existence of the hidden constant. This can be posed as a completeness argument. Including the constant allows for formulating the system with the full symmetry.
+   Identifiability issues may arise when more constants are present.
+   
+   We shouldn't get into the area of learning the problem. 
+
+
+
+
+
+\section{Discussion}\label{sec:summary}
+
+Want a summary? Read the abstract.
+
+   5.2 Why this is non-trivial to do in practice.
+   
+   5.3 The bigger target is to apply the huge symmetry groups acting in the WORLD, of which any data set is a heterogeneous and sparse sampling. These are not exact symmetries or group actions in any real data set. Define / name check observer symmetries here. Also note that there is a causal description or causal way of thinking about all this.
+
+\bibliography{example_paper}
+\bibliographystyle{icml2023}
+
+\newpage\appendix\onecolumn
+\section{Glossary}
+\paragraph{symmetry}
+Given a mathematical object $X$ of any sort, (like a manifold, metric space, equation, etc), any mapping of the object onto itself that preserves the corresponding structure is a \emph{symmetry}.
+
+\paragraph{representation}
+There are two meanings of the word \emph{representation}. One is the approximate way we describe a system (or all the objects in a system) either in a mathematical model or on a computer.
+The other is the \emph{representation of a group} $G$: a homomorphism $\rho: G\to \text{GL}(V)$ where $V$ is a vector space and $\text{GL}(V)$ denotes the space of invertible linear transformations from $V$ to itself.
+
+\paragraph{equivariance}
+Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X$ and $\rho_Y$ respectively. We say that a function $f:X\to Y$ is \emph{equivariant} if for any group element $g\in G$ and any possible input $x$, the function obeys $f( \rho_X(g) x) = \rho_Y(g)\cdot f(x)$.
+The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps(X,Y)}$ then $g\cdot f = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$.
+The equivariant maps are the fixed points of this action.
+Equivariances define symmetries in the space of maps. 
+
+\paragraph{invariance}
+An equivariance in which the action in the output space is trivial is called an \emph{invariance}.
+
+\paragraph{coordinate freedom}
+When physical quantities are measured, or represented in a computer, they must be expressed in some coordinate system.
+The redundancy of this representation---the fact that the investigator had many choices for the coordinate system---leads to a symmetry, which is known as \emph{coordinate freedom}:
+If the inputs to a physics problem are moved to a different coordinate system (because of a change in the origin or orientation), the outputs of the problem must be correspondingly moved.
+
+\paragraph{covariance}
+When a physical law is written in a way that is consistent with the geometric principle, then the law is sometimes said to be \emph{covariant}.
+
+\paragraph{general covariance}
+The covariance of relevance in general relativity \cite{einstein} is known as \emph{general covariance}.
+Because general relativity is a metric theory in $3+1$ spacetime dimensions with invariance with respect to arbitrary diffeomorphisms, this is a very strong symmetry.
+General covariance is sometimes called ``coordinate freedom'', but it is a special case thereof.
+
+\paragraph{conservation law}
+We say that a quantity obeys a \emph{conservation law} if changes in that quantity (with time) inside some closed volume can are quantitatively explained by fluxes of that quantity through the surface of that volume.
+\emph{Active} (not passive) symmetries lead to conservation laws in dynamical systems \cite{noether}.
+
+\paragraph{units}
+All physical quantities are measured with a system of what we call \emph{units}.
+A quantity can be transformed from one unit system to another by multiplication with a dimensionless number.
+Almost all quantities---including almost all scalars, vectors, and tensors---have units.
+
+\paragraph{units covariance}
+The left-hand side and the right-hand side of any equation must have the same units.
+This symmetry is called (by us) \emph{units covariance} (contra \cite{villar2022dimensionless}).
+
+\paragraph{gauge freedom}
+Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
+These freedoms lead to additional passive symmetries that are known as \emph{gauge freedom}.
+
+\end{document}
+
+

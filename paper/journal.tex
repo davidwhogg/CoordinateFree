@@ -1,14 +1,9 @@
 % This document is part of the CoordinateFree project.
-% Copyright 2022 the authors.
+% Copyright 2022, 2023 the authors.
 
 % to-do
 % -----
-% - Soledad, BS: add grant numbers.
-% - Where to submit this? If we submit to Nature Communications, the setup is:
-%   - un-headed introduction (which will include glossary)
-%   - Results
-%   - Discussion
-%   - Methods (maybe in smaller font).
+% - Figure out how to re-write this for the ML community and re-write it. Maybe for ICML?
 
 \documentclass[11pt]{article}
 
@@ -74,6 +69,22 @@ Representation agnosticism, passive symmetries,\\ and equivariant machine learni
 
 \maketitle
 
+
+
+Here are some ideas and comments related to this paper:
+\begin{itemize}
+  \item We could make this for a physics audience or for an ML audience. BS, MSV, DWH tentatively decided to go with a ML audience in a phone call in 2022 December.
+  \item One key point to make at the beginning is that this is not a typical ML paper; it is not mainly showing results of anything. The contribution is primarily conceptual, about the structure of the relationships that ML methods are trying to learn. The examples will be toys, because they are meant to bolster the conceptual point.
+  \item A good idea is for the paper to retain its glossary; this is useful, and also emphasizes the conceptual and pedagogical nature of the paper.
+  \item Equivariant ML is an important literature, but very niche: Only certain problems in physics and chemistry are actively symmetric.
+  \item But every problem---literally every data analysis problem ever---has hidden within it passive symmetries, related to representation choices, like units, coordinate system, gauge, and so on. Thus there is a use for equivariant ML in every ML problem ever tackled. This paper vastly increases the scope and applicability of equivariant ML.
+  \item There are also approximate symmetries coming from irrelevant or minor observer choices, like about camera pointing, exposure, focus, white balance, pixelization, and so on. These are somehow similar to the passive symmetries but not exact; they don't have groups associated with them, exactly. This point could be dropped, it could be included as a discussion point, or it could be addressed head-on. It has a causal aspect to it, which is fun.
+  \item Demos can include perhaps the double pendulum, the black-body radiation, MNIST digits, and perhaps demos with CNNs showing that they are powerful because of their equivariance, even when the input data have no symmetries.
+  \item A point of skepticism in the cosmology community about equivariant ML comes from the fact that even though the universe is exactly translation and rotation invariant, no data set is. Data sets have edges and window functions and so on, which break symmetry. This is a perfect talking point for the passive symmetries perhaps?
+  \item Hogg would love to see a mention of the point that all observables are classical scalars. Will that be useful in the above arguments? It feels like it will be.
+  \item BS thinks we should discuss what can go wrong in ML based on physical data: we may add things with different dimensions (e.g., PCA or neural nets, but not kernel PCA or SVMs), we may apply nonlinearities to quantities that are not dimensionless, etc.)
+\end{itemize}
+
 {\bfseries\noindent
 It has become an important goal of machine learning to develop methods that are exactly (or approximately) equivariant to group actions.
 Equivariant functions obey relations like $f(g\cdot x) = g\cdot f(x)$; that is, if the inputs $x$ are transformed by group element $g$, then the outputs $f(x)$ are correspondingly transformed.
@@ -81,7 +92,7 @@ There are two different kinds of symmetries that can be encoded by these equivar
 In the first category are the symmetries that lead to conservation of momentum, energy and angular momentum. In the second category are coordinate freedom, units covariance, and gauge symmetry, among others.  
 Passive symmetries always exist, even in situations in which the physical law is not actively symmetric.
 For example, the physics near the surface of the Earth is very strongly oriented (free objects fall in the down direction, usually), and yet the laws can be expressed in a perfectly orientation-free way.
-The passive symmetries seem trivial, but they can lead naturally to the discovery of scalings, mechanistic structures, and missing geometric and dimensional quantities, even with very limited training data.
+The passive symmetries seem trivial, but they can lead naturally to the discovery of scalings, mechanistic structures, and missing geometric and dimensional quantities, even with limited training data.
 Our conjecture is that enforcing passive symmetries in machine-learning models will improve generalization (both in and out of sample) in all areas of engineering and the natural sciences.}
 
 \bigskip\noindent
@@ -107,18 +118,19 @@ Both passive and active symmetries can be illustrated by the commutative diagram
 \end{equation}
 The space $\mathcal X$ could be the space of all possible physical systems, and $\Phi$ and $\Psi$ are encodings of the systems into a space $\mathcal H$ of representations of systems (here we mean ``representation'' in the broad sense, not the group-theoretic notion; see next Section).
 The passive symmetries are transformations $\{\beta:\mathcal H \to \mathcal H\}$ where $\alpha$ is taken to be the identity map.
-When the systems are the same, there can still be different representations, because there are redundancies, or multiple elements of $\mathcal H$ that represent the same element of $\mathcal X$ (consider coordinate-system or units choices).
+Even in this case, there can still be different representations, because there are redundancies, or multiple elements of $\mathcal H$ that represent the same element of $\mathcal X$ (consider choice of units or coordinate systems, e.g., $\Phi$ and $\Psi$ might map the same physical vector to two different coordinate representations).
 The active symmetries are transformations $\{\beta:\mathcal H \to \mathcal H\}$ that preserve some important properties of the representation (element of $\mathcal H$) even when $\alpha$ is non-trivial and $\Phi\equiv \Psi$.
-Because of the indifference of the physical world to observer choices, all theories are invariant with respect to passive symmetries; some additionally have active symmetries.
-Not all contain invariances with respect to active symmetries. 
+Because of the indifference of the physical world to observer choices, all theories are invariant with respect to passive symmetries; some (but not all) additionally have active symmetries.
+%Not all contain invariances with respect to active symmetries. 
 
 When the transformations $\alpha$ and $\beta$ are actions by a certain group, then both active and passive symmetries can be expressed in terms of group equivariances.
 They are useful in machine-learning models \cite{cohen2016group, kondor2018convolution, thomas2018tensor, geiger2022e3nn, finzi2020generalizing, finzi2021practical} and have scientific applications \cite{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}.
 Equivariant machine-learning models can predict the properties and behaviour of physical systems (as argued in \cite{cheng2019covariance}), with the correct inductive bias, achieving smaller generalization error \cite{bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning} and allowing for out-of-distribution generalization \cite{villar2022dimensionless}. 
 Even the non-trivial diffeomorphism symmetries of general relativity have been considered for machine learning \cite{weiler}.
 
+\bernhard{you have commented out the next two paragraphs in the latex file -- maybe let's discuss?}
 % The idea of homomorphic structure \eqref{eq.diagram} in the representation space $\cal H$ also applies to causal world models (eg, the brightness changes in the real world may be represented as retinal gain control mechanisms in the nervous system \cite{1911.10500}).
-% Other instantiations of the commutative diagram \eqref{eq.diagram} include representations that retains the dimensions of system components but drops all numbers, or the representation that converts systems into physical equations.
+% Other instantiations of the commutative diagram \eqref{eq.diagram} include representations that retains the dimensions of system components but drops all numbers, \bernhard{add: representations that drops the dimensions and only retains numeric values,} or the representation that converts systems into physical equations.
 
 Most importantly, imposing a passive symmetry on the structure of a machine-learning model can permit the discovery of scalings, structures, or missing elements in the physical description of, or predictions about, the problem.
 We illustrate these ideas with some toy examples below.
@@ -219,7 +231,7 @@ Generalization improvements have been explicitly quantified under different sets
 Consider a mass $m$ near the surface of the Earth, in a location where the surface of the Earth can be considered as a horizontal plane, and close enough to the surface such that the gravitational field can be considered to be determined by a constant (not spatially varying) vector with magnitude $g$ and direction downwards.
 \textsl{Question~1:}~If this mass $m$ is dropped (released at rest) from a small height $h$ from above the ground, how much time $T$ does it take to fall to the ground?
 \textsl{Question~2:}~If this mass $m$ is launched from the surface at a low velocity of magnitude $v$ at an angle $\theta$ to the horizontal, how much horizontal distance $L$ will it fly before it hits the surface again?
-Assume that only $m, g, h$ come in to the solution; assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored.
+Assume that only $m, g, h$ come in to the solution; assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored. \bernhard{We shall return to this seemingly innocuous point below.}
 
 The answers to these questions are almost completely determined by dimensional (or units-covariance) arguments.
 The mass $m$ has units of $\kg$, the gravitational acceleration magnitude $g$ has units of $\m\,\s^{-2}$, the velocity magnitude $v$ has units of $\m\,\s^{-1}$, the time $T$ has units of $\s$, and the lengths $h$ and $L$ have units of $\m$.
@@ -234,8 +246,14 @@ This shows that the structure of physical law can sometimes be inferred from uni
 We note also that these arguments may contain information pertaining to the (hard problem of) inference of causal structure:
 treating $g$ as a constant, we can construct a structural causal model with the following vertices: (a)~an initial value of $v$, (b)~a value of $m$, chosen independently, and (c)~a final value of $L$, affected by a noise term $\theta$.
 Time ordering implies that possible causal arrows are from $v, m, \theta$ to $L$.
-From dimensional analysis, the arrow $m\to l$ is excluded, leaving us with the non-trivial result that in the causal graph, only $v,\theta$ cause $L$.
+As argued above, dimensional analysis rules out the arrow $m\to l$, leaving us with the non-trivial result that in the causal graph, only $v,\theta$ cause $L$.
 Again, this conclusion can be reached without any training data or interventions.
+
+\bernhard{New: There is another intriguing connection to causality that we have glossed over above.
+We made the assumption that only quantities come into the solution (in our case, $m, g, h$). How would we ascertain such an assumption in practice; e.g., why does temperature not affect the result? In essence, this is not a probabilistic statement, but one about the behavior of a system under experimentation, i.e., intervention. A set of experiments can indicate that a certain outcome (or effect variable) depends on a certain set of input (cause) variables but is independent of certain other potential cause variables. The physical law is thus not inferred from dimensional arguments alone, but from a combination of dimensional and causal arguments.
+
+This is also related to the issue of transfer: in practice, we may not be able to tell all inputs (and non-inputs) from experimentation. E.g., it is nontrivial to intervene on $g$ (unless we can run an experiment in an elevator, say). However, we may know from having previously solved a related problem that we expect a problem to depend on $g$. This is a form of qualitative transfer which we believe may be relevant in practice.
+}
 
 \paragraph{Black-body radiation}
 An important moment in the history of physics was the discovery by Planck that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation \cite{planck}
