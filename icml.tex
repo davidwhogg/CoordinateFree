@@ -52,17 +52,18 @@
 %\usepackage[disable,textsize=tiny]{todonotes}
 \usepackage[textsize=tiny]{todonotes}
 
+% add our our own custom macros
+\newcommand{\sectionname}{Section}
+\newcommand{\secref}[1]{\sectionname~\ref{#1}}
 
 % The \icmltitle you define below is probably too long as a header.
 % Therefore, a short form for the running title is supplied here:
-\icmltitlerunning{Submission and Formatting Instructions for ICML 2023}
-
+\icmltitlerunning{Passive symmetries make every machine-learning problem equivariant}
 \frenchspacing
 \begin{document}
 
 \twocolumn[
-\icmltitle{Representation agnosticism, passive symmetries,\\ and equivariant machine learning}
-
+\icmltitle{Passive symmetries make every machine-learning problem equivariant}
 
 \icmlsetsymbol{equal}{*}
 
@@ -108,16 +109,16 @@
 \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
-This is a purely conceptual paper that substantially extends the applicability of group-equivariant methods in machine learning.
+This purely conceptual paper extends the applicability of group-equivariant methods in machine learning to almost all machine-learning methods.
 Any representation of data involves arbitrary investigator choices.
-Because the choices are arbitrary, and external to the data-generating process, each choice leads to an exact symmetry.
-These are the \emph{passive symmetries}; they include coordinate freedom, gauge symmetry, and units equivariance, all of which are important in physics but have equivalents in essentially all data sets.
+Because those choices are arbitrary, and external to the data-generating process, each choice leads to an exact symmetry.
+These are the \emph{passive symmetries}; they include coordinate freedom, gauge symmetry, and units equivariance, all of which have led to important results in physics but have equivalents in essentially all data-analysis tasks.
 The permutation equivariance enforced by graph neural network architectures is an example of an important passive symmetry.
 Our goal is to understand how passive symmetries might be used to improve machine learning methods.
 We develop conditions under which implementing exact passive symmetries will help (or not help) a learning problem, and we provide examples.
 Roughly speaking, they are always helpful, and can be implemented as group equivariances, except when there are relevant but hidden constants that are not included among the features in the learning problem.
-Even when there are hidden constants, in some cases you can learn them.
-The impact of implementing the passive symmetries is greatest when the goal of the learning problem is to generalize out of sample, perform symbolic regression, or obtain interpretable results, but they will help in many other circumstances.
+Even when there are hidden constants, in some cases they can be learned.
+Implementation of passive symmetries is most valuable when the goal of the learning problem is to generalize out of sample, but they will help in many circumstances.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -143,8 +144,9 @@ If the graph nodes are relabeled or reordered, nothing of significance about the
 Famously, graph neural network architectures build this passive symmetry in by design.
 That has been incredibly important and useful in machine learning.
 
-One example familiar to physicists is what's sometimes called dimensional analysis:
-HOGG: EXAMPLE OF FALLING OBJECT.
+One example familiar to physicists is what we call \emph{units equivariance}, which is the requirement that any correct description of the world have inputs and outputs with the correct units.
+This is a purely passive, exact symmetry---the choice of units is an arbitrary investigator choice---but the symmetry leads to dimensional analysis, which is a powerful tool for solving physics problems.
+We discuss this example in more detail in \secref{sec:units}.
 
 Not all symmetries are easy to implement... HOGG... Other symmetries may be even harder to implement such as diffeomorphisms, general relativity
 Equivariant Representation learning (https://arxiv.org/abs/2012.02771)
@@ -153,7 +155,9 @@ HOGG: All observables are classical scalars. The WORLD obeys extremely large sym
 
 HOGG: Unfortunately, passive symmetries are only useful if you know---or learn---housekeeping/external data. HOGG... gravitational force vector, Planck's constant
 
-\section{Units symmetries}
+HOGG: The necessity of thinking about these things if your problem is a symbolic regression or an interpretable method. If you want to get the Right Answer (tm), you have to obey these symmetries exactly.
+
+\section{Example: units symmetry}\label{sec:units}
 HOGG:write the examples of the restrictions of the passive symmetries using symmeries. From the Dagstuhl talk.
 
 Example: timing of the fallen object.
