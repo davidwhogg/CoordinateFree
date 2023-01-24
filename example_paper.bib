@@ -1,9 +1,36 @@
+@article{mcmc,
+ ISSN = {00063444},
+ URL = {http://www.jstor.org/stable/2334940},
+ abstract = {A generalization of the sampling method introduced by Metropolis et al. (1953) is presented along with an exposition of the relevant theory, techniques of application and methods and difficulties of assessing the error in Monte Carlo estimates. Examples of the methods, including the generation of random orthogonal matrices and potential applications of the methods to numerical problems arising in statistics, are discussed.},
+ author = {W. K. Hastings},
+ journal = {Biometrika},
+ number = {1},
+ pages = {97--109},
+ publisher = {[Oxford University Press, Biometrika Trust]},
+ title = {Monte Carlo Sampling Methods Using Markov Chains and Their Applications},
+ urldate = {2023-01-24},
+ volume = {57},
+ year = {1970}
+}
+
+@article{gibbs,
+  title={Gibbs sampling},
+  author={Gelfand, Alan E},
+  journal={Journal of the American statistical Association},
+  volume={95},
+  number={452},
+  pages={1300--1304},
+  year={2000},
+  publisher={Taylor \& Francis}
+}
+
 @article{muldoonmedium,
    author =       "Conor Muldoon",
    title =        "{DeepMind}’s {EigenGame} Is Not a Game!",
    journal =       "medium",
    month =        "May",
    year =         "2021",
+   note = "https://towardsdatascience.com/deepminds-eigengame-is-not-a-game-f580b3709316"
 }
 
 @book{mcp,
@@ -13,6 +40,41 @@
   url={https://books.google.com/books?id=U1S6BQAAQBAJ},
   year={2017},
   publisher={Princeton University Press}
+}
+
+@article{bronstein2021geometric,
+  title={Geometric deep learning: Grids, groups, graphs, geodesics, and gauges},
+  author={Bronstein, Michael M and Bruna, Joan and Cohen, Taco and Veli{\v{c}}kovi{\'c}, Petar},
+  journal={arXiv preprint arXiv:2104.13478},
+  year={2021}
+}
+
+@article{bakarji2022dimensionally,
+  title={Dimensionally consistent learning with buckingham pi},
+  author={Bakarji, Joseph and Callaham, Jared and Brunton, Steven L and Kutz, J Nathan},
+  journal={arXiv preprint arXiv:2202.04643},
+  year={2022}
+}
+
+@article{xie2022data,
+  title={Data-driven discovery of dimensionless numbers and governing laws from scarce measurements},
+  author={Xie, Xiaoyu and Samaei, Arash and Guo, Jiachen and Liu, Wing Kam and Gan, Zhengtao},
+  journal={Nature Communications},
+  volume={13},
+  number={1},
+  pages={7562},
+  year={2022},
+  publisher={Nature Publishing Group UK London}
+}
+
+@article{sr,
+  title={Zur Elektrodynamik bewegter Körper},
+  author={Einstein, Albert and others},
+  journal={Annalen der physik},
+  volume={17},
+  number={10},
+  pages={891--921},
+  year={1905}
 }
 
 @article{gr,
@@ -1593,6 +1655,17 @@ keywords = {Galaxies, General, Techniques, Image processing, Computing methodolo
    year={2015},
    month={Apr},
    pages={1441–1459}
+}
+
+@article{chen2020group,
+  title={A group-theoretic framework for data augmentation},
+  author={Chen, Shuxiao and Dobriban, Edgar and Lee, Jane H},
+  journal={The Journal of Machine Learning Research},
+  volume={21},
+  number={1},
+  pages={9885--9955},
+  year={2020},
+  publisher={JMLRORG}
 }
 
 @article{sanchez-gonzalez2019hamiltonian,
@@ -4674,7 +4747,7 @@ author = {Jin, Pengzhan and Zhang, Zhen and Zhu, Aiqing and Tang, Yifa and Karni
 abstractNote = {Here, we propose new symplectic networks (SympNets) for identifying Hamiltonian systems from data based on a composition of linear, activation and gradient modules. In particular, we define two classes of SympNets: the LA-SympNets composed of linear and activation modules, and the G-SympNets composed of gradient modules. Correspondingly, we prove two new universal approximation theorems that demonstrate that SympNets can approximate arbitrary symplectic maps based on appropriate activation functions. We then perform several experiments including the pendulum, double pendulum and three-body problems to investigate the expressivity and the generalization ability of SympNets. The simulation results show that even very small size SympNets can generalize well, and are able to handle both separable and non-separable Hamiltonian systems with data points resulting from short or long time steps. In all the test cases, SympNets outperform the baseline models, and are much faster in training and prediction. We also develop an extended version of SympNets to learn the dynamics from irregularly sampled data. This extended version of SympNets can be thought of as a universal model representing the solution to an arbitrary Hamiltonian system.},
 doi = {10.1016/j.neunet.2020.08.017},
 journal = {Neural Networks},
-number = C,
+number = "C",
 volume = 132,
 place = {United States},
 year = {2020},
@@ -4694,4 +4767,108 @@ year = {2020},
 month = {12}
 }
 
+@book{PetJanSch17,
+  title = {Elements of Causal Inference - Foundations and Learning Algorithms},
+  author = {Peters, J. and Janzing, D. and Sch{\"o}lkopf, B.},
+  publisher = {MIT Press},
+  address = {Cambridge, MA, USA},
+  year = {2017},
+  ISBN = {978-0-262-03731-0}
 
+}
+
+@article{RojSchTurPet18,
+  title = {Invariant Models for Causal Transfer Learning},
+  author = {Rojas-Carulla, M. and Sch{\"o}lkopf, B. and Turner, R. and Peters, J.},
+  journal = {Journal of Machine Learning Research},
+  volume = {19},
+  number = {36},
+  pages = {1--34},
+  year = {2018}
+}
+
+@inproceedings{khemakhem2020ice,
+ author = {Ilyes Khemakhem and
+Ricardo Pio Monti and
+Diederik P. Kingma and
+Aapo Hyv{\"{a}}rinen},
+ bibsource = {dblp computer science bibliography, https://dblp.org},
+ biburl = {https://dblp.org/rec/conf/nips/KhemakhemMKH20.bib},
+ booktitle = {Advances in Neural Information Processing Systems 33: Annual Conference
+on Neural Information Processing Systems 2020, NeurIPS 2020, December
+6-12, 2020, virtual},
+ editor = {Hugo Larochelle and
+Marc'Aurelio Ranzato and
+Raia Hadsell and
+Maria{-}Florina Balcan and
+Hsuan{-}Tien Lin},
+ timestamp = {Tue, 19 Jan 2021 00:00:00 +0100},
+ title = {{ICE-BeeM}: Identifiable Conditional Energy-Based Deep Models Based
+on Nonlinear {ICA}},
+ year = {2020}
+}
+
+@conference{BucBesSch22,
+  title = {Function Classes for Identifiable Nonlinear Independent Component Analysis},
+  author = {Buchholz, S. and Besserve, M. and Sch{\"o}lkopf, B.},
+  booktitle = {Advances in Neural Information Processing Systems 35 (NeurIPS 2022)},
+  publisher = {Curran Associates, Inc.},
+  month = dec,
+  year = {2022},
+  doi = {},
+  month_numeric = {12}
+}
+
+@article{sharpminima,
+Author = {Laurent Dinh and Razvan Pascanu and Samy Bengio and Yoshua Bengio},
+Title = {Sharp Minima Can Generalize For Deep Nets},
+Year = {2017},
+note = {arXiv:1703.04933},
+}
+
+@inproceedings{petzka2021relative,
+title = {Relative Flatness and Generalization},
+author = {Henning Petzka and Michael Kamp and Linara Adilova and Cristian Sminchisescu and Mario Boley},
+year = {2021},
+date = {2021-12-07},
+urldate = {2021-12-07},
+booktitle = {Advances in Neural Information Processing Systems},
+publisher = {Curran Associates, Inc.},
+abstract = {Flatness of the loss curve is conjectured to be connected to the generalization ability of machine learning models, in particular neural networks. While it has been empirically observed that flatness measures consistently correlate strongly with generalization, it is still an open theoretical problem why and under which circumstances flatness is connected to generalization, in particular in light of reparameterizations that change certain flatness measures but leave generalization unchanged. We investigate the connection between flatness and generalization by relating it to the interpolation from representative data, deriving notions of representativeness, and feature robustness. The notions allow us to rigorously connect flatness and generalization and to identify conditions under which the connection holds. Moreover, they give rise to a novel, but natural relative flatness measure that correlates strongly with generalization, simplifies to ridge regression for ordinary least squares, and solves the reparameterization issue.},
+keywords = {deep learning, flatness, generalization, Hessian, learning theory, relative flatness, theory of deep learning},
+pubstate = {published},
+tppubtype = {inproceedings}
+}
+
+@article{flatminima,
+  author    = {Sepp Hochreiter and
+               J{\"{u}}rgen Schmidhuber},
+  title     = {Flat Minima},
+  journal   = {Neural Comput.},
+  volume    = {9},
+  number    = {1},
+  pages     = {1--42},
+  year      = {1997}
+  }
+
+
+
+@article{LuxburgBS04,
+  author    = {Ulrike von Luxburg and
+               Olivier Bousquet and
+               Bernhard Sch{\"{o}}lkopf},
+  title     = {A Compression Approach to Support Vector Model Selection},
+  journal   = {J. Mach. Learn. Res.},
+  volume    = {5},
+  pages     = {293--323},
+  year      = {2004}}
+
+@article{EARMAN1978251,
+title = {Lost in the tensors: Einstein's struggles with covariance principles 1912–1916},
+author = {John Earman and Clark Glymour},
+journal = {Studies in History and Philosophy of Science Part A},
+volume = {9},
+number = {4},
+pages = {251-278},
+year = {1978}
+}
