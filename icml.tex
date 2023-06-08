@@ -2,7 +2,7 @@
 %% ---------------
 %% - This is the first paper that discusses how to be systematic about coordinate freedom in ML.
 %% - HOGG: Carry the example of FINANCE through everything here, just to make sure we have non-physics examples everywhere. It has both coordinate and units considerations.
-%% - BEFORE ARXIV UNCOMMENT ACKNOWLEDGEMENT
+%% Adjust the description on how we got the magnitude of the missing constant in the black body problem.
 
 \documentclass{article}
 \usepackage{microtype}
@@ -19,12 +19,12 @@
 \newcommand{\theHalgorithm}{\arabic{algorithm}}
 
 % Use the following line for the initial blind version submitted for review:
-\usepackage{icml2023}
+% \usepackage{icml2023}
 % If ACCEPTED, instead use the following line for the camera-ready submission:
 % \usepackage[accepted]{icml2023}
 % For ARXIV, but BEFORE acceptance, uncomment the following two lines (AND UNCOMMENT THE ACKS):
-% \usepackage[accepted]{icml2023}
-% \makeatletter\renewcommand{\ICML@appearing}{Copyright 2023 the authors.}\makeatother
+\usepackage[accepted]{icml2023}
+\makeatletter\renewcommand{\ICML@appearing}{Copyright 2023 the authors.}\makeatother
 
 % For theorems and such
 \usepackage{amsmath}
@@ -78,12 +78,12 @@
 
 % The \icmltitle you define below is probably too long as a header.
 % Therefore, a short form for the running title is supplied here:
-\icmltitlerunning{~ \hfill Passive symmetries of machine learning \hfill \thepage}
+\icmltitlerunning{~ \hfill The passive symmetries of machine learning \hfill \thepage}
 \frenchspacing\sloppy\sloppypar\raggedbottom
 \begin{document}
 
 \twocolumn[
-\icmltitle{Passive symmetries of machine learning
+\icmltitle{The passive symmetries of machine learning
 %Towards covariant machine learning
 %Passive symmetries make every machine learning problem equivariant
 }
@@ -91,22 +91,23 @@
 \icmlsetsymbol{equal}{*}
 
 \begin{icmlauthorlist}
-\icmlauthor{Soledad Villar}{equal,JHU}
+\icmlauthor{Soledad Villar}{equal,JHU,MINDS}
 \icmlauthor{David W. Hogg}{equal,CCPP,MPIA,Flatiron}
 \icmlauthor{Weichi Yao}{Stern}
-\icmlauthor{George A Kevrekidis}{equal ,JHU,LANL}
+\icmlauthor{George A. Kevrekidis}{JHU,LANL}
 \icmlauthor{Bernhard Sch\"olkopf}{MPI-IS}
 \end{icmlauthorlist}
 
-\icmlaffiliation{JHU}{whatevs}
-\icmlaffiliation{CCPP}{Center for Cosmology and Particle Physics, Department of Physics, New York University, New York, USA}
+\icmlaffiliation{JHU}{Department of Applied Mathematics and Statistics, Johns Hopkins University, Baltimore MD, USA}
+\icmlaffiliation{MINDS}{Mathematical Institute for Data Science, Johns Hopkins University, Baltimore MD, USA}
+\icmlaffiliation{CCPP}{Center for Cosmology and Particle Physics, Department of Physics, New York University, New York NY, USA}
 \icmlaffiliation{MPIA}{Max-Planck-Insitut f\"ur Astronomie, Heideilberg, Germany}
-\icmlaffiliation{Flatiron}{Flatiron Institute, a division of the Simons Foundation, New York, USA}
-\icmlaffiliation{Stern}{Stern School of whatever, New York University, New York, USA}
+\icmlaffiliation{Flatiron}{Flatiron Institute, a division of the Simons Foundation, New York NY, USA}
+\icmlaffiliation{Stern}{Department of Technology, Operations, and Statistics, Stern School of Business, New York University, New York NY, USA}
+\icmlaffiliation{LANL}{Los Alamos National Laboratory, Los Alamos NM, USA}
 \icmlaffiliation{MPI-IS}{Max Planck Institute for Intelligent Systems, T\"ubingen, Germany}
-\icmlaffiliation{LANL}{Los Alamos National Laboratory, Los Alamos, New Mexico, USA}
 
-\icmlcorrespondingauthor{Soledad Villar}{svillar3@jhu.edu}
+\icmlcorrespondingauthor{David W. Hogg}{david.hogg@nyu.edu}
 
 % You may provide any keywords that you
 % find helpful for describing your paper; these are used to populate
@@ -147,15 +148,15 @@ Here we suggest another connection between physics and ML, which relates to repr
 When features and labels are represented in a mathematical form that involves investigator choices, the ML method (or any relevant function) ought to be written in a form that is exactly equivariant to changes in those investigator choices.
 These ideas appear in the physics literature as early as \citet{gr}. They are given in the introduction of \textit{The Classical Groups} by \citet{weyl} as a motivation to study group theory.
 The first sentences of \textit{Modern Classical Physics} by \citet{mcp} say
-\vspace{-1ex}\begin{quote}
+\vspace{-1.5ex}\begin{quote}
 [...] a central theme will be a Geometric Principle: 
 The laws of physics must all
 be expressible as geometric (coordinate-independent and reference-frame-independent)
 relationships between geometric objects (scalars, vectors, tensors, ...) that represent
 physical entities.
-\end{quote}\vspace{-1ex}
+\end{quote}\vspace{-1.5ex}
 This principle leads to the important physical symmetries of coordinate freedom and gauge symmetry; a small generalization would include units covariance.
-Each of these symmetries has led to fundamental results in physics. Some of these ideas are also exploited in ML, in particular in the geometric deep learning literature \cite{bronstein2021geometric}. 
+Each of these symmetries has led to fundamental results in physics. Some of these ideas are also exploited in ML, in particular in the geometric deep learning literature \cite{bronstein2021geometric, weiler}. 
 We argue---in this purely conceptual contribution---that analogs of these symmetries could have big impacts in ML, and enormously increase the scope of group-equivariant methods in ML.
 
 In natural science there are two types of symmetries (see, for example, Section 4.1 of \citealt{rovelli2000loop}). 
@@ -176,13 +177,14 @@ In this contribution, we argue that passive symmetries apply to essentially all 
 They have implications for how we structure ML methods. While we provide some examples, most of our contributions are conceptual:
 
 \textbf{Our contributions:}
-\vspace{-1ex}\begin{itemize}
+\vspace{-1.5ex}\begin{itemize}
 \itemsep 0.5\parskip
 \topsep 0pt
 \partopsep 0pt
 \parskip 0pt
 \item
-We introduce active and passive symmetries in the context of ML. While this is an old concept in classical physics, it has not been applied to ML widely yet.
+We introduce the concept of passive symmetries to ML.
+While this is an old concept in classical physics, it has not been applied widely in ML.
 \item
 We give a formal definition of passive symmetries in terms of group actions and explain how passive symmetries are always in play in data problems.
 \item
@@ -197,10 +199,19 @@ Another is that the determination that a data problem has all the inputs necessa
 We provide guidance on how to structure ML models so that they respect the passive symmetries. We call out some current standard practices that prevent models from obeying symmetries. 
 % \item
 % We provide a glossary that can be used to translate ideas between physics and ML. 
-\end{itemize}\vspace{-1ex}
+\end{itemize}\vspace{-1.5ex}
 Some of the ideas seem deceptively simple, yet they have profound implications. Since ML has not yet absorbed these notions as naturally as physics has, we need to discuss analogies to physics in some detail. We have tried to make the discussion accessible to an ML audience; the Appendices includes a glossary that can be used to translate ideas between physics and ML.
 
 \section{Passive symmetries}\label{sec:informal}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.45\textwidth]{alias.png}
+    \vspace{-1.5ex}
+    \caption{Figure depicting the difference between active and passive transformations. \textsl{(Left panel)}: The passive or alias transformation corresponding to a rotation of the coordinates through an angle $\theta$ in the xy-plane. The equivariance of the dynamics with respect to this tranformation is a passive symmetry. \textsl{(Right panel)}: The active or alibi transformation corresponding to a rotation of the double pendulum state through an angle $-\theta$ in the xy-plane. Equivariance with respect to this transformation is an active symmetry.}
+    \vspace{-2.5ex}
+    \label{fig:alias}
+\end{figure}
 
 Passive symmetries arise from redundancies or free parameters or investigator choices in the representation of data.
 They are to be contrasted with the active symmetries, which arise from observed or empirical invariances of the laws of physics with respect to parameters, like position, velocity, particle labeling, or angle.
@@ -216,7 +227,7 @@ This finding relies on the (empirical) observation that the local gravitational 
 This may be approximately true or assumed or experimentally established; it is an active symmetry.
 In contrast, the fact that the protein folds in a way that doesn't depend on the coordinate system chosen to describe it is absolutely and always true; it is not experimentally established; it is a passive symmetry.
 
-The relationship between active and passive symmetries is reflected in the relationship between what are sometimes called active and passive transformations, or \emph{alibi} and \emph{alias} transformations.
+The relationship between active and passive symmetries is reflected in the relationship between what are sometimes called active and passive transformations, or \emph{alibi} and \emph{alias} transformations, depicted in Figure \ref{fig:alias}.
 An active or alibi transformation is one in which the objects of study are moved (rotated, translated, interchanged, etc.).
 A passive or alias transformation is one in which the coordinate system in which the objects of study are described is changed (rotated, translated, relabeled, etc.).
 Mathematically, the two kinds of transformations seem very similar:
@@ -289,12 +300,14 @@ We consider a family of maps $\{\Phi_i: \mathcal X \to \mathcal H_i\}_{i\in \mat
 The family of maps $\{\Phi_i\}_{i\in \mathcal I}$ not only describes the possible observables but also a way to express those observables in a specific coordinate system and with specific units. 
 
 We say that two encodings $\Phi_i$ and $\Phi_j$ are compatible if there exists an invertible morphism $\beta_{j}^i:\Phi_i(\mathcal X)\to  \Phi_j(\mathcal X)$ that makes the diagram \eqref{eq.diagram} commute.
+\vspace{-1.5ex}
 \begin{equation}\label{eq.diagram}
 \small
 \begin{tikzcd}[every label/.append style = {font = \small}]
   {\cal X}\arrow[r,"id"] \arrow[d,"\Phi_i",swap] & {\cal X}  \arrow[d,"\Phi_j"]\\
 {\mathcal H_i} \arrow[r,"\beta_{j}^i"]  & {\mathcal H_j} 
 \end{tikzcd}
+\vspace{-1.5ex}
 \end{equation}
 Note that not all observables are compatible. We expect that observables of different types (for instance, masses and positions) are not compatible. Which observables are compatible depend on the definition of the spaces $\mathcal H_i$ and the invertible morphisms $\beta$ between them.
 %Namely, the encodings $\Phi_i$ and $\Phi_j$ are compatible (or \emph{equivalent}) if they express the same aspect of the world in possibly different representation. WE SHOULD FURTHER DISCUSS THIS POINT. For instance in under this definition if $\Phi_i(x)$ is the p 
@@ -306,16 +319,19 @@ Critical to the definition is that we establish beforehand the spaces of possibl
 
 For example, take $\mathcal X$ to be a protein. Each map $\Phi_i$ could encode a list of positions of each of its atoms in some coordinate system. The passive symmetries include reordering of the atoms, and changes of the coordinate system by any invertible morphism. We may restrict $\mathcal H_i$ to the category of smooth manifolds where the $\beta$'s are diffeomorphisms, or we may only allow the $\beta$'s to be orthogonal transformations that fix the origin. Restricting the space of valid coordinates naturally restricts the valid changes of coordinates and therefore the space of passive symmetries.
 
-The active symmetries can be thought as transformations of the world that preserve a relationship between two encodings or observations.
-Given a compatible family of observations $\{\Phi_i\}_{i\in I}$ as above, we say that a 1-1 map $\alpha:\mathcal X \to \mathcal X$ is an active symmetry (for those observations) if there exist $i,j\in I$ such that $\mathcal H_i = \mathcal H_j$ and the diagram \eqref{eq.diagram2} commutes. 
-\begin{equation}\label{eq.diagram2}
-\small
-\begin{tikzcd}[every label/.append style = {font = \small}]
-  {\cal X}\arrow[r,"\alpha"] \arrow[d,"\Phi_i",swap] & {\cal X}  \arrow[d,"\Phi_j"]\\
-{\mathcal H} \arrow[r,"id"]  & {\mathcal H} 
-\end{tikzcd}
-\end{equation}
-The active symmetries require transformations or interventions on the physical system. Therefore they are typically empirical and approximate.
+Active symmetries, on the other hand, can be thought as transformations of the world that preserve an observable property.
+%Given a compatible family of encodings $\{\Phi_i\}_{i\in I}$ as above, we could say that a map $\alpha:\mathcal X \to \mathcal X$ represents an active symmetry if there exist $i,j\in I$ such that $\mathcal H_i = \mathcal H_j$ and the diagram \eqref{eq.diagram2} commutes. 
+%\begin{equation}\label{eq.diagram2}
+%\small
+%\begin{tikzcd}[every label/.append style = {font = \small}]
+%  {\cal X}\arrow[r,"\alpha"] \arrow[d,"\Phi_i",swap] & {\cal X}  \arrow[d,"\Phi_j"]\\
+%{\mathcal H} \arrow[r,"id"]  & {\mathcal H} 
+%\end{tikzcd}
+%\end{equation}
+They involve interventions in the physical system, and therefore they are typically empirical and approximate.
+Not every passive symmetry corresponds to an active symmetry, nor vice versa.
+%For instance there are passive symmetries that would translate into active symmetries w transformations of the world that are not physically possible (such as changing $g$).
+%There are  alternative definitions of active symmetries that do not rely on observables. 
 
 Imposing a passive symmetry on the structure of an ML model can permit the discovery of scalings, structures, or missing elements in the physical description of, or predictions about, the problem.
 We illustrate these ideas with some toy examples below.
@@ -335,11 +351,11 @@ After all, most problems (like reading handwriting or predicting gravitational t
     \centering
     \includegraphics[width=0.99\textwidth]{pendulum}
     \includegraphics[width=0.99\textwidth]{table}
-    \end{minipage}
+    \end{minipage}\vspace{-1.5ex}
     \caption{\textsl{(Left panel)}~We predict the intensity of black body radiation as a function of wavelength and temperature. For all experiments we use an MLP consisting of 3 layers with 20 hidden units each. The \emph{standard MLP} uses wavelength and temperature as features and it doesn't require the output to be dimensionally correct. The \emph{units covariant without extra constant} learns a scaling of the only dimensionally correct object one can construct with inputs $\lambda, T, c, k$ (see description main in text). The \emph{units covariant with extra dimensional constant} incorporates a constant with units $[\kg, \m, \s, \K]\in[-1,0,1]^4$ as an input feature, it performs a units covariant regression with the original features $\lambda, T, c, k$ and the extra constant. It then selects a constant with low validation error and reports the results on the test set. The constant learned for the depicted plot is 1.61e52 $\kg^{-1}\m^{-1}\s^{-1}\K^{-1}$, which is the same units and similar magnitude to the valid physical combination $c\,k\,h^{-2}$.
-    \textsl{(Right panel)}~Performance of learning the dynamics of the springy double pendulum. We consider the three models (described in main text): (Known-g) an $O(3)$-equivariant model where the gravity is an input to the model, (No-g) an $O(3)$-equivariant model where the gravity is not given, and (learned-g) an $O(3)$-equivariant model that uses the position and momenta as well as an unknown vector that the model learns. The results show that $O(3)$-equivariance permits the learning of the gravity vector from data with only minimal impact in performance.}
+    \textsl{(Right panel)}~Performance of learning the dynamics of the springy double pendulum. We consider the three models (described in main text): (Known-g) an $O(3)$-equivariant model where the gravity is an input to the model, (No-g) an $O(3)$-equivariant model where the gravity is not given, and (learned-g) an $O(3)$-equivariant model that uses the position and momenta as well as an unknown vector that the model learns. The results show that $O(3)$-equivariance permits the learning of the gravity vector from data with only minimal impact in performance. See Appendix \ref{app:pendulum} for a more detailed description of the experiment.}
     \label{fig:my_label}
-    \vspace{-1ex}
+    \vspace{-1.5ex}
 \end{figure*}
 
 \textbf{Black-body radiation:}
@@ -396,7 +412,7 @@ This difficulty is related to the problem in causal inference of knowing or spec
 
 This can also be linked to the notion of experimental interventions. Suppose we assume that only certain quantities come into the solution (say, $m, g, h$). How would we confirm this in practice? In essence, this is not a probabilistic statement, but one about the behavior of a system under interventions. A set of experiments can indicate that a certain outcome (or effect variable) depends on a certain set of input (cause) variables but is independent of certain other potential cause variables. In this case, the physical law is not inferred from dimensional arguments alone, but from a combination of dimensional and causal arguments.
 
-Even if interventions are not available (e.g., for $g$, unless we can run an experiment in an elevator, say), physicists trying to infer a law (or high school students trying to solve a puzzle like the ones above) will not do so based (purely) on input-output data: they will have prior knowledge from related problems informing them as to which variables are relevant. E.g., we may know from having previously solved a related problem that we expect a problem to depend on $g$.
+Even if interventions are not available (e.g., for $g$), physicists trying to infer a law will not do so based (purely) on input-output data: they will have prior knowledge from related problems informing them as to which variables are relevant. E.g., we may know from having previously solved a related problem that we expect a problem to depend on $g$.
 This is a form of qualitative {\em transfer} that we expect will also become relevant for model transfer in ML \cite{RojSchTurPet18}.
 
 \section{Connections to current ML practice}\label{sec:practice}
@@ -404,24 +420,24 @@ This is a form of qualitative {\em transfer} that we expect will also become rel
 Most ML implementations don't impose exact symmetries. Sometimes they approximate equivariances by means of data augmentation \cite{chen2020group, huang2022quantifying}.
 In the present work we focus on exact symmetries: Given data spaces $X$ and $Y$ and a group $G$ acting on $X$ and $Y$, equivariant ML restricts the function space to those satisfying  $f(g\cdot x) = g \cdot f(x)$ for all $f\in \mathcal F$, $g\in G$, $x\in X$.
 There are two main approaches to perform optimization in the space of equivariant functions:
-\vspace{-1ex}\begin{itemize}
+\vspace{-1.5ex}\begin{itemize}
 \itemsep 0.5\parskip
 \topsep 0pt
 \partopsep 0pt
 \parskip 0pt
     \item Explicitly parameterizing the space of equivariant functions via equivariant layers or weight sharing \cite{cohen2016group, kondor2018convolution, thomas2018tensor, geiger2022e3nn, finzi2020generalizing, finzi2021practical}.
     \item Finding a set of invariant features and expressing the equivariant functions in terms of those features \cite{villar2021scalars,blum2022equivariant}.
-\end{itemize}\vspace{-1ex}
+\end{itemize}\vspace{-1.5ex}
 The two approaches are theoretically equivalent, but their practical implementation may be dramatically different. For example, efficiently computing a complete generating set of invariant/equivariant features may be prohibitive. On the other hand, in some cases it may hard to construct a perfectly invariant/equivariant layer (or family of approximating functions); more often, it may be possible to construct such a family, but we may lack proof that they are universal approximators of \textit{all} invariant/equivariant functions within some well-defined context, even in a limiting sense.
 
 Aside from the previously mentioned results in Convolutional/Graph Neural Networks, another example of successful exact universal parametrization of a family of functions is the implementation of symplectic networks, which exactly preserve a (not-necessarily-known) differential 2-form on a manifold by acting on ambient space \cite{sympnets,henonnets}. Even the non-trivial diffeomorphism symmetries of general relativity have been considered for ML \cite{weiler}.
  
-Equivariant ML models can predict the properties and behaviour of physical systems (as argued in \citealt{cheng2019covariance}), and have plenty of scientific applications \cite{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}. The implicit bias, generalization error, and sample complexity of equivariant ML models have been recently studied \cite{lawrence2021implicit, bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning}.
+Equivariant ML models can predict the properties and behaviour of physical systems (see \citealt{cheng2019covariance}), and have plenty of scientific applications \cite{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}. The implicit bias, generalization error, and sample complexity of equivariant ML models have been recently studied \cite{lawrence2021implicit, bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning}.
 
 \section{Dos and Don'ts}\label{sec:dos}
 
 MacKay famously wrote (see \citealt{muldoonmedium})
-\vspace{-1ex}\begin{quote}Principal Component Analysis is a dimensionally invalid method that gives people a delusion that they are doing something useful with their data. If you change the units that one of the variables is measured in, it will change all the ``principal components''\end{quote}\vspace{-1ex}
+\vspace{-1.5ex}\begin{quote}Principal Component Analysis is a dimensionally invalid method that gives people a delusion that they are doing something useful with their data. If you change the units that one of the variables is measured in, it will change all the ``principal components''\end{quote}\vspace{-1.5ex}
 This comment is aligned with our mission, but also misleading: If a rectangular data set contains only data with identical units (that is, all features of all records have the same units), then PCA does excactly the right thing.
 That said, if a rectangular data set has features with different units (for example, if every record contains a position, a temperature, a voltage, and a few intensities), then indeed the output of PCA will be extremely sensitive to the units system in which the features are recorded.
 If PCA is run on such a data set, the subsequent data model or data manipulations will be, by construction, asymmetric or not consistent with the passive symmetry of units covariance.
@@ -434,8 +450,7 @@ On the other hand, if a kernel function can be chosen that is units covariant (e
 
 Learning involves optimization.
 Optimization is of a scalar cost function (a number, which is a function of many parameters).
-If passive geometric groups are in play, like $O(3)$, the parameters that are explicitly or implicitly components of vectors can only be combined into the scalar objective through the Euclidean norm.
-Otherwise the scalar objective isn't scalar in the geometric sense of ``invariant to $O(3)$'', and the optimization won't return a result that is invariant (or equivariant) to $O(3)$.
+If passive geometric groups are in play, like $O(3)$, the parameters that are explicitly or implicitly components of vectors can only be combined into the scalar objective through the Euclidean norm. Otherwise the scalar objective isn't scalar in the geometric sense of ``invariant to $O(3)$'', and the optimization won't return a result that is invariant (or equivariant) to $O(3)$.
 Similarly, if the components of the vector are normalized differently before they are summed in quadrature, the objective won't be invariant to $O(3)$.
 And similarly, if all the different contributions to the objective aren't converted to the same units before being combined into the objective, then the model won't be units covariant.
 The common practices of making objectives with functional forms other than Euclidean norm, normalizing features with data ranges, and combining features with different units, all make common ML methods, by construction, inconsistent with the passive symmetries in play.
@@ -445,8 +460,10 @@ Transcendental functions like \texttt{exp()} and \texttt{arctanh()} and most oth
 That means that the nonlinearities in neural networks are predicated on the weights removing the units of the input features, and the linear combinations performing some kind of dot products on the inputs.
 That, in turn, means that the internal weights in the bottom and top layers of a neural network \emph{implicitly} have geometric properties and units.
 They have the geometric properties and units such that the latent variables passed into the nonlinear functions are dimensionless scalars.
-There are exceptions:
-If the nonlinearity is mathematically homogeneous, as it is for a pure monomial, or for the unmodified RELU function, dimensional scalars (but not vector or tensor components) can be taken as inputs.
+Because they have these properties, a trained neural network cannot be covariant in the end, unless the inputs and outputs are already covariant scalars.
+
+There are exceptions to the restrictions on nonlinear functions:
+If nonlinearities are mathematically homogeneous, as it is for a pure monomial, or for the RELU function, dimensional scalars (but not vector or tensor components) can be taken as inputs.
 It's interesting to ask whether the success of RELU in ML might be related to its homogeneity.
 
 $L_1$ and $L_\infty$ norms are almost always inconsistent with the passive symmetries.
@@ -483,13 +500,20 @@ That said, many groups have been implemented usefully, including translations, r
 In addition to the exact (and true by definition) passive symmetries, and the observed active symmetries, there are other kinds of approximate or weakly broken symmetries we might call \emph{observer symmetries}.
 These arise from the point that the content of a data record (an image, say) is independent of the minor choices made by the observer in taking that data record (shooting the image, say).
 The details of the six-axis location and orientation of the camera, and of the exposure time and focus, can be changed without changing the semantic or label content of the image.
-These symmetries are approximate, because of course these changes don't lead to invertible changes to the recorded data; there is no group or groupoid in the space of the data.
+These symmetries are approximate, because these changes don't lead to invertible changes in the recorded data; there is no group or groupoid in the space of the data.
 However, the success of convolutional structure in image models might have to do with the importance of these observer symmetries.
 There is much more to do in this space.
 
-% \textbf{Acknowledgement:}
-% It is a pleasure to thank Ben Blum-Smith (JHU) for valuable discussions.
-% This project was started at the meeting \textit{Machine Learning for Science} at Schloss Dagstuhl, 2022 September 18--23.
+\textbf{Acknowledgement:}
+It is a pleasure to thank Ben Blum-Smith (JHU) for valuable discussions.
+This project was started at the meeting \textit{Machine Learning for Science} at Schloss Dagstuhl, 2022 September 18--23.
+SV was partially supported by
+ONR N00014-22-1-2126, 
+the NSF–Simons Research Collaboration on the Mathematical and Scientific Foundations of Deep Learning
+(MoDL) (NSF DMS 2031985),
+NSF CISE 2212457,
+and
+an AI2AI Amazon research award.
 % SOLE: GRANT NUMBERS?
 
 {\raggedright
@@ -499,6 +523,7 @@ There is much more to do in this space.
 
 \appendix\onecolumn
 \section{Springy double pendulum}\label{app:pendulum}
+
 We consider the dissipationless spherical double pendulum with springs, with a pivot $o$ and two masses connected by springs. The kinetic energy $\mathcal{T}$ and potential energy $\mathcal{U}$ of the system are given by
 \begin{align}
     KE =&\;\frac{|\mathbf{p}_1|^2}{2m_1} +\frac{|\mathbf{p}_2|^2}{2m_2}, \label{eq:energy_T}\\
@@ -593,10 +618,6 @@ A symmetry is \emph{passive} when it arises from a choice in the representation 
 Examples include coordinate freedom, gauge freedom, and units covariance.
 These symmetries are exact and true by definition.
 
-\textbf{representation:}
-There are two meanings of the word \emph{representation}. One is the approximate way we describe a system (or all the objects in a system) either in a mathematical model or on a computer.
-The other is the \emph{representation of a group} $G$: a homomorphism $\rho: G\to \text{GL}(V)$ where $V$ is a vector space and $\text{GL}(V)$ denotes the space of invertible linear transformations from $V$ to itself.
-
 \textbf{scalar:}
 A number (with or without units), whose value does not depend on the coordinate system in which it is represented, is a \emph{scalar}.
 Thus, say, the charge of a particle is a scalar, but the $x$ coordinate of its velocity is not a scalar.
@@ -606,7 +627,7 @@ Given a mathematical object $X$ of any sort, (like a manifold, metric space, equ
 
 \textbf{tensor:}
 A linear function of $k-1$ vectors that outputs a vector, or a linear function of $k$ vectors that outputs a scalar, is a $k$-\emph{tensor}.
-By this definition, a rectangular array of data is not usually a tensor according to this definition.
+A rectangular array of data is not usually a tensor according to this definition.
 A vector can be seen as a 1-tensor, and a scalar can be seen as a 0-tensor.
 
 \textbf{units:}
@@ -619,7 +640,7 @@ The left-hand side and the right-hand side of any equation must have the same un
 This symmetry is called (by us) \emph{units covariance} (contra \citealt{villar2022dimensionless} where it is called ``units equivariance'').
 
 \textbf{vector:}
-An ordered list of $d$ numbers, all of which has the same units, that is subject to the passive $O(d)$ symmetry corresponding to coordinate-system rotations, is a \emph{vector} in $d$ dimensions.
+An ordered list of $d$ numbers, all of which have the same units, that is subject to the passive $O(d)$ symmetry corresponding to coordinate-system rotations, is a \emph{vector} in $d$ dimensions.
 A generic list of $d$ features is not usually a vector according to this definition.
 The inner (or dot) product of two vectors produces a scalar; for this reason a vector can be seen as a 1-tensor.
 
