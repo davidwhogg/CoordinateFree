@@ -1,10 +1,12 @@
 %% NOTES TO SELVES
 %% ---------------
-%% - This is the first paper that discusses how to be systematic about coordinate freedom in ML.
 %% - HOGG: Carry the example of FINANCE through everything here, just to make sure we have non-physics examples everywhere. It has both coordinate and units considerations.
 %% - HOGG: Adjust the description on how we got the magnitude of the missing constant in the black body problem.
 %% - HOGG: Audit for uses of "equivariant" and "covariant" and "invariant".
 %% - HOGG MAY WANT to adjust margins and line spacing for arXiv, because his eyes are burning.
+%% - HOGG: Should there be an explicit literature review, written by SOLE?
+%% SOLE: audit cdot 
+%% - SOLE: You commented this out. Either deal with it or delete it? \soledad{DO WE NEED TO MENTION AND CITE Equivariant Representation learning (https://arxiv.org/abs/2012.02771)? Here or somewhere above in Related Work?}
 
 \documentclass{article}
 \usepackage{tmlr}
@@ -80,15 +82,14 @@
 Any representation of data involves arbitrary investigator choices.
 Because those choices are external to the data-generating process, each choice leads to an exact symmetry, corresponding to the group of transformations that takes one possible representation to another.
 These are the \emph{passive symmetries}; they include coordinate freedom, gauge symmetry and units covariance, all of which have led to important results in physics.
-Our goal is to understand the implications of passive symmetries for machine learning: Which passive symmetries play a role (e.g., permutation symmetry in graph neural networks)? What are \emph{dos and don'ts} in machine learning practice?
-We assay conditions under which passive symmetries can be implemented as group equivariances.
-We also discuss links to causal modeling, and argue that 
-the implementation of passive symmetries is particularly valuable when the goal of the learning problem is to generalize out of sample.
-While this paper is purely conceptual, we believe that it can have an impact on helping machine learning make the transition that took place for modern physics in the first half of the Twentieth century.
+Our goal is to understand the implications of passive symmetries for machine learning: Which passive symmetries play a role (e.g., permutation symmetry in graph neural networks)? What are \emph{dos and don'ts} in machine learning practice if passive symmetries are to be respected?
+We discuss links to causal modeling, and argue that the implementation of passive symmetries is particularly valuable when the goal of the learning problem is to generalize out of sample.
+This paper is purely conceptual;
+it is intended to help with translation among physics, mathematics, and machine-learning languages.
+We believe that consideration of passive symmetries can help machine learning make the transition that took place for modern physics in the first half of the twentieth century.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
-
 Many important ideas in machine learning (ML) have come from---or been inspired by---mathematical physics.
 These include the kernel trick \citep{CouHil53,SchSmo02} and the use of statistical mechanics techniques to solve probabilistic problems \citep{mcmc, gibbs}.
 Here we suggest another connection between physics and ML, which relates to representation of observables:
@@ -110,10 +111,12 @@ In natural science there are two types of symmetries (see, for example, Section 
 The first kind is \emph{passive}, arising from the arbitrariness of the mathematical representation described above.
 An example familiar to machine learners is the equivariance of functions on graphs to the relabeling of the graph nodes.
 This is an exact, passive symmetry; graph neural network architectures (GNNs) build this passive symmetry in by design \citep{bruna2013spectral, duvenaud2015convolutional, gilmer2017neural}. 
-An example familiar to physicists is what we call \emph{units covariance}, which is the requirement that any correct description of the world have inputs and outputs with the correct units: \bernhard{NEW: imagine an equation connecting physical observables that numerically holds true. If the left hand side and the right hand side of the equation were to contain different dimensions, then we could disrupt the numerical correctness of the equation by changing the units using which we measure some of the observables (e.g., from kg to pounds).}
-This passive symmetry leads to remarkable results; we discuss these in \secref{sec:units}.
+An example familiar to physicists is what we call \emph{units covariance}, which is the requirement that any correct description of the world have inputs and outputs with the correct units (and dimensions; see \secref{sec:glossary} for definitions):
+Imagine an equation connecting physical observables that numerically holds true.
+If the left hand side and the right hand side of the equation were to represent quantities with different dimensions (for example, a length on the LHS and a time on the RHS), then we could disrupt the numerical correctness of the equation by changing the units in which we measure some of the observables (e.g., from s to yr).
+This passive symmetry leads to remarkable results; we discuss a few in \secref{sec:units}.
 
-The second kind of symmetries is {\em active}.
+The second kind of symmetries is \emph{active}.
 These are the ones that must be established by observations and experiments.
 The fundamental laws of physics do not seem (at current precision) to depend on position, orientation, or time, which in turn imply conservation of momentum, angular momentum and energy (the celebrated theorem of \citealt{noether}).
 Of course the motion of a particle depends on time and position! But the fundamental laws governing the motion do not themselves appear to depend on the absolute value of the time, nor the position of the experimental apparatus.
@@ -123,7 +126,7 @@ Both active and passive symmetries can be expressed in terms of group or groupoi
 In this contribution, we argue that passive symmetries apply to essentially all data analysis problems.
 They have implications for how we structure ML methods. While we provide some examples, most of our contributions are conceptual:
 
-\textbf{Our contributions:}
+\paragraph{Our contributions:}
 \begin{itemize}
 \item
 We introduce the concept of passive and active symmetries to ML.
@@ -147,9 +150,8 @@ We provide a glossary that can be used to translate ideas between physics and ML
 Some of the ideas seem deceptively simple, yet they have profound implications. Since ML has not yet absorbed these notions as naturally as physics has, we need to discuss analogies to physics in some detail. We have tried to make the discussion accessible to an ML audience.
 
 \section{Glossary}\label{sec:glossary}
-While some of the below terms will only be described in detail further below, we start with a glossary to facilitate reading the paper.
-\bernhard{could quote Halmos here: "... the reader should not feel discouraged if he finds he does not have the prerequisities for reading the prerequisites" }
-
+We provide here a glossary to translate terminologies among machine learning, mathematics, and physics.
+Some of what's here will be expanded upon further in subsequent Sections.
 \begin{description}
 \item[active symmetry:]
 A symmetry is \emph{active} when it is an observed or empirical regularity of the laws of physics.
@@ -164,14 +166,21 @@ The redundancy of this representation---the fact that the investigator had many 
 If the inputs to a physics problem are moved to a different coordinate system (because of a change in the origin or orientation), the outputs of the problem must be correspondingly moved.
 In much of the literature ``coordinate freedom'' is only used in relationship to general covariance, but it applies in all contexts (including non-physics contexts) in which a coordinate system has been chosen.
 \item[covariance:]
-When a physical law is written in a way that is equivariant with respect to all (or some) passive symmetries, then the law is said to be \emph{covariant}.
+When a physical law is equivariant with respect to a passive symmetry, then the law is said to be \emph{covariant} with respect to that symmetry.
 \item[dimensional analysis:]
 The technique in physics of deducing scalings by consideration of units covariance is \emph{dimensional analysis}.
 \item[equivariance:]
-Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X$ and $\rho_Y$ respectively. We say that a function $f:X\to Y$ is \emph{equivariant} if for any group element $g\in G$ and any possible input $x$, the function obeys $f( \rho_X(g) x) = \rho_Y(g)\cdot f(x)$.
+Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X:G\to \operatorname{Sym}(X)$ and $\rho_Y:G\to \operatorname{Sym}(Y)$ respectively. Namely, $\rho_X$ (and similarly $\rho_Y$) maps each element of $G$ to a bijective function from $X$ to itself satisfying some rules described in the definition of ``group action''. We say that a function $f:X\to Y$ is \emph{equivariant} if for any group element $g\in G$ and any possible input $x$, the function obeys $f( \rho_X(g)(x)) = \rho_Y(g)(f(x))$. This is typically expressed by saying that the following commutative diagram commutes for all $g\in G$:
+\begin{equation}
+\begin{tikzcd}[every label/.append ]
+  {X}\arrow[r, "f"] \arrow[d,"\rho_X(g)",swap] & {Y}  \arrow[d,"\rho_Y(g)"]\\
+{X} \arrow[r, "f"]  & {Y} 
+\end{tikzcd}
+\end{equation}
 The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps(X,Y)}$ then $g\cdot f = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$.
 The equivariant maps are the fixed points of this action.
-Equivariances define symmetries in the space of maps.  \hogg{ADD COMMENT ABOUT ACTIVE ONLY HERE??}
+
+While an equivariance is a mathematical property of a map, in this contribution we use the word ``equivariance'' mainly in the context of active symmetries, and ``covariance'' in the context of passive symmetries.
 \item[gauge freedom:]
 Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
 These freedoms lead to additional passive symmetries that are known as \emph{gauge freedom}.
@@ -212,7 +221,6 @@ The inner (or dot) product of two vectors produces a scalar; for this reason a v
 \end{description}
 
 \section{Passive symmetries}\label{sec:informal}
-
 Passive symmetries arise from redundancies or free parameters or investigator choices in the representation of data.
 They are to be contrasted with the active symmetries, which arise from observed or empirical invariances of the laws of physics with respect to parameters, like position, velocity, particle labeling, or angle.
 Passive symmetries can be established with no need of observations, as they arise solely from the principle that the physical world is independent of the mathematical choices we make to describe it.
@@ -220,12 +228,12 @@ The groups involved in coordinate freedom can be large and complicated (for exam
 
 In contrast, a big part of the literature on equivariant ML is implicitly or explicitly looking at \emph{active} symmetries.
 This is possibly because in most problems the coordinate system is fixed before the problem is posed, and both training and test data are expressed in those fixed coordinates.
-If a data set is made with a fixed coordinate system, but still exhibits an {\em observable} invariance or equivariance with respect to (say) rotations, then that represents an active symmetry.
+If a data set is made with a fixed coordinate system, but still exhibits an \emph{observable} invariance or equivariance with respect to (say) rotations, then that represents an active symmetry.
 However, cases of exact active symmetries are rare; they only really appear in natural-science contexts like protein folding or cosmology.
 For example, in a protein folding problem, the way the protein folds may not depend on its orientation in space (rendering the problem actively O(3) equivariant).
 This finding relies on the (empirical) observation that the local gravitational field (on Earth) does not affect the folding.
 This may be approximately true or assumed or experimentally established; it is an active symmetry.
-In contrast, the fact that the protein folds in a way that doesn't depend on the coordinate system {\em chosen to describe it} is absolutely and always true; it is not experimentally established; it is a passive symmetry.
+In contrast, the fact that the protein folds in a way that doesn't depend on the coordinate system \emph{chosen to describe it} is absolutely and always true; it is not experimentally established; it is a passive symmetry.
 
 \begin{figure}
     \centering
@@ -255,7 +263,7 @@ We will come back to the connections to causality in \secref{sec:causality}.
 Once a passive symmetry---and all relevant contextual information---is identified, we want to write the data analysis problem or learned function such that it is exactly \emph{equivariant} with respect to the relevant group:
 If the representation or coordinate system of the inputs is changed, the representation or coordinate system of the output should change correspondingly.
 ML methods that are not constrained to respect passive symmetries are doomed to make certain kinds of mistakes.
-We will provide some examples thereof in \secref{sec:dos}.
+We will provide some examples thereof in \secref{sec:dos} and \secref{sec:norm}.
 
 The most restrictive form of the Geometric Principle quoted in \secref{sec:intro} states that physical law must be written in terms of vectors, tensors, and (coordinate-invariant) scalars.
 These objects can only be combined by rules set out in the Ricci calculus (\citealt{ricci}; sometimes Einstein summation notation, \citealt{einstein}).
@@ -263,35 +271,42 @@ This calculus was introduced to make objects equivariant to coordinate diffeomor
 In the Ricci calculus, objects are written in index notation (a scalar has no indices, a vector has one index, and a $k$-tensor has $k$ indices), outer products are formed, and only certain kinds of sums over pairs of indices are permitted.
 When the inputs to a function are scalars, vectors, and tensors, and the function conforms to the rules of the Ricci calculus, the function will produce a geometric output (a scalar, vector, or tensor,\footnote{%
 It should be noted here that with the word ``vector'' and ``tensor'' here we are making specific technical reference to true vectors and tensors in 3-space, subject to passive $O(3)$ symmetries, like (physical) velocities, accelerations, and stress tensors.
-We are \emph{not} including arbitrary lists or tables of data or coefficients, which are sometimes called ``vectors'' and ``tensors'' in ML contexts.}
-depending on the number of unsummed indices), and the function will be precisely 
-%equivariant\bernhard{in our new terminology: 
-covariant to rotations and reflections of the coordinate system.
+We are \emph{not} including arbitrary lists or tables of data or coefficients, which are sometimes called ``vectors'' and ``tensors'' in ML contexts.} depending on the number of unsummed indices), and the function will be precisely covariant to rotations and reflections of the coordinate system.
 This is how a large class of passive symmetries are enforced in physics contexts.
 
-There are many other passive symmetries, including coordinate diffeomorphisms, reparameterizations (including canonical transformations), units covariance (see \secref{sec:units}), and gauge.
-Some of these are easy to implement and some are difficult;
-not all passive symmetries have practical implementations available at present.
+There are many other passive symmetries, including coordinate diffeomorphisms, reparameterizations (including canonical transformations in Lagrangian and Hamiltonian systems), units covariance (see \secref{sec:units}), and gauge freedom.
+Some of these are easy to implement in ML contexts and some are difficult;
+not all group equivariances have practical implementations available at present.
 
-\hogg{We need a paragraph about the relationship between active and passive symmetries, and how they can be converted.}
+Sometimes it is difficult to tell whether a symmetry is active or passive.
+For example, the law of gravity is explicitly $O(3)$ invariant:
+If you rotate all of the position vectors, you rotate all of the forces correspondingly too.
+If you rotate all of the initial conditions, you rotate all of the gravitational trajectories correspondingly too.
+But this symmetry is also a passive symmetry:
+The law of gravity does not depend on the orientation (or handedness) of the coordinate system.
+In this sense, active symmetries can sometimes be turned into passive symmetries:
+If you know that an active symmetry is in play, you can sometimes write the physical law in terms of invariants such that the symmetry is true by construction or definition, and thus becomes a passive symmetry.
+This conversion of an active symmetry into a passive symmetry is related to the alias--alibi distinction mentioned above.
 
-The passive coordinate diffeomorphism symmetry on curved manifolds has been tremendously important in the development of contemporary physics.
-Einstein, for example, found the equations of general relativity by looking at every expression to some degree consistent with the passive symmetry enforced by the Ricci calculus (he called this family of functions \emph{covariant}) until he found the one that reduced to Newtonian gravity in the weak-field limit \citep{gr}.
-Following this lead, we will refer to the passive symmetries as ``covariances'' in what follows.
-Even before general relativity, special relativity \citep{sr} can be seen as making the decision to move an active symmetry (the observation that the speed of light is the same for all observers) into a passive symmetry, true by construction for all valid physical laws.
+One example is the passive coordinate diffeomorphism symmetry on curved manifolds, which has been tremendously important in the development of contemporary physics.
+The discovery of special relativity \citep{sr} can be seen as the discovery that an active symmetry (the observation that the speed of light is the same for all observers) can be converted into a passive symmetry, true by construction for all valid physical laws.
 This passive symmetry is now called Lorentz invariance.
-We stress that these insights were profound \citep{EARMAN1978251}; they revolutionized physics; not too long before Einstein, such considerations would have seemed highly unusual. 
-Similarly, passive symmetries do not feature in today's ML practice---if the development of physics is any indication, their potential could be significant.
+After this, the equations of general relativity  \citep{gr} were found by looking at every expression to some degree consistent with the passive symmetry (of coordinate diffeomorphisms on curved spacetime manifolds) enforced by the Ricci calculus (he called this family of functions \emph{generally covariant}) until he found the one that reduced to Newtonian gravity in the weak-field limit.
+Following this lead, we will refer to the passive symmetries as ``covariances'' in what follows.
+We stress that these insights had a big impact on physics \citep{EARMAN1978251};
+only a few years previously, such considerations would have seemed highly unusual;
+now this form of argument is canon in theoretical physics (see, for example, \citealt{zee2016group}).
+Similarly, passive symmetries do not feature in most of today's ML practice---if the development of physics is any indication, their potential could be significant.
+Recent ML work in this direction is beautifully reported in \cite{weiler} and \cite{bronstein2021geometric}.
 
 \section{Example: Units covariance}\label{sec:units}
-
 Perhaps the most universal passive symmetry is units covariance---the behavior of a system doesn't depend on the units system in which we write the measured quantities.
 It is a passive symmetry with extremely useful consequences.
 
 Consider a mass $m$ near the surface of the Earth, close enough to the surface such that the gravitational field can be considered to be determined by a constant (not spatially varying) vector with magnitude $g$ and direction downwards.
 \textsl{Question~1:}~If this mass $m$ is dropped (released at rest) from a height $h$ from above the ground, how much time $T$ does it take to fall to the ground?
 \textsl{Question~2:}~If this mass $m$ is launched from the surface at a velocity of magnitude $v$ at an angle $\theta$ to the horizontal, how much horizontal distance $L$ will it fly before it hits the surface again?
-Assume that only $m, g, h$ come in to the solution;\footnote{We will return to this seemingly innocuous point below. We note that it is an {\em empirical} statement, which will turn out to have rather significant implications.} in particular, assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored.
+Assume that only $m, g, h$ come in to the solution;\footnote{We will return to this seemingly innocuous point below. We note that it is an \emph{empirical} statement, which will turn out to have rather significant implications.} in particular, assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored.
 
 The answers to these questions are then almost completely determined by dimensional (or units-covariance) arguments.
 The mass $m$ has units of $\kg$, the gravitational acceleration magnitude $g$ has units of $\m\,\s^{-2}$, the velocity magnitude $v$ has units of $\m\,\s^{-1}$, the time $T$ has units of $\s$, and the lengths $h$ and $L$ have units of $\m$.
@@ -301,18 +316,16 @@ The only possible combination of $m, g, v, \theta$ that has units of length is $
 That is, both Questions~1 and 2 can be answered up to a dimensionless prefactor without any considerations beyond those of the units of the inputs and outputs, and without any training data.
 And both of those answers don't depend in any way on the input mass $m$, which is a fundamental observation \citep{gr}.
 
-This shows that a function can sometimes be inferred from units covariance only, i.e., from a purely passive symmetry, combined with the {\em empirical} knowledge that the solution is {\em independent} of all other observables.
-%\bernhard{I now believe this is {\em not} completely true: crucially, it needs empirical input too: the fact that the solution is {\em independent} of all other observables.}
+This shows that a function can sometimes be inferred from units covariance only, i.e., from a purely passive symmetry, combined with the \emph{empirical} knowledge that the solution is \emph{independent} of all other observables.
 Units covariance has been discussed in ML previously \citep{villar2022dimensionless, bakarji2022dimensionally, xie2022data}.
 It can help with training, predictive accuracy, and out-of-sample generalization.
 In particular, out-of-sample generalization improves because the enforcement of the symmetry enforces scaling properties of the learned function.
 These, in turn, help make predictions when the test data are outside the range of the training data.
 
 \section{Formal definition}\label{sec:definitions}
-
-Consider $\mathcal{X}$ to be space of all possible physical states of a specific system (for instance $x\in \mathcal X$ could be the positions, velocities, masses, spins, and charges of a set of particles at all times). 
+Consider $\mathcal{X}$ to be space of all possible physical states of a specific system (for instance $x\in \mathcal X$ could be the positions, velocities, masses, spins, and charges of a set of particles, possibly at a set of times). 
 We consider maps $\{\Phi_i: \mathcal{X} \to \mathcal{H}\}_{i\in \mathcal{I}}$ where $\mathcal{H}$ is the space of encodings (or representations) of the values of those positions, velocities, masses, and so on, in some units system and some coordinate system.
-That is, any element $z\in \mathcal{H}$ will be a list of real values of vector and tensor components, and scalars.\bernhard{at all times? (we decided to delete this, I think}
+That is, any element $z\in \mathcal{H}$ will be a list of real values of vector and tensor components, and scalars.
 Different maps $\Phi_i$ will have (in general) different coordinate origins, different axis orientations, and units of measurements.
 
 Provided that every $\Phi_i$ records all of the information necessary to describe the state $x\in \mathcal{X}$ (or, equivalently, every element $z\in \mathcal{H}$ contains all of the information necessary to describe the state),
@@ -381,7 +394,7 @@ After all, most problems (like reading handwriting or predicting gravitational t
 
 \section{Experiments and examples}\label{sec:experiments}
 
-\textbf{Black-body radiation:}
+\paragraph{Black-body radiation:}
 An important moment in the history of physics was the discovery that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation \cite{planck}
 \begin{equation} \label{eq.planck}
     B_\lambda(\lambda) = \frac{2\,h\,c^2}{\lambda^5}\,\frac{1}{\exp\frac{h\,c}{\lambda\,k\,T} - 1}~,
@@ -419,7 +432,7 @@ Our results show that no units-covariant regression for the intensity as a funct
     \label{fig:exps}
 \end{figure*}
 
-\textbf{Springy double pendulum:}
+\paragraph{Springy double pendulum:}
 The double pendulum connected by springs is a toy example often used in equivariant ML demonstrations \cite{finzi2021practical,yao2021simple, villar2022dimensionless}. 
 The final conditions (position and velocities of both masses after elapsed time $T$) are related to the initial conditions (position and velocities of the masses at the initial time), and the dynamics is classically chaotic.
 
@@ -443,14 +456,14 @@ Time ordering implies that possible causal arrows are from $v, m, \theta$ to $L$
 As argued above, dimensional analysis rules out the arrow $m\to L$, leaving us with the non-trivial result that in the causal graph, only $v,\theta$ cause $L$.
 As in \secref{sec:units}, this conclusion can be reached without any training data or interventions.
 
-That said, dimensional analysis makes a strong assumption, which is that {\em all} relevant quantities for predicting $L$ have been specified in the list $m, g, v, \theta$.
+That said, dimensional analysis makes a strong assumption, which is that \emph{all} relevant quantities for predicting $L$ have been specified in the list $m, g, v, \theta$.
 For example, if the projectile is large enough or the speed $v$ is high enough, air resistance will come into play, and the size of the object and the density of air will enter, bringing new variables and new combinations of variables that matter to the answer.
 This difficulty is related to the problem in causal inference of knowing or specifying all possible confounding variables.
 
 This can also be linked to the notion of experimental interventions. Suppose we assume that only certain quantities come into the solution (say, $m, g, h$). How would we confirm this in practice? In essence, this is not a probabilistic statement, but one about the behavior of a system under interventions. A set of experiments can indicate that a certain outcome (or effect variable) depends on a certain set of input (cause) variables but is independent of certain other potential cause variables. In this case, the physical law is not inferred from dimensional arguments alone, but from a combination of dimensional and causal arguments.
 
 Even if interventions are not available (e.g., for $g$), physicists trying to infer a law will not do so based (purely) on input-output data: they will have prior knowledge from related problems informing them as to which variables are relevant. E.g., we may know from having previously solved a related problem that we expect a problem to depend on $g$.
-This is a form of qualitative {\em transfer} that we expect will also become relevant for model transfer in ML \cite{RojSchTurPet18}.
+This is a form of qualitative \emph{transfer} that we expect will also become relevant for model transfer in ML \cite{RojSchTurPet18}.
 
 \section{Connections to current ML practice}\label{sec:practice}
 
@@ -499,7 +512,13 @@ There are exceptions to the restrictions on nonlinear functions:
 If nonlinearities are mathematically homogeneous, as it is for a pure monomial, or for the RELU function, dimensional scalars (but not vector or tensor components) can be taken as inputs.
 It is interesting to ask whether the success of RELU in ML might be related to its homogeneity.
 
-\hogg{Related to the above: Each layer must be connected to the previous layer by enough edges that the weight multiplication can be seen as a dot product or contraction. That might have implications for dropouts or other kinds of sparse structures.}
+Above we said that the weights in a neural network implicitly have geometric properties and units.
+What are these?
+Imagine, say, at the input layer, that three of the inputs are the components $(v_1, v_2, v_3)$ of a velocity vector, and, at the next layer, these have been multiplied by weights, summed, subtracted from a threshold, and passed into a nonlinear function (such as a sigmoid).
+Given that a nonlinearity is in play, implicitly the output of the multiplication by weights and summation is a dimensionless scalar---it is inconsistent with the passive symmetries of $0(3)$ covariance and units covariance for a nonlinearity to be applied to anything other than a dimensionless scalar.
+This condition will only be met if implicitly the three weights $(W_1, W_2, W_3)$ that multiply these vector components are themselves the components of a an $O(3)$-covariant vector with units of inverse velocity.
+If the network has any nodes in the next layer have graph connections (weights) to only one or two of the three components $(v_1, v_2, v_3)$, that is, if the network is sparse in the wrong ways, these implicit conditions cannot be met.
+The passive symmetries thus also put conditions on network architecture or graph structure.
 
 $L_1$ and $L_\infty$ norms are often inconsistent with the passive symmetries.
 This is because the sum of absolute values of input components, and the maximum of inputs, are rarely either geometrically, or from a units perspective, covariant.
@@ -508,7 +527,7 @@ There is a rare exception if all features have the same units, and none of the f
 Similarly, regularizers such as those favoring flat loss minima \cite{flatminima,sharpminima,petzka2021relative} are often not units covariant, changing their values under certain weight transformations that leave the overall function invariant. 
 If reformulated as a regularizer that is a covariant function of the training points, this problem vanishes \cite{LuxburgBS04}.
 
-Data normalization, batch normalization, and layer normalization are all generally brutal and violate model equivariances and covariances.
+Data normalization, batch normalization, and layer normalization are all generally brutal and often violate model equivariances and covariances \citep{aalto2022geometric}.
 These provide rich examples, one of which we expand further in \secref{sec:norm}.
 
 Finally, we mention that passive symmetries play a crucial role also when it comes to latent variable models and ICA, since unobserved latent factors usually come with a large class of allowed gauge transformations (permutations, rotations in the latent space, and coordinate-wise nonlinear transformations) which should be incorporated correctly when studying notions of identifiability \cite{khemakhem2020ice, BucBesSch22}.
@@ -529,7 +548,7 @@ It is not uncommon for $\sigma$ to be a root-variance of the features (or a mean
 
 Na\"ive normalization like this will in general break the passive symmetries of geometry and units \citep{aalto2022geometric}.
 For one, different individual features in $X$ will have different units.
-It neither makes sense to add or average (nor add nor average in the square) features with different units, nor does it make sense to apply very different scales to different features with the same units and qualitatively similar measurement properties.
+It neither makes sense to add or average (nor add nor average in the square) features with different units, nor does it make sense to apply very different scales to different features with the same units and qualitatively similar measurement properties \hogg{Should I weaken this ``different scales to different features with the same units''}.
 For another, if a subset of $3$ features in $X$ are the components of a 3-vector subject to $O(3)$ symmetry or a subset of $9$ features in $X$ are the components of a tensor subject to $O(3)$ symmetry, these components cannot be summed or medianed without violating $O(3)$ equivariance (and thus passive-symmetry covariance), nor can they be independently scaled without violating $O(3)$.
 
 What should be done instead?
@@ -537,15 +556,15 @@ For one, the elements of the training data $X$ that correspond to 3-vector compo
 Instead the vectors must be dotted into themselves each individually to construct scalar norms.
 Those scalar norms can subsequently be summed or medianed or averaged or square-rooted.
 Usefully, the root-mean-square of the components of a 3-vector can be seen as the square root of $1/3$ of the dot product of the vector with itself.
-At application time, the 3 components of any 3-vector must be scaled identically, not independently, otherwise the vector is (in general) arbitrarily rotated.
-In this 3-vector case, he shift $\mu$ cannot be a single number but instead, for the 3-vectors, the shift must itself be a 3-vector.
-That's natural in many but not all normaliztion methods in use at present.
+At application time, the three components of any 3-vector must be scaled identically, not independently, otherwise the vector is (in general) arbitrarily rotated.
+In this 3-vector case, the shift $\mu$ cannot be a single number but instead, the shift must itself be a 3-vector which is an $O(3)$-equivariant function of the input vectors.
+That's natural in many but not all normalization methods in use at present.
 
 For another, the features in $X$ that correspond to the elements of tensors must not have their components treated equally in the computation of the shift $\mu$ and scale $\sigma$.
 Instead the tensors must have their spectral norms taken (or have some other $O(3)$-equivariant norms must be taken), with each tensor treated individually.
 Those norms can subsequently be summed or medianed or averaged or square-rooted.
 Unfortunately, taking spectral norms is more expensive than taking moments.
-Once again, at application time, the tensor components cannot be independently scaled with 9 different scales; instead one scale must be applied consistently to all 9 components.
+Once again, at application time, the tensor components cannot be independently scaled with nine different scales; instead one scale must be applied consistently to all nine components.
 Once again, the shift applied cannot be a single number applied to all components but instead the shift must itself be a tensor.
 These vector and tensor considerations suggest that data normalization needs to be substantially modified to achieve covariance, that is, to accommodate the passive symmetries of vectors and tensors.
 
@@ -579,7 +598,6 @@ Identifiability issues may arise when more constants or non-constant features ar
 Another difficulty is that some kinds of symmetries are hard to enforce.
 For example, complete coordinate diffeomorphisms and problem reparameterizations involve enormous groups which are hard to implement in a realistic ML method.
 That said, many groups have been implemented usefully, including translations, rotations, permutations, changes of units, and some coordinate transformations (see \citealt{weiler} for a review of the latter). 
-%\soledad{DO WE NEED TO MENTION AND CITE Equivariant Representation learning (https://arxiv.org/abs/2012.02771)? Here or somewhere above in Related Work?}
 
 In addition to the exact (and true by definition) passive symmetries, and the observed active symmetries, there are other kinds of approximate or weakly broken symmetries we might call \emph{observer symmetries}.
 These arise from the point that the content of a data record (an image, say) is independent of the minor choices made by the observer in taking that data record (shooting the image, say).
@@ -617,7 +635,7 @@ All code used in this project is available at \hogg{WEICHI: What URL?}.
 \fi
 \makeatother
 
-\bibliography{example_paper}
+\bibliography{TMLR/covariant}
 \bibliographystyle{tmlr}
 
 \appendix
