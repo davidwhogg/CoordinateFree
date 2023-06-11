@@ -494,6 +494,8 @@ This can also be linked to the notion of experimental interventions. Suppose we 
 Even if interventions are not available (for $g$, for example), physicists trying to infer a law will not do so based (purely) on input-output data: they will have prior knowledge from related problems informing them as to which variables are relevant. For example, we may know from having previously solved a related problem that we expect a problem to depend on $g$.
 This is a form of qualitative \emph{transfer} that we expect will also become relevant for model transfer in ML \citep{RojSchTurPet18}.
 
+\hogg{Finally, we remark that causal language appeared above, HERE and HERE. Say more about those.}
+
 \section{Connections to current ML practice}\label{sec:practice}
 Most ML implementations don't impose exact symmetries. Sometimes they approximate equivariances by means of data augmentation \citep{chen2020group, huang2022quantifying}.
 In the present work we focus on exact symmetries: Given data spaces $X$ and $Y$ and a group $G$ acting on $X$ and $Y$, equivariant ML restricts the function space to those satisfying  $f(g\cdot x) = g \cdot f(x)$ for all $f\in \mathcal F$, $g\in G$, $x\in X$.
