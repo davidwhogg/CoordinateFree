@@ -157,33 +157,38 @@ We provide here a glossary to translate terminologies among machine learning, ma
 Some of what's here will be expanded upon further in subsequent Sections.
 \begin{description}
 \item[active symmetry:]
-A symmetry is \emph{active} when it is an observed or empirical regularity of the laws of physics.
-Examples include the observation that the fundamental laws don't depend on the location or time at which the experiment takes place.
-We provide a formal definition in \secref{sec:definitions}.
+  A symmetry is \emph{active} when it is an observed or empirical regularity of the laws of physics.
+  Examples include the observation that the fundamental laws don't depend on the location or time at which the experiment takes place.
+  We provide a formal definition in \secref{sec:definitions}.
 \item[conservation law:]
-We say that a quantity obeys a \emph{conservation law} if changes in that quantity (with time) inside some closed volume can are quantitatively explained by fluxes of that quantity through the surface of that volume.
-Active symmetries can lead to conservation laws in dynamical systems (when the dynamics is Lagrangian; \citealt{noether}).
+  We say that a quantity obeys a \emph{conservation law} if changes in that quantity (with time) inside some closed volume can are quantitatively explained by fluxes of that quantity through the surface of that volume.
+  Active symmetries can lead to conservation laws in dynamical systems (when the dynamics is Lagrangian; \citealt{noether}).
 \item[coordinate freedom:]
-When physical quantities are measured, or represented in a computer, they must be expressed in some coordinate system.
-The redundancy of this representation---the fact that the investigator had many choices for the coordinate system---leads to the passive symmetry \emph{coordinate freedom}:
-If the inputs to a physics problem are moved to a different coordinate system (because of a change in the origin or orientation), the outputs of the problem must be correspondingly moved.
-In much of the literature ``coordinate freedom'' is only used in relationship to general covariance, but it applies in all contexts (including non-physics contexts) in which a coordinate system has been chosen.
+  When physical quantities are measured, or represented in a computer, they must be expressed in some coordinate system.
+  The redundancy of this representation---the fact that the investigator had many choices for the coordinate system---leads to the passive symmetry \emph{coordinate freedom}:
+  If the inputs to a physics problem are moved to a different coordinate system (because of a change in the origin or orientation), the outputs of the problem must be correspondingly moved.
+  In much of the literature ``coordinate freedom'' is only used in relationship to general covariance, but it applies in all contexts (including non-physics contexts) in which a coordinate system has been chosen.
 \item[covariance:]
-When a physical law is equivariant with respect to a passive symmetry, then the law is said to be \emph{covariant} with respect to that symmetry.
+  When a physical law is equivariant with respect to a passive symmetry, then the law is said to be \emph{covariant} with respect to that symmetry.
+\item[dimensions:]
+  \hogg{SHOULD we have a definition for this? Yes, of course.}
 \item[dimensional analysis:]
-The technique in physics of deducing scalings by consideration of units covariance is \emph{dimensional analysis}.
+  The technique in physics of deducing scalings by consideration of units covariance is \emph{dimensional analysis}.
 \item[equivariance:]
-Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X:G\to \operatorname{Sym}(X)$ and $\rho_Y:G\to \operatorname{Sym}(Y)$ respectively. Namely, $\rho_X$ (and similarly $\rho_Y$) maps each element of $G$ to a bijective function from $X$ to itself satisfying some rules described in the definition of ``group action''. We say that a function $f:X\to Y$ is \emph{equivariant} if for any group element $g\in G$ and any possible input $x$, the function obeys $f( \rho_X(g)(x)) = \rho_Y(g)(f(x))$. This is typically expressed by saying that the following commutative diagram commutes for all $g\in G$:
-\begin{equation}
-\begin{tikzcd}[every label/.append ]
-  {X}\arrow[r, "f"] \arrow[d,"\rho_X(g)",swap] & {Y}  \arrow[d,"\rho_Y(g)"]\\
-{X} \arrow[r, "f"]  & {Y} 
-\end{tikzcd}
-\end{equation}
-The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps}(X,Y)$ then we can define $\rho_{XY}: G \to \operatorname{Sym}(\operatorname{Maps}(X,Y))$ such that $\rho_{XY}(g)(f) = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$.
-The equivariant maps are the fixed points of this action.
+  Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X:G\to \operatorname{Sym}(X)$ and $\rho_Y:G\to \operatorname{Sym}(Y)$ respectively.
+  Namely, $\rho_X$ (and similarly $\rho_Y$) maps each element of $G$ to a bijective function from $X$ to itself satisfying some rules described in the definition of ``group action''.
+  We say that a function $f:X\to Y$ is \emph{equivariant} if for any group element $g\in G$ and any possible input $x$, the function obeys $f( \rho_X(g)(x)) = \rho_Y(g)(f(x))$.
+  This is typically expressed by saying that the following commutative diagram commutes for all $g\in G$:
+  \begin{equation}
+    \begin{tikzcd}[every label/.append ]
+      {X}\arrow[r, "f"] \arrow[d,"\rho_X(g)",swap] & {Y}  \arrow[d,"\rho_Y(g)"]\\
+      {X} \arrow[r, "f"]  & {Y} 
+    \end{tikzcd}
+  \end{equation}
+  The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps}(X,Y)$ then we can define $\rho_{XY}: G \to \operatorname{Sym}(\operatorname{Maps}(X,Y))$ such that $\rho_{XY}(g)(f) = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$.
+  The equivariant maps are the fixed points of this action.
 
-While an equivariance is a mathematical property of a map, in this contribution we use the word ``equivariance'' mainly in the context of active symmetries, and ``covariance'' in the context of passive symmetries.
+  While an equivariance is a mathematical property of a map, in this contribution we use the word ``equivariance'' mainly in the context of active symmetries, and ``covariance'' in the context of passive symmetries.
 \item[gauge freedom:]
   Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
   These freedoms lead to additional passive symmetries that are known as \emph{gauge freedom}.
@@ -419,8 +424,8 @@ $c$ is the speed of light,
 $\lambda$ is the wavelength of the electromagnetic radiation,
 $k$ is Boltzmann's constant,
 and $T$ is the temperature.
-In finding this formula, Planck had to posit the existence (and units) of the constant $h=6.62607015\times 10^{-34}\,\kg\,\m^2\,\s^{-1}$ (Planck's original value was presented in $\mathrm{erg}\,\s$, which are different units but the same dimensions).
-Prior to the introduction of $h$, the only dimensionally acceptable expression for the black-body radiation intensity was $B_\lambda(\lambda)=2\,c\,k\,T/\lambda^4$, which is the long-wavelength (infrared) or high-temperature limit.
+In finding this formula, Planck had to posit the existence (and units) of the constant $h=6.62607015\times 10^{-34}\,\kg\,\m^2\,\s^{-1}$ (Planck's original value was presented with less precision and in $\mathrm{erg}\,\s$, which are different units but the same dimensions).
+Prior to the introduction of $h$, the only dimensionally acceptable expression for the black-body radiation intensity was $B_\lambda(\lambda)=2\,c\,k\,T/\lambda^4$, which is the long-wavelength (infrared) or high-temperature limit of \eqref{eq.planck}.
 Planck's discovery solved the ``ultraviolet catastrophe'' of classical physics.
 This is the problem that, classically, the black-body spectrum, or any thermal object, ought to contain infinite numbers of excited modes at short wavelengths, or high frequencies, and thus infinite energy density.
 Planck's solution seeded the development of quantum mechanics, which governs the behavior of all matter at small scales, and which cuts off the ultraviolet modes through quantization of energy.
@@ -430,10 +435,12 @@ That is, the exponential cut-off of the intensity appears at a wavelength set by
 
 In \figref{fig:exps} (left) we perform the following toy experiment:
 We generate noisy samples of intensities as a function of wavelength and temperature according to \eqref{eq.planck}, and the learning task is to predict the intensity for different values of wavelengths and temperatures.
-We perform a units covariant regression (employing the approach of \citealt{villar2022dimensionless}) using only $\lambda, T, c, k$; a units covariant regression with an extra dimensional constant found by cross-validation; and a standard MLP with no units constraints.
+We perform three experiments,
+\textsl{(1)}~a units-covariant regression (employing the approach of \citealt{villar2022dimensionless}) using only $\lambda, T, c, k$; \textsl{(2)}~a units covariant regression with an extra dimensional constant found by cross-validation; and \textsl{(3)}~a standard multi-layer perceptron regression (MLP) with no units constraints.
 Our results show that no units-covariant regression for the intensity as a function of $\lambda, T, c, k$ can reproduce accurately the intensity $B_\lambda$.
-However when the regression is permitted to introduce a new dimensional constant (and remains units covariant given the new constant), it finds a constant with units (and, less precisely, magnitude) that is consistent with $h$ (or $h$ times a combination of $c$ and $k$).
-The units-covariant model outperforms the baseline MLP. Again, this shows that the passive symmetry leads to powerful capability.
+However when the regression is permitted to introduce a new dimensional constant (but enforce exact units-covariance given the new constant), it finds a constant with units (and, less precisely, magnitude) that is consistent with $h$ (or $h$ times a combination of $c$ and $k$).
+The units-covariant model with extra contant outperforms the baseline MLP.
+Na\"ively this suggests that the passive symmetry brings new capabilities.
 \begin{figure*}[t!]
     \centering
     \begin{minipage}{0.45\textwidth}
@@ -452,19 +459,25 @@ The units-covariant model outperforms the baseline MLP. Again, this shows that t
 \paragraph{Springy double pendulum:}
 The double pendulum connected by springs is a toy example often used in equivariant ML demonstrations \citep{finzi2021practical,yao2021simple, villar2022dimensionless}. 
 The final conditions (position and velocities of both masses after elapsed time $T$) are related to the initial conditions (position and velocities of the masses at the initial time), and the dynamics is classically chaotic.
+This means that prediction accuracy, in the end, must be bounded by considerations of the fundamental mathematical properties of dynamical systems.
 
-The system is subject to a passive $O(3)$ symmetry (equivariance with respect to orthogonal coordinate transformations), and an active $O(2)$ symmetry (equivariance with respect to rotations and reflections in the 2-d plane normal to the gravity). 
+The system is subject to a passive $O(3)$ symmetry (equivariance with respect to orthogonal coordinate transformations), and an active $O(2)$ symmetry (equivariance with respect to rotations and reflections in the 2D plane normal to the gravity). 
 The $O(3)$ symmetry is passive, because it is guaranteed by the fact that all vectors must be described in a coordinate system; nothing physical can change as the vectors undergo passive transformations because of coordinate-system changes.
 The $O(2)$ symmetry is active, because it is an experimental fact that if the initial conditions are changed by an active or alibi rotation in the plane perpendicular to gravity, the dynamics and final state rotate accordingly.
 Here we can see that the $O(2)$ active symmetry corresponds to the set of transformations in $O(3)$ that fix the gravity vector. 
-%\bernhard{I think this needs more explanation, or ideally a picture that shows what are the coordinates. ML people won't get it otherwise.}
 
-The $O(3)$ passive symmetry requires that the coordinates of all relevant vectors are transformed identically, the positions and momenta of both masses and the gravity vector. If the model doesn't contain all relevant vectors as inputs then the predictions will not be $O(3)$ equivariant. We perform an experiment in which we predict the dynamics of the double pendulum using $O(3)$-equivariant models. The symmetries are implemented by converting the network inputs (scalars and components of vectors) into invariant scalar quantities according to the Ricci calculus (which explicitly encodes $O(3)$), building the model in the space of the invariant scalars (as per \citealt{villar2021scalars}). The models implemented are \textsl{(Known-g)}---an $O(3)$-equivariant model that has the positions, momenta and gravity vector all as features (similar to the models in \citealt{villar2021scalars, yao2021simple}); \textsl{(No-g)}---an $O(3)$-equivariant model that that is missing the gravity vector as an input feature; and \textsl{(Learned-g)}\---an $O(3)$-equivariant model that has the position, momenta and an extra unknown vector as features. The latter model optimizes model weights along with the unknown vector. 
+The passive $O(3)$ symmetry requires that the coordinates of all relevant vectors are transformed identically, the positions and momenta of both masses and the gravity vector.
+If the model doesn't contain all relevant vectors as inputs then the predictions will not be apparently $O(3)$ equivariant.
+We perform an experiment in which we predict the dynamics of the double pendulum using $O(3)$-equivariant models.
+The symmetries are implemented by converting the network inputs (scalars and components of vectors) into invariant scalar quantities according to the Ricci calculus (which explicitly encodes $O(3)$), building the model in the space of the invariant scalars (as per \citealt{villar2021scalars}).
+The models implemented here are \textsl{(Known-g)}---an $O(3)$-equivariant model that has the positions, momenta and gravity vector all as features (similar to the models in \citealt{villar2021scalars, yao2021simple}); \textsl{(No-g)}---an $O(3)$-equivariant model that that is missing the gravity vector as an input feature; and \textsl{(Learned-g)}\---an $O(3)$-equivariant model that has the position, momenta and an extra unknown vector as features.
+The latter model optimizes model weights along with the unknown vector. 
 In the right panel of \figref{fig:exps} we show the performance of the three models.
-We remark that in (Learned-g), the learned vector in the performed experiments was nearly parallel to the true (but unknown) gravity vector $g$; the angle between the learned and true gravity vector was 0.00016~radians.
+We remark that in \textsl{(Learned-g)}, the learned vector in the performed experiments was nearly parallel to the true (but unknown) gravity vector $g$; the angle between the learned and true gravity vector ended up at 0.00016~radians.
 
 \section{Connections with causality}\label{sec:causality}
-There is nothing statistical about the notion of passive symmetries, and thus everything we have said above also applies to causal models \citep{PetJanSch17}. There are, however, a few comments specific to causality.
+There is nothing statistical about the notion of passive symmetries, and thus everything we have said above also applies to causal models \citep{PetJanSch17}.
+There are, however, a few comments specific to causality.
 
 The passive symmetry discussed in \secref{sec:units}---and indeed all passive symmetries---can also deliver information pertaining to the (hard problem of) inference of causal structure:
 treating $g$ as a constant, we can construct a structural causal model with the following vertices: \textsl{(a)}~an initial value of $v$, \textsl{(b)}~a value of $m$, chosen independently, and \textsl{(c)}~a final value of $L$, affected by a noise term $\theta$.
