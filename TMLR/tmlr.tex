@@ -312,7 +312,7 @@ We stress that these kinds of insights had a big impact on physics \citep{EARMAN
 only a few years previously, such considerations would have seemed highly unusual;
 now this form of argument is canon in theoretical physics (see, for example, \citealt{zee2016group}).
 That evolution motivates this contribution; passive symmetries do not feature in most of today's ML practice---if the development of physics is any indication, their potential could be significant.
-Some recent ML work has been done along these directions \citep{weiler, bronstein2021geometric}.
+Some valuable ML research has started recently along these directions \citep{weiler, bronstein2021geometric}.
 
 \section{Example: Units covariance}\label{sec:units}
 Perhaps the most universal passive symmetry is units covariance---the behavior of a system doesn't depend on the units system in which we write the measured quantities.
@@ -323,25 +323,25 @@ Consider a mass $m$ near the surface of the Earth, close enough to the surface s
 \textsl{Question~2:}~If this mass $m$ is launched from the surface at a velocity of magnitude $v$ at an angle $\theta$ to the horizontal, how much horizontal distance $L$ will it fly before it hits the surface again?
 Assume that only $m, g, h$ come in to the solution;\footnote{We will return to this seemingly innocuous point below. We note that it is an \emph{empirical} statement, which will turn out to have rather significant implications.} in particular, assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored.
 
-The answers to these questions are then almost completely determined by dimensional (or units-covariance) arguments.
+The answers to these questions are almost completely determined by dimensional (or units-covariance) arguments.
 The mass $m$ has units of $\kg$, the gravitational acceleration magnitude $g$ has units of $\m\,\s^{-2}$, the velocity magnitude $v$ has units of $\m\,\s^{-1}$, the time $T$ has units of $\s$, and the lengths $h$ and $L$ have units of $\m$.
 The angle $\theta$ is dimensionless.
 The only possible combination of $m, g, h$ that has units of time is $\alpha\,\sqrt{h/g}$, where $\alpha$ is a dimensionless constant, which doesn't depend on any of the inputs.
 The only possible combination of $m, g, v, \theta$ that has units of length is $\beta(\theta)\,v^2/g$, where $\beta(\theta)$ is a dimensionless function of only one dimensionless input.
-That is, both Questions~1 and 2 can be answered up to a dimensionless prefactor without any considerations beyond those of the units of the inputs and outputs, and without any training data.
-And both of those answers don't depend in any way on the input mass $m$, which is a fundamental observation \citep{gr}.
+That is, both Question~1 and Question~2 can be answered up to a dimensionless prefactor without any considerations beyond those of the units of the inputs and outputs, and without any training data.
+And both of those answers don't depend in any way on the input mass $m$ (which is the fundamental observation that leads to general relativity; \citealt{gr}).
 
-This shows that a function can sometimes be inferred from units covariance only, that is, from a purely passive symmetry, combined with the \emph{empirical} knowledge that the solution is \emph{independent} of all other observables.
+This shows that a function can sometimes be inferred from units covariance only, that is, from a purely passive symmetry, combined with the \emph{empirical} knowledge that the solution is \emph{independent} of all other observables (which itself is a causal assumption).
 Units covariance has been discussed in ML previously \citep{villar2022dimensionless, bakarji2022dimensionally, xie2022data}.
 It can help with training, predictive accuracy, and out-of-sample generalization.
 In particular, out-of-sample generalization improves because the enforcement of the symmetry enforces scaling properties of the learned function.
 These, in turn, help make predictions when the test data are outside the range of the training data.
 
 \section{Formal definition}\label{sec:definitions}
-Consider $\mathcal{X}$ to be space of all possible physical states of a specific system (for instance $x\in \mathcal X$ could be the positions, velocities, masses, spins, and charges of a set of particles, possibly at a set of times). 
+Consider $\mathcal{X}$ to be space of all possible physical states of a specific system (for instance $x\in \mathcal X$ could be the positions, velocities, masses, spins, and charges of a set of particles, at a time or possibly at a set of times).
 We consider maps $\{\Phi_i: \mathcal{X} \to \mathcal{H}\}_{i\in \mathcal{I}}$ where $\mathcal{H}$ is the space of encodings (or representations) of the values of those positions, velocities, masses, and so on, in some units system and some coordinate system.
 That is, any element $z\in \mathcal{H}$ will be a list of real values of vector and tensor components, and scalars.
-Different maps $\Phi_i$ will have (in general) different coordinate origins, different axis orientations, and units of measurements.
+Different maps $\Phi_i$ will have (in general) different coordinate origins, different axis orientations, and different units of measurement.
 
 Provided that every $\Phi_i$ records all of the information necessary to describe the state $x\in \mathcal{X}$ (or, equivalently, every element $z\in \mathcal{H}$ contains all of the information necessary to describe the state),
 for any two encodings $\Phi_i$ and $\Phi_j$ there is an invertible morphism $\beta_j^i:\mathcal{H}\to\mathcal{H})$ that makes the diagram \eqref{eq.passive} commute.
@@ -364,7 +364,7 @@ Not every passive symmetry corresponds to an active symmetry, nor vice versa.
 
 To define the active symmetries we fix $\Phi:\mathcal X \to \mathcal{H}$ an encoding as above; a function $F: \mathcal H \to \mathcal Y$, where $F$ is a function that delivers a possible observable or prediction or system property; and a group $G$ that acts on the $\mathcal X, \mathcal H$ and $\mathcal Y$ via actions $\tau$, $\beta$ and $\rho$ respectively.
 An element $y\in\mathcal{Y}$ contains some prediction or observable of interest in the system, such as the energy or the future time evolution (trajectory).
-A group element $g\in G$
+Given a group element $g\in G$ we might draw this commutative diagram:
 \begin{equation}\label{eq.active}
 \begin{tikzcd}[every label/.append]
   {\mathcal X}\arrow[r,"\Phi"] \arrow[d,"\tau(g)"] 
@@ -388,24 +388,24 @@ This symmetry is active in the sense that it says how something changes (the ene
 
 The alias vs alibi distinction maps onto the correspondence of related passive and active symmetries.
 Rotating the coordinate system (an alias transformation) by an angle $\alpha$ can be indistiguishable from rotating the position of every atom in the molecule (an alibi transformation) by the angle $-\alpha$. 
-In this sense the active symmetries correspond to \emph{interventions} in the system, while passive symmetries are purely inj the realm of representation.
+In this sense the active symmetries correspond to \emph{interventions} in the system, while passive symmetries are purely in the realm of representation.
 Note that this statement relies on the assumption that no other vector is needed to describe the state of the molecule. 
-For example, a possibly valid assumption is that the orientation of the molecule with respect to the Earth gravitational field is relevant to the state of the molecule. 
-In this case the rotation of the coordinate system should include rotating the gravity vector, and the corresponding active symmetry would require to rotate the gravitational field. In practice, this is not really an active symmetry since we can't intervene in this way.
+For example, a possibly valid assumption (or empirical result) is that the orientation of the molecule with respect to the Earth's gravitational field is relevant to the state or behavior of the molecule. 
+In this case the rotation of the coordinate system should affect also the components of the gravity vector, and the corresponding active symmetry would require the rotatation the gravitational field.
+In practice, this is probably not really an active symmetry since we can't intervene in this way (note again the causal character of this statement).
 
-Most of the equivariant machine learning literature is focused on active symmetries.
+Most of the equivariant ML literature is focused on active symmetries.
 Projects begin with the question: What active symmetries are in play in this system?
 From here on we focus mainly on the passive symmetries, which are in play in almost every conceivable learning problem (since almost every data set involves investigator choices about coordinates and units).
 Indeed, we will reserve the word ``equivariance'' for active symmetries, and use the word ``covariance'' for passive symmetries, consistent with the use of the word ``covariance'' in physics contexts.
 
+The passive symmetries are seemingly trivial statements about the world, but they led to important results in physics.
 Imposing a passive symmetry on the structure of an ML model can permit the discovery of scalings, structures, or missing elements in the physical description of, or predictions about, the problem.
-We illustrate these ideas with some toy examples below.
-The passive symmetries are seemingly trivial statements about the world, but they lead to strong constraints on the laws of physics, and deliver scaling arguments that solve real problems in physics.
-They can also constrain ML in valuable ways.
+They also suggest changes to make to regularizations, network structures, and normalizations.
+We illustrate these ideas with some toy examples and discussion below.
 \emph{We conjecture that enforcing passive symmetries will improve ML and data-analysis tasks.}
-They constrain how models should be regularized and normalized, and will provide generalization improvements in some contexts.
-We are inspired in part by the success of convolutional neural networks in image-analysis contexts in which translation symmetry is not an active symmetry.
-After all, most problems (like reading handwriting or predicting gravitational trajectories near the surface of the Earth) are not actively equivariant to rotations, reflections, and translations, but they are all, in their data-generating processes, exactly coordinate free, and exactly agnostic to the choices made in data representation.
+We are inspired in part by the success of convolutional neural networks in image-analysis contexts in which translation symmetry is not an active symmetry, but where the particular pixel locations of particular features are unimportant to the recognition task at hand.
+After all, most problems (like reading handwriting or predicting gravitational trajectories near the surface of the Earth) are not actively equivariant to rotations, reflections, and translations, but they are all, in their data-generating processes, exactly coordinate free, and exactly (or almost exactly) agnostic to the choices made in data representation (for example centering and cropping).
 
 \section{Experiments and examples}\label{sec:experiments}
 
@@ -589,7 +589,7 @@ This is consistent with current normalization practice in most cases.
 For scales, it makes sense to find base-unit scales that make the range of scaled features as close as possible to having unit variance.
 That is, data normalization in this case turns into an optimization problem of finding a length scale $L$ and a time scale $T$ such that when the features with units of length are divided by $L$, the features with units of time are divided by $T$, the features with units of velocity are divided by $L\,T^{-1}$, the features with units of acceleration are divided by $L\,T^{-2}$, and the features with units of frequency are divided by $T^{-1}$, the resulting \emph{dimensionless features} have a distribution of values that has unit width.
 This optimization might get difficult as the number of base units in play grows.
-This is very related to the ideas presented elsewhere in the subject of units-covariant machine learning (\citealt{villar2022dimensionless}).
+This is very related to the ideas presented elsewhere in the subject of units-covariant ML (\citealt{villar2022dimensionless}).
 
 \section{Discussion}\label{sec:discussion}
 In this conceptual contribution,
@@ -647,8 +647,10 @@ All code used in this project is available at \hogg{WEICHI: What URL?}.
 \fi
 \makeatother
 
+{\raggedright
 \bibliography{TMLR/covariant}
 \bibliographystyle{tmlr}
+}
 
 \appendix
 \section{Springy double pendulum}\label{app:pendulum}
