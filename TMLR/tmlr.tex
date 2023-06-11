@@ -112,7 +112,7 @@ We argue---in this purely conceptual contribution---that analogs of these symmet
 
 In natural science there are two types of symmetries (see, for example, Section 4.1 of \citealt{rovelli2000loop}). 
 The first kind is \emph{passive}, arising from the arbitrariness of the mathematical representation described above.
-An example familiar to machine learners is the equivariance of functions on graphs to the relabeling of the graph nodes.
+An example familiar in ML is the equivariance of functions on graphs to the relabeling of the graph nodes.
 This is an exact, passive symmetry; graph neural network architectures (GNNs) build this passive symmetry in by design \citep{bruna2013spectral, duvenaud2015convolutional, gilmer2017neural}. 
 An example familiar to physicists is what we call \emph{units covariance}, which is the requirement that any correct description of the world have inputs and outputs with the correct units (and dimensions; see \secref{sec:glossary} for definitions):
 Imagine an equation connecting physical observables that numerically holds true.
@@ -123,7 +123,7 @@ The second kind of symmetries is \emph{active}.
 These are the ones that must be established by observations and experiments.
 The fundamental laws of physics do not seem (at current precision) to depend on position, orientation, or time, which in turn imply conservation of momentum, angular momentum and energy (the celebrated theorem of \citealt{noether}).
 Of course the motion of a particle depends on time and position! But the fundamental laws governing the motion do not themselves appear to depend on the absolute value of the time, nor the position of the experimental apparatus.
-Active symmetries like these are empirical and can be falsified by experimental tests.
+Active symmetries like these are empirical and could (in principle) be falsified by experimental tests.
 Both active and passive symmetries can be expressed in terms of group or groupoid actions and equivariances, but their epistemological content and range of applicability are very different. 
 
 In this contribution, we argue that passive symmetries apply to essentially all data analysis problems.
@@ -146,11 +146,11 @@ One is that all causal graphs and mechanistic models are constrained to be consi
 Another is that the determination that a data problem has all the inputs necessary to express the symmetry exactly looks like a causal inference. 
 We also explain how active symmetries can be expressed in terms of interventions.
 \item 
-We provide guidance on how to structure ML models so that they respect the passive symmetries. We call out some current standard practices that prevent models from obeying symmetries. 
+We provide guidance on how to structure ML models so that they respect the passive symmetries. We call out some current standard practices that prevent models from obeying symmetries.
+We give particularly detailed guidence in the context of data normalization.
 \item
 We provide a glossary that can be used to translate ideas between physics and ML. 
 \end{itemize}
-Some of the ideas seem deceptively simple, yet they have profound implications. Since ML has not yet absorbed these notions as naturally as physics has, we need to discuss analogies to physics in some detail. We have tried to make the discussion accessible to an ML audience.
 
 \section{Glossary}\label{sec:glossary}
 We provide here a glossary to translate terminologies among machine learning, mathematics, and physics.
@@ -185,42 +185,57 @@ The equivariant maps are the fixed points of this action.
 
 While an equivariance is a mathematical property of a map, in this contribution we use the word ``equivariance'' mainly in the context of active symmetries, and ``covariance'' in the context of passive symmetries.
 \item[gauge freedom:]
-Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
-These freedoms lead to additional passive symmetries that are known as \emph{gauge freedom}.
+  Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
+  These freedoms lead to additional passive symmetries that are known as \emph{gauge freedom}.
 \item[general covariance:]
-The covariance of relevance in general relativity \citep{einstein} is known as \emph{general covariance}.
-Because general relativity is a metric theory in $3+1$ spacetime dimensions with invariance with respect to arbitrary diffeomorphisms, this is a very strong symmetry.
-General covariance is sometimes called ``coordinate freedom'', but it is a special case thereof.
-\item[group:] A group $G$ is a set with a binary operation $\cdot$ satisfying (1) Associativity: for all $a,b,c\in G$ we have $(a\cdot b) \cdot c = a \cdot (b\cdot c)$. (2) Identity element: there exists an element $e\in G$ so that $e\cdot a = a \cdot e = a$ for all $a\in G$. (3) Inverse: for all $a \in G$ there exists a unique element $b$ such that $a\cdot b = b\cdot a = e$. This element is the inverse of $a$ and it is typically denoted as $a^{-1}$.
-\item[group action:] We consider a group $G$, a space $X$, and a map $\rho: G \to \operatorname{Sym}(X)$, where $\operatorname{Sym}(X)$ denotes the bijective maps from $X$ to itself. Lightly abusing notation, sometimes this map is expressed as $\rho:G\times X \to X$. We say $\rho$ is an action of $G$ on $X$ if it satisfies the following properties (1) Identity: $\rho(e)(x)=x$ for all $x\in X$, where $e$ is the group identity element. (2) Compatibility: $\rho(a)( \rho(b)(x))=\rho (a\cdot b)( x)$ for all $a,b\in G$ and $x\in X$.
-\item[group representation:] A representation of a group $G$ is an action $\rho: G \to \operatorname{GL}(V)$, where $\operatorname{GL}(V)$ is the space of invertible linear transformations of the vector space $V$. Sometimes it is said that $V$ is a representation of $G$ (and the action is implicitly known). When $V$ is a finite dimensional vector space, the group representation allows us to map the multiplication of group elements to multiplication of matrices. 
+  The covariance of relevance in general relativity \citep{einstein} is known as \emph{general covariance}.
+  Because general relativity is a metric theory on an intrinsically curved spacetime of $3+1$ dimensions that is invariant to arbitrary diffeomorphisms of the coordinate system, this is a very strong symmetry.
+  General covariance is sometimes called ``coordinate freedom'', but it is a special case thereof.
+\item[group:]
+  A \emph{group} $G$ is a set with a binary operation $\cdot$ satisfying the following:
+  \textsl{(1)}~Associativity: for all $a,b,c\in G$ we have $(a\cdot b) \cdot c = a \cdot (b\cdot c)$;
+  \textsl{(2)}~Identity element: there exists an element $e\in G$ so that $e\cdot a = a \cdot e = a$ for all $a\in G$;
+  \textsl{(3)}~Inverse: for all $a \in G$ there exists a unique element $b$ such that $a\cdot b = b\cdot a = e$;
+  this element is the inverse of $a$ and it is typically denoted as $a^{-1}$.
+\item[group action:]
+  We consider a group $G$, a space $X$, and a map $\rho: G \to \operatorname{Sym}(X)$, where $\operatorname{Sym}(X)$ denotes the bijective maps from $X$ to itself.
+  Lightly abusing notation, sometimes this map is expressed as $\rho:G\times X \to X$. We say $\rho$ is an \emph{action} of $G$ on $X$ if it satisfies the following properties:
+  \textsl{(1)}~Identity: $\rho(e)(x)=x$ for all $x\in X$, where $e$ is the group identity element.
+  \textsl{(2)}~Compatibility: $\rho(a)( \rho(b)(x))=\rho (a\cdot b)( x)$ for all $a,b\in G$ and $x\in X$.
+\item[group representation:]
+  A \emph{representation} of a group $G$ is an action $\rho: G \to \operatorname{GL}(V)$, where $\operatorname{GL}(V)$ is the space of invertible linear transformations of the vector space $V$.
+  Sometimes it is said that $V$ is a representation of $G$ (and the action is implicitly known).
+  When $V$ is a finite dimensional vector space, the group representation allows us to map the multiplication of group elements to multiplication of matrices. 
 \item[invariance:]
-An equivariance in which the action in the output space is trivial is called an \emph{invariance}. Physicists sometimes use invariant (gauge invariant, for example) for things we would call covariant.
+  An equivariance in which the action in the output space is trivial is called an \emph{invariance}.
+  Physicists sometimes use the word invariant (gauge invariant, for example) for things we would call covariant.
 \item[passive symmetry:]
-A symmetry is \emph{passive} when it arises from a choice in the representation of the data. 
-Examples include coordinate freedom, gauge freedom, and units covariance.
-These symmetries are exact and true by definition.
-We provide a formal definition in \secref{sec:definitions}.
+  A symmetry is \emph{passive} when it arises from a choice in the representation of the data. 
+  Examples include coordinate freedom, gauge freedom, and units covariance.
+  These symmetries are exact and true by definition.
+  We provide a formal definition in \secref{sec:definitions}.
 \item[scalar:]
-A number (with or without units), whose value does not depend on the coordinate system in which it is represented, is a \emph{scalar}.
-Thus, say, the charge of a particle is a scalar, but the $x$ coordinate of its velocity is not a scalar.
+  A number (with or without units), whose value does not depend on the coordinate system in which it is represented, is a \emph{scalar}.
+  Thus, say, the charge of a particle is a scalar, but the $x$ coordinate of its velocity is not a scalar.
 \item[symmetry:]
-Given a mathematical object $X$ of any sort, (like a manifold, metric space, equation, etc), any mapping of the object onto itself that preserves the corresponding structure is a \emph{symmetry}.
+  Given a mathematical object $X$ of any sort, (like a manifold, metric space, equation, etc), any mapping of the object onto itself that preserves the corresponding structure is a \emph{symmetry}.
+  \hogg{SOLE: Can you look at this definition and see if you agree with it?}
 \item[tensor:]
-A multi-linear function of $k-1$ vectors that outputs a vector, or a multi-linear function of $k$ vectors that outputs a scalar, is a $k$-\emph{tensor}.
-A rectangular array of data is not usually a tensor according to this definition.
-A vector can be seen as a 1-tensor, and a scalar can be seen as a 0-tensor.
+  A multi-linear function of $k-1$ vectors that outputs a vector, or a multi-linear function of $k$ vectors that outputs a scalar, is a $k$-\emph{tensor}.
+  A rectangular array of data is not usually a tensor according to this definition.
+  A vector can be seen as a 1-tensor (the linear function corresponding to the vector being the inner product with that vector), and a scalar can be seen as a 0-tensor.
 \item[units:]
-All physical quantities are measured with a system of what we call \emph{units}.
-A quantity can be transformed from one unit system to another by multiplication with a dimensionless number.
-Almost all quantities---including almost all scalars, vectors, and tensors---have units.
+  All physical quantities are measured with a system of what we call \emph{units}.
+  A quantity can be transformed from one unit system to another by multiplication with a dimensionless number.
+  Almost all quantities---including almost all scalars, vectors, and tensors---have units.
 \item[units covariance:]
-The left-hand side and the right-hand side of any equation must have the same units.
-This symmetry is called (by us) \emph{units covariance} (contra \citealt{villar2022dimensionless} where it is called ``units equivariance'').
+  The left-hand side and the right-hand side of any equation must have the same units.
+  This symmetry is called (by us) \emph{units covariance} (contra \citealt{villar2022dimensionless} where it is called ``units equivariance'').
 \item[vector:]
-An ordered list of $d$ numbers, all of which have the same units, that is subject to the passive $O(d)$ symmetry corresponding to coordinate-system rotations, is a \emph{vector} in $d$ dimensions.
-A generic list of $d$ features is not usually a vector according to this definition.
-The inner (or dot) product of two vectors produces a scalar; for this reason a vector can be seen as a 1-tensor.
+  An ordered list of $d$ numbers, all of which have the same units, that is subject to the passive $O(d)$ symmetry corresponding to coordinate-system rotations, is a \emph{vector} in $d$ dimensions.
+  See the definition of ``tensor'' for an alternative definition:
+  The inner (or dot) product of two vectors produces a scalar; for this reason a vector can be seen as a 1-tensor.
+  A generic list of $d$ features is not usually a vector according to this definition.
 \end{description}
 
 \section{Passive symmetries}\label{sec:informal}
@@ -233,17 +248,10 @@ In contrast, a big part of the literature on equivariant ML is implicitly or exp
 This is possibly because in most problems the coordinate system is fixed before the problem is posed, and both training and test data are expressed in those fixed coordinates.
 If a data set is made with a fixed coordinate system, but still exhibits an \emph{observable} invariance or equivariance with respect to (say) rotations, then that represents an active symmetry.
 However, cases of exact active symmetries are rare; they only really appear in natural-science contexts like protein folding or cosmology.
-For example, in a protein folding problem, the way the protein folds may not depend on its orientation in space (rendering the problem actively O(3) equivariant).
-This finding relies on the (empirical) observation that the local gravitational field (on Earth) does not affect the folding.
+For example, in a protein folding problem, the way the protein folds may not depend on its orientation in space (rendering the problem actively $O(3)$ equivariant).
+This finding relies on the (empirical) observation that the local gravitational field (on Earth), for example, does not affect the folding.
 This may be approximately true or assumed or experimentally established; it is an active symmetry.
 In contrast, the fact that the protein folds in a way that doesn't depend on the coordinate system \emph{chosen to describe it} is absolutely and always true; it is not experimentally established; it is a passive symmetry.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.6\textwidth]{alias.png}
-    \caption{Figure depicting the difference between active and passive transformations. \textsl{(Left panel)}: The passive or alias transformation corresponding to a rotation of the coordinates through an angle $\theta$ in the xy-plane. The equivariance of the dynamics with respect to this tranformation is a passive symmetry. \textsl{(Right panel)}: The active or alibi transformation corresponding to a rotation of the double pendulum state through an angle $-\theta$ in the xy-plane. Equivariance with respect to this transformation is an active symmetry.}
-    \label{fig:alias}
-\end{figure}
 
 The relationship between active and passive symmetries is reflected in the relationship between what are sometimes called active and passive transformations, or \emph{alibi} and \emph{alias} transformations, depicted in \figref{fig:alias}.
 An active or alibi transformation is one in which the objects of study are moved (rotated, translated, interchanged, etc.).
@@ -252,14 +260,20 @@ Mathematically, the two kinds of transformations seem very similar:
 For example, how do we know whether we rotated all the vectors in our problem by $30\,\deg$, or else rotated the coordinate system used by $-30\,\deg$?
 The answer is that if you rotated \emph{absolutely all} the vectors (and tensors) in your problem, including possibly many latent physical vectors, then there would be no mathematical difference. However, this is not possible in practice. 
 In real problems, where some vectors can't be actively rotated (think, for example of the local gravitational-field vector, or the vector pointing towards the Sun), or some may not be known or measurable, the two kinds of transformations are different.
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{alias.png}
+    \caption{Figure depicting the difference between active and passive transformations. \textsl{(Left panel)}: The passive or alias transformation corresponding to a rotation of the coordinates through an angle $\theta$ in the xy-plane. The equivariance of the dynamics with respect to this tranformation is a passive symmetry. \textsl{(Right panel)}: The active or alibi transformation corresponding to a rotation of the double pendulum state through an angle $-\theta$ in the xy-plane. Equivariance with respect to this transformation is an active symmetry.}
+    \label{fig:alias}
+\end{figure}
 
-The protein-folding example suggests that it is hard to implement or enforce an exact passive symmetry in a real data-analysis problem.
+This problem---that a passive symmetry only becomes an active symmetry when it is possible to transform every relevant thing correspondingly---suggests that it might be hard to implement or enforce an exact passive symmetry in a real data-analysis problem.
 It requires us to incorporate all relevant contextual information.
 How do we know if all relevant features are part of our data set?
-We could perform the protein-folding experiment in a closed, isolated environment to make sure no external forces are in play;
-this is impossible for many practical applications, and furthermore there could still exist fundamental constants that are not part of our model or knowledge (see \secref{sec:experiments}).
+We could perform the protein-folding experiment in a closed, isolated environment to make sure no external forces are in play?
+This is impossible for many practical applications, and furthermore there could still exist fundamental constants that are not part of our model or knowledge (see \secref{sec:experiments}).
 Another approach is to perform the experiment multiple times after actively putting the molecules into different orientations.
-If the protein folds differently, we learn that the problem is not symmetric with respect to the 3d coordinates of the molecule, and therefore when a rotation is performed there must be at least one more vector that needs to be rotated as well (for instance, the gravity vector or the eigenvectors of a stress tensor, say).
+If the protein folds differently, we learn that the problem is not symmetric with respect to the 3d coordinates of the molecule, and therefore when a rotation is performed there must be at least one more vector that needs to be rotated as well (for instance, the gravity vector or the eigenvectors of some stress tensor, say).
 This identification of all necessary inputs to establish the passive symmetry is similar to the problem of performing interventions to learn the existence of confounding factors in causal inference.
 We will come back to the connections to causality in \secref{sec:causality}.
 
@@ -270,16 +284,16 @@ We will provide some examples thereof in \secref{sec:dos} and \secref{sec:norm}.
 
 The most restrictive form of the Geometric Principle quoted in \secref{sec:intro} states that physical law must be written in terms of vectors, tensors, and (coordinate-invariant) scalars.
 These objects can only be combined by rules set out in the Ricci calculus (\citealt{ricci}; sometimes Einstein summation notation, \citealt{einstein}).
-This calculus was introduced to make objects equivariant to coordinate diffeomorphisms on curved manifolds.
+This calculus was introduced to make objects equivariant to coordinate diffeomorphisms on curved manifolds, but it applies to $O(3)$ and Lorentz symmetry as well.
 In the Ricci calculus, objects are written in index notation (a scalar has no indices, a vector has one index, and a $k$-tensor has $k$ indices), outer products are formed, and only certain kinds of sums over pairs of indices are permitted.
 When the inputs to a function are scalars, vectors, and tensors, and the function conforms to the rules of the Ricci calculus, the function will produce a geometric output (a scalar, vector, or tensor,\footnote{%
 It should be noted here that with the word ``vector'' and ``tensor'' here we are making specific technical reference to true vectors and tensors in 3-space, subject to passive $O(3)$ symmetries, like (physical) velocities, accelerations, and stress tensors.
-We are \emph{not} including arbitrary lists or tables of data or coefficients, which are sometimes called ``vectors'' and ``tensors'' in ML contexts.} depending on the number of unsummed indices), and the function will be precisely covariant to rotations and reflections of the coordinate system.
+We are \emph{not} including arbitrary lists or tables of data or coefficients, which are sometimes called ``vectors'' and ``tensors'' in ML contexts. See \secref{sec:glossary} for more detail.} depending on the number of unsummed indices), and the function will be precisely covariant to rotations and reflections of the coordinate system.
 This is how a large class of passive symmetries are enforced in physics contexts.
 
 There are many other passive symmetries, including coordinate diffeomorphisms, reparameterizations (including canonical transformations in Lagrangian and Hamiltonian systems), units covariance (see \secref{sec:units}), and gauge freedom.
 Some of these are easy to implement in ML contexts and some are difficult;
-not all group equivariances have practical implementations available at present.
+not all group equivariances have practical implementations useful for ML methods available at present.
 
 Sometimes it is difficult to tell whether a symmetry is active or passive.
 For example, the law of gravity is explicitly $O(3)$ invariant:
@@ -289,18 +303,16 @@ But this symmetry is also a passive symmetry:
 The law of gravity does not depend on the orientation (or handedness) of the coordinate system.
 In this sense, active symmetries can sometimes be turned into passive symmetries:
 If you know that an active symmetry is in play, you can sometimes write the physical law in terms of invariants such that the symmetry is true by construction or definition, and thus becomes a passive symmetry.
-This conversion of an active symmetry into a passive symmetry is related to the alias--alibi distinction mentioned above.
+This conversion of an active symmetry into a passive symmetry is related to the alias--alibi distinction mentioned above, and it has been critical in the development of contemporary physics.
 
-One example is the passive coordinate diffeomorphism symmetry on curved manifolds, which has been tremendously important in the development of contemporary physics.
-The discovery of special relativity \citep{sr} can be seen as the discovery that an active symmetry (the observation that the speed of light is the same for all observers) can be converted into a passive symmetry, true by construction for all valid physical laws.
-This passive symmetry is now called Lorentz invariance.
-After this, the equations of general relativity  \citep{gr} were found by looking at every expression to some degree consistent with the passive symmetry (of coordinate diffeomorphisms on curved spacetime manifolds) enforced by the Ricci calculus (he called this family of functions \emph{generally covariant}) until he found the one that reduced to Newtonian gravity in the weak-field limit.
-Following this lead, we will refer to the passive symmetries as ``covariances'' in what follows.
-We stress that these insights had a big impact on physics \citep{EARMAN1978251};
+The discovery of general relativity \citep{gr} can be seen as the discovery that active symmetries---the observation that the speed of light is the same for all observers, another is the observation that the gravitational mass equals the inertial mass---can be converted into a passive symmetry, true by construction for all valid physical laws, provided that they are written in particular forms.
+Indeed, the equations of general relativity were found by looking at every differential equation to some degree consistent with the passive symmetry of coordinate diffeomorphisms on curved spacetime manifolds (enforced by the Ricci calculus; the family of \emph{generally covariant} functions) until one was found that reduced to Newtonian gravity in the weak-field limit.
+Following this lead, we refer to passive symmetries as ``covariances'' here.
+We stress that these kinds of insights had a big impact on physics \citep{EARMAN1978251};
 only a few years previously, such considerations would have seemed highly unusual;
 now this form of argument is canon in theoretical physics (see, for example, \citealt{zee2016group}).
-Similarly, passive symmetries do not feature in most of today's ML practice---if the development of physics is any indication, their potential could be significant.
-Recent ML work in this direction is beautifully reported in \citep{weiler} and \citep{bronstein2021geometric}.
+That evolution motivates this contribution; passive symmetries do not feature in most of today's ML practice---if the development of physics is any indication, their potential could be significant.
+Some recent ML work has been done along these directions \citep{weiler, bronstein2021geometric}.
 
 \section{Example: Units covariance}\label{sec:units}
 Perhaps the most universal passive symmetry is units covariance---the behavior of a system doesn't depend on the units system in which we write the measured quantities.
@@ -419,7 +431,9 @@ That is, the exponential cut-off of the intensity appears at a wavelength set by
 In \figref{fig:exps} (left) we perform the following toy experiment:
 We generate noisy samples of intensities as a function of wavelength and temperature according to \eqref{eq.planck}, and the learning task is to predict the intensity for different values of wavelengths and temperatures.
 We perform a units covariant regression (employing the approach of \citealt{villar2022dimensionless}) using only $\lambda, T, c, k$; a units covariant regression with an extra dimensional constant found by cross-validation; and a standard MLP with no units constraints.
-Our results show that no units-covariant regression for the intensity as a function of $\lambda, T, c, k$ can reproduce accurately the intensity $B_\lambda$. However when the regression is permitted to introduce a new dimensional constant (and remains units covariant given the new constant), it finds a constant with units (and, less precisely, magnitude) that is consistent with $h$ (or $h$ times a combination of $c$ and $k$). The units covariant model outperforms the baseline MLP. Again, this shows that the passive symmetry leads to powerful capability.
+Our results show that no units-covariant regression for the intensity as a function of $\lambda, T, c, k$ can reproduce accurately the intensity $B_\lambda$.
+However when the regression is permitted to introduce a new dimensional constant (and remains units covariant given the new constant), it finds a constant with units (and, less precisely, magnitude) that is consistent with $h$ (or $h$ times a combination of $c$ and $k$).
+The units-covariant model outperforms the baseline MLP. Again, this shows that the passive symmetry leads to powerful capability.
 \begin{figure*}[t!]
     \centering
     \begin{minipage}{0.45\textwidth}
