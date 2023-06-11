@@ -82,7 +82,7 @@
 Any representation of data involves arbitrary investigator choices.
 Because those choices are external to the data-generating process, each choice leads to an exact symmetry, corresponding to the group of transformations that takes one possible representation to another.
 These are the \emph{passive symmetries}; they include coordinate freedom, gauge symmetry and units covariance, all of which have led to important results in physics.
-Our goal is to understand the implications of passive symmetries for machine learning: Which passive symmetries play a role (e.g., permutation symmetry in graph neural networks)? What are \emph{dos and don'ts} in machine learning practice if passive symmetries are to be respected?
+Our goal is to understand the implications of passive symmetries for machine learning: Which passive symmetries play a role (for example, permutation symmetry in graph neural networks)? What are \emph{dos and don'ts} in machine learning practice if passive symmetries are to be respected?
 We discuss links to causal modeling, and argue that the implementation of passive symmetries is particularly valuable when the goal of the learning problem is to generalize out of sample.
 This paper is purely conceptual;
 it is intended to help with translation among physics, mathematics, and machine-learning languages.
@@ -94,8 +94,8 @@ Many important ideas in machine learning (ML) have come from---or been inspired 
 These include the kernel trick \citep{CouHil53,SchSmo02} and the use of statistical mechanics techniques to solve probabilistic problems \citep{mcmc, gibbs}.
 Here we suggest another connection between physics and ML, which relates to representation of observables:
 When features and labels are represented in a mathematical form that involves investigator choices, methods of ML (or any relevant function) ought to be written in a form that is exactly equivariant to changes in those investigator choices.
-These ideas appear in the physics literature as early as \citet{gr}. They are given in the introduction of \textit{The Classical Groups} by \citet{weyl} as a motivation to study group theory.
-The first sentences of \textit{Modern Classical Physics} by \citet{mcp} say
+These ideas appear in the physics literature in the 1910s (most famously in \citealt{gr}). They are given in the introduction of \textit{The Classical Groups} \citep{weyl} as a motivation to study group theory.
+Literally the first sentences of \textit{Modern Classical Physics} \citep{mcp} are
 \begin{quote}
 [...] a central theme will be a Geometric Principle: 
 The laws of physics must all
@@ -105,7 +105,7 @@ physical entities.
 \end{quote}
 This principle leads to the important physical symmetries of coordinate freedom and gauge symmetry; a small generalization would include what we will refer to as units covariance.
 Each of these symmetries has led to fundamental results in physics. Some of these ideas are also exploited in ML, in particular in the geometric deep learning literature \citep{bronstein2021geometric, weiler}. 
-We argue---in this purely conceptual contribution---that analogs of these symmetries could have impact in ML, and increase the scope of group-equivariant methods in ML.
+We argue---in this purely conceptual contribution---that analogs of these symmetries could have impact in ML, and thus increase the scope of group-equivariant methods in ML.
 
 In natural science there are two types of symmetries (see, for example, Section 4.1 of \citealt{rovelli2000loop}). 
 The first kind is \emph{passive}, arising from the arbitrariness of the mathematical representation described above.
@@ -113,7 +113,7 @@ An example familiar to machine learners is the equivariance of functions on grap
 This is an exact, passive symmetry; graph neural network architectures (GNNs) build this passive symmetry in by design \citep{bruna2013spectral, duvenaud2015convolutional, gilmer2017neural}. 
 An example familiar to physicists is what we call \emph{units covariance}, which is the requirement that any correct description of the world have inputs and outputs with the correct units (and dimensions; see \secref{sec:glossary} for definitions):
 Imagine an equation connecting physical observables that numerically holds true.
-If the left hand side and the right hand side of the equation were to represent quantities with different dimensions (for example, a length on the LHS and a time on the RHS), then we could disrupt the numerical correctness of the equation by changing the units in which we measure some of the observables (e.g., from s to yr).
+If the left hand side and the right hand side of the equation were to represent quantities with different dimensions (for example, a length on the LHS and a time on the RHS), then we could disrupt the numerical correctness of the equation by changing the units in which we measure some of the observables (for example, from seconds to years).
 This passive symmetry leads to remarkable results; we discuss a few in \secref{sec:units}.
 
 The second kind of symmetries is \emph{active}.
@@ -177,7 +177,7 @@ Let $G$ be a group that acts on vector spaces $X$ and $Y$ as $\rho_X:G\to \opera
 {X} \arrow[r, "f"]  & {Y} 
 \end{tikzcd}
 \end{equation}
-The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps(X,Y)}$ then $g\cdot f = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$.
+The actions of $G$ in $X$ and $Y$ induce an action on the space of maps from $X$ to $Y$. If $f\in \text{Maps}(X,Y)$ then we can define $\rho_{XY}: G \to \operatorname{Sym}(\operatorname{Maps}(X,Y))$ such that $\rho_{XY}(g)(f) = \rho_Y(g)\circ f \circ \rho_X(g)^{-1}$.
 The equivariant maps are the fixed points of this action.
 
 While an equivariance is a mathematical property of a map, in this contribution we use the word ``equivariance'' mainly in the context of active symmetries, and ``covariance'' in the context of passive symmetries.
@@ -185,11 +185,11 @@ While an equivariance is a mathematical property of a map, in this contribution 
 Some physical quantities in field theories (for example the vector potential in electromagnetism) have additional degrees of freedom that go beyond the choice of coordinate system and units.
 These freedoms lead to additional passive symmetries that are known as \emph{gauge freedom}.
 \item[general covariance:]
-The covariance of relevance in general relativity \cite{einstein} is known as \emph{general covariance}.
+The covariance of relevance in general relativity \citep{einstein} is known as \emph{general covariance}.
 Because general relativity is a metric theory in $3+1$ spacetime dimensions with invariance with respect to arbitrary diffeomorphisms, this is a very strong symmetry.
 General covariance is sometimes called ``coordinate freedom'', but it is a special case thereof.
 \item[group:] A group $G$ is a set with a binary operation $\cdot$ satisfying (1) Associativity: for all $a,b,c\in G$ we have $(a\cdot b) \cdot c = a \cdot (b\cdot c)$. (2) Identity element: there exists an element $e\in G$ so that $e\cdot a = a \cdot e = a$ for all $a\in G$. (3) Inverse: for all $a \in G$ there exists a unique element $b$ such that $a\cdot b = b\cdot a = e$. This element is the inverse of $a$ and it is typically denoted as $a^{-1}$.
-\item[group action:] We consider a group $G$, a space $X$, and a map $\rho: G \to \operatorname{Sym}(X)$, where $\operatorname{Sym}(X)$ denotes the bijective maps from $X$ to itself. Using a slight use of notation, sometimes this map is expressed as $\rho:G\times X \to X$. We say $\rho$ is an action of $G$ on $X$ if it satisfies the following properties (1) Identity: $\rho(e,x)=x$ for all $x\in X$. (2) Compatibility: $\rho(a, \rho(b, x))=\rho (a\cdot b, x)$.
+\item[group action:] We consider a group $G$, a space $X$, and a map $\rho: G \to \operatorname{Sym}(X)$, where $\operatorname{Sym}(X)$ denotes the bijective maps from $X$ to itself. Lightly abusing notation, sometimes this map is expressed as $\rho:G\times X \to X$. We say $\rho$ is an action of $G$ on $X$ if it satisfies the following properties (1) Identity: $\rho(e)(x)=x$ for all $x\in X$, where $e$ is the group identity element. (2) Compatibility: $\rho(a)( \rho(b)(x))=\rho (a\cdot b)( x)$ for all $a,b\in G$ and $x\in X$.
 \item[group representation:] A representation of a group $G$ is an action $\rho: G \to \operatorname{GL}(V)$, where $\operatorname{GL}(V)$ is the space of invertible linear transformations of the vector space $V$. Sometimes it is said that $V$ is a representation of $G$ (and the action is implicitly known). When $V$ is a finite dimensional vector space, the group representation allows us to map the multiplication of group elements to multiplication of matrices. 
 \item[invariance:]
 An equivariance in which the action in the output space is trivial is called an \emph{invariance}. Physicists sometimes use invariant (gauge invariant, for example) for things we would call covariant.
@@ -204,7 +204,7 @@ Thus, say, the charge of a particle is a scalar, but the $x$ coordinate of its v
 \item[symmetry:]
 Given a mathematical object $X$ of any sort, (like a manifold, metric space, equation, etc), any mapping of the object onto itself that preserves the corresponding structure is a \emph{symmetry}.
 \item[tensor:]
-A linear function of $k-1$ vectors that outputs a vector, or a linear function of $k$ vectors that outputs a scalar, is a $k$-\emph{tensor}.
+A multi-linear function of $k-1$ vectors that outputs a vector, or a multi-linear function of $k$ vectors that outputs a scalar, is a $k$-\emph{tensor}.
 A rectangular array of data is not usually a tensor according to this definition.
 A vector can be seen as a 1-tensor, and a scalar can be seen as a 0-tensor.
 \item[units:]
@@ -297,7 +297,7 @@ We stress that these insights had a big impact on physics \citep{EARMAN1978251};
 only a few years previously, such considerations would have seemed highly unusual;
 now this form of argument is canon in theoretical physics (see, for example, \citealt{zee2016group}).
 Similarly, passive symmetries do not feature in most of today's ML practice---if the development of physics is any indication, their potential could be significant.
-Recent ML work in this direction is beautifully reported in \cite{weiler} and \cite{bronstein2021geometric}.
+Recent ML work in this direction is beautifully reported in \citep{weiler} and \citep{bronstein2021geometric}.
 
 \section{Example: Units covariance}\label{sec:units}
 Perhaps the most universal passive symmetry is units covariance---the behavior of a system doesn't depend on the units system in which we write the measured quantities.
@@ -316,7 +316,7 @@ The only possible combination of $m, g, v, \theta$ that has units of length is $
 That is, both Questions~1 and 2 can be answered up to a dimensionless prefactor without any considerations beyond those of the units of the inputs and outputs, and without any training data.
 And both of those answers don't depend in any way on the input mass $m$, which is a fundamental observation \citep{gr}.
 
-This shows that a function can sometimes be inferred from units covariance only, i.e., from a purely passive symmetry, combined with the \emph{empirical} knowledge that the solution is \emph{independent} of all other observables.
+This shows that a function can sometimes be inferred from units covariance only, that is, from a purely passive symmetry, combined with the \emph{empirical} knowledge that the solution is \emph{independent} of all other observables.
 Units covariance has been discussed in ML previously \citep{villar2022dimensionless, bakarji2022dimensionally, xie2022data}.
 It can help with training, predictive accuracy, and out-of-sample generalization.
 In particular, out-of-sample generalization improves because the enforcement of the symmetry enforces scaling properties of the learned function.
@@ -395,7 +395,7 @@ After all, most problems (like reading handwriting or predicting gravitational t
 \section{Experiments and examples}\label{sec:experiments}
 
 \paragraph{Black-body radiation:}
-An important moment in the history of physics was the discovery that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation \cite{planck}
+An important moment in the history of physics was the discovery that the electromagnetic radiation intensity $B_\lambda$ (energy per time per area per solid angle per wavelength) of thermal black-body radiation can be described with a simple equation \citep{planck}
 \begin{equation} \label{eq.planck}
     B_\lambda(\lambda) = \frac{2\,h\,c^2}{\lambda^5}\,\frac{1}{\exp\frac{h\,c}{\lambda\,k\,T} - 1}~,
 \end{equation}
@@ -433,7 +433,7 @@ Our results show that no units-covariant regression for the intensity as a funct
 \end{figure*}
 
 \paragraph{Springy double pendulum:}
-The double pendulum connected by springs is a toy example often used in equivariant ML demonstrations \cite{finzi2021practical,yao2021simple, villar2022dimensionless}. 
+The double pendulum connected by springs is a toy example often used in equivariant ML demonstrations \citep{finzi2021practical,yao2021simple, villar2022dimensionless}. 
 The final conditions (position and velocities of both masses after elapsed time $T$) are related to the initial conditions (position and velocities of the masses at the initial time), and the dynamics is classically chaotic.
 
 The system is subject to a passive $O(3)$ symmetry (equivariance with respect to orthogonal coordinate transformations), and an active $O(2)$ symmetry (equivariance with respect to rotations and reflections in the 2-d plane normal to the gravity). 
@@ -448,7 +448,7 @@ We remark that in (Learned-g), the learned vector in the performed experiments w
 
 \section{Connections with causality}\label{sec:causality}
 
-There is nothing statistical about the notion of passive symmetries, and thus everything we have said above also applies to causal models \cite{PetJanSch17}. There are, however, a few comments specific to causality.
+There is nothing statistical about the notion of passive symmetries, and thus everything we have said above also applies to causal models \citep{PetJanSch17}. There are, however, a few comments specific to causality.
 
 The passive symmetry discussed in \secref{sec:units}---and indeed all passive symmetries---can also deliver information pertaining to the (hard problem of) inference of causal structure:
 treating $g$ as a constant, we can construct a structural causal model with the following vertices: \textsl{(a)}~an initial value of $v$, \textsl{(b)}~a value of $m$, chosen independently, and \textsl{(c)}~a final value of $L$, affected by a noise term $\theta$.
@@ -462,23 +462,23 @@ This difficulty is related to the problem in causal inference of knowing or spec
 
 This can also be linked to the notion of experimental interventions. Suppose we assume that only certain quantities come into the solution (say, $m, g, h$). How would we confirm this in practice? In essence, this is not a probabilistic statement, but one about the behavior of a system under interventions. A set of experiments can indicate that a certain outcome (or effect variable) depends on a certain set of input (cause) variables but is independent of certain other potential cause variables. In this case, the physical law is not inferred from dimensional arguments alone, but from a combination of dimensional and causal arguments.
 
-Even if interventions are not available (e.g., for $g$), physicists trying to infer a law will not do so based (purely) on input-output data: they will have prior knowledge from related problems informing them as to which variables are relevant. E.g., we may know from having previously solved a related problem that we expect a problem to depend on $g$.
-This is a form of qualitative \emph{transfer} that we expect will also become relevant for model transfer in ML \cite{RojSchTurPet18}.
+Even if interventions are not available (for $g$, for example), physicists trying to infer a law will not do so based (purely) on input-output data: they will have prior knowledge from related problems informing them as to which variables are relevant. For example, we may know from having previously solved a related problem that we expect a problem to depend on $g$.
+This is a form of qualitative \emph{transfer} that we expect will also become relevant for model transfer in ML \citep{RojSchTurPet18}.
 
 \section{Connections to current ML practice}\label{sec:practice}
 
-Most ML implementations don't impose exact symmetries. Sometimes they approximate equivariances by means of data augmentation \cite{chen2020group, huang2022quantifying}.
+Most ML implementations don't impose exact symmetries. Sometimes they approximate equivariances by means of data augmentation \citep{chen2020group, huang2022quantifying}.
 In the present work we focus on exact symmetries: Given data spaces $X$ and $Y$ and a group $G$ acting on $X$ and $Y$, equivariant ML restricts the function space to those satisfying  $f(g\cdot x) = g \cdot f(x)$ for all $f\in \mathcal F$, $g\in G$, $x\in X$.
 There are two main approaches to perform optimization in the space of equivariant functions:
 \begin{itemize}
-    \item Explicitly parameterizing the space of equivariant functions via equivariant layers or weight sharing \cite{cohen2016group, kondor2018convolution, thomas2018tensor, geiger2022e3nn, finzi2020generalizing, finzi2021practical}.
-    \item Finding a set of invariant features and expressing the equivariant functions in terms of those features \cite{villar2021scalars,blum2022equivariant}.
+    \item Explicitly parameterizing the space of equivariant functions via equivariant layers or weight sharing \citep{cohen2016group, kondor2018convolution, thomas2018tensor, geiger2022e3nn, finzi2020generalizing, finzi2021practical}.
+    \item Finding a set of invariant features and expressing the equivariant functions in terms of those features \citep{villar2021scalars,blum2022equivariant}.
 \end{itemize}
 The two approaches are theoretically equivalent, but their practical implementation may be dramatically different. For example, efficiently computing a complete generating set of invariant/equivariant features may be prohibitive. On the other hand, in some cases it may hard to construct a perfectly invariant/equivariant layer (or family of approximating functions); more often, it may be possible to construct such a family, but we may lack proof that they are universal approximators of \textit{all} invariant/equivariant functions within some well-defined context, even in a limiting sense.
 
-Aside from the previously mentioned results in Convolutional/Graph Neural Networks, another example of successful exact universal parametrization of a family of functions is the implementation of symplectic networks, which exactly preserve a (not-necessarily-known) differential 2-form on a manifold by acting on ambient space \cite{sympnets,henonnets}. Even the non-trivial diffeomorphism symmetries of general relativity have been considered for ML \cite{weiler}.
+Aside from the previously mentioned results in Convolutional/Graph Neural Networks, another example of successful exact universal parametrization of a family of functions is the implementation of symplectic networks, which exactly preserve a (not-necessarily-known) differential 2-form on a manifold by acting on ambient space \citep{sympnets,henonnets}. Even the non-trivial diffeomorphism symmetries of general relativity have been considered for ML \citep{weiler}.
  
-Equivariant ML models can predict the properties and behaviour of physical systems (see \citealt{cheng2019covariance}), and have plenty of scientific applications \cite{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}. The implicit bias, generalization error, and sample complexity of equivariant ML models have been recently studied \cite{lawrence2021implicit, bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning}.
+Equivariant ML models can predict the properties and behaviour of physical systems (see \citealt{cheng2019covariance}), and have plenty of scientific applications \citep{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}. The implicit bias, generalization error, and sample complexity of equivariant ML models have been recently studied \citep{lawrence2021implicit, bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning}.
 
 \section{Dos and Don'ts}\label{sec:dos}
 
@@ -492,7 +492,7 @@ The choice to use PCA on such a data set is the choice to be wrong.
 Consider a kernel function with inputs that are lists of features with different units.
 If the kernel function involves, say, an exponential of a sum of squares of differences of the input features, the output of the kernel function cannot obey the passive symmetry of units covariance.
 Quantities with different units cannot be summed, and dimensional quantities cannot be exponentiated. 
-On the other hand, if a kernel function can be chosen that is units covariant (e.g., if all features have the same units, or if the kernel is constructed from tensor products of kernels, each of which uses only one type of input), then the result of a kernel algorithm can be covariant. These considerations are relevant for maximum margin hyperplane (in SVMs), eigenvectors in kernel PCA \cite{SchSmo02}, or Gaussian processes.
+On the other hand, if a kernel function can be chosen that is units covariant (for example, if all features have the same units, or if the kernel is constructed from tensor products of kernels, each of which uses only one type of input), then the result of a kernel algorithm can be covariant. These considerations are relevant for maximum margin hyperplane (in SVMs), eigenvectors in kernel PCA \citep{SchSmo02}, or Gaussian processes.
 
 Learning involves optimization.
 Optimization is of a scalar cost function (a number, which is a function of many parameters).
@@ -524,13 +524,13 @@ $L_1$ and $L_\infty$ norms are often inconsistent with the passive symmetries.
 This is because the sum of absolute values of input components, and the maximum of inputs, are rarely either geometrically, or from a units perspective, covariant.
 There is a rare exception if all features have the same units, and none of the features are components of geometric objects (they are all scalars).
 
-Similarly, regularizers such as those favoring flat loss minima \cite{flatminima,sharpminima,petzka2021relative} are often not units covariant, changing their values under certain weight transformations that leave the overall function invariant. 
-If reformulated as a regularizer that is a covariant function of the training points, this problem vanishes \cite{LuxburgBS04}.
+Similarly, regularizers such as those favoring flat loss minima \citep{flatminima,sharpminima,petzka2021relative} are often not units covariant, changing their values under certain weight transformations that leave the overall function invariant. 
+If reformulated as a regularizer that is a covariant function of the training points, this problem vanishes \citep{LuxburgBS04}.
 
 Data normalization, batch normalization, and layer normalization are all generally brutal and often violate model equivariances and covariances \citep{aalto2022geometric}.
-These provide rich examples, one of which we expand further in \secref{sec:norm}.
+We expand further on normalization problems in \secref{sec:norm}.
 
-Finally, we mention that passive symmetries play a crucial role also when it comes to latent variable models and ICA, since unobserved latent factors usually come with a large class of allowed gauge transformations (permutations, rotations in the latent space, and coordinate-wise nonlinear transformations) which should be incorporated correctly when studying notions of identifiability \cite{khemakhem2020ice, BucBesSch22}.
+Finally, we mention that passive symmetries play a crucial role also when it comes to latent variable models and ICA, since unobserved latent factors usually come with a large class of allowed gauge transformations (permutations, rotations in the latent space, and coordinate-wise nonlinear transformations) which should be incorporated correctly when studying notions of identifiability \citep{khemakhem2020ice, BucBesSch22}.
 
 \section{Example: Normalization}\label{sec:norm}
 
