@@ -108,7 +108,6 @@ physical entities.
 This Geometric Principle leads to the important physical symmetries of coordinate freedom and gauge symmetry; a small generalization would include what we will refer to as units covariance.
 Each of these symmetries has led to fundamental results in physics. Some of these ideas are also exploited in ML, in particular in the geometric deep learning literature \citep{bronstein2021geometric, weiler}. 
 We argue---in this purely conceptual contribution---that analogs of these symmetries could have impact in ML, and thus increase the scope of group-equivariant methods in ML.
-% HOGG's syntactical reference point
 
 In natural science there are two types of symmetries (see, for example, Section 4.1 of \citealt{rovelli2000loop}). 
 The first kind is \emph{passive}, arising from the arbitrariness of the mathematical representation described above.
@@ -229,6 +228,8 @@ Some of what's here will be expanded upon further in subsequent Sections.
   A multi-linear function of $k-1$ vectors that outputs a vector, or a multi-linear function of $k$ vectors that outputs a scalar, is a $k$-\emph{tensor}.
   A rectangular array of data is not usually a tensor according to this definition.
   A vector can be seen as a 1-tensor (the linear function corresponding to the vector being the inner product with that vector), and a scalar can be seen as a 0-tensor.
+
+  There is an alternative definition of tensor in terms of transformations with respect to the $O(d)$ group, analogous to the primary definition of ``vector'' below.
 \item[units:]
   All physical quantities are measured with a system of what we call \emph{units}.
   A quantity can be transformed from one unit system to another by multiplication with a dimensionless number.
@@ -238,9 +239,10 @@ Some of what's here will be expanded upon further in subsequent Sections.
   This symmetry is called (by us) \emph{units covariance} (contra \citealt{villar2022dimensionless} where it is called ``units equivariance'').
 \item[vector:]
   An ordered list of $d$ numbers, all of which have the same units, that is subject to the passive $O(d)$ symmetry corresponding to coordinate-system rotations, is a \emph{vector} in $d$ dimensions.
+  These rotations are performed by the standard rotation (and reflection) matrix representation of the elements of $O(d)$.
   See the definition of ``tensor'' for an alternative definition:
   The inner (or dot) product of two vectors produces a scalar; for this reason a vector can be seen as a 1-tensor.
-  A generic list of $d$ features is not usually a vector according to this definition.
+  A generic ordered list of $d$ features is not usually a vector according to this definition.
 \end{description}
 
 \section{Passive symmetries}\label{sec:informal}
@@ -409,8 +411,10 @@ Imposing a passive symmetry on the structure of an ML model can permit the disco
 They also suggest changes to make to regularizations, network structures, and normalizations.
 We illustrate these ideas with some toy examples and discussion below.
 \emph{We conjecture that enforcing passive symmetries will improve ML and data-analysis tasks.}
-We are inspired in part by the success of convolutional neural networks in image-analysis contexts in which translation symmetry is not an active symmetry, but where the particular pixel locations of particular features are unimportant to the recognition task at hand.
-After all, most problems (like reading handwriting or predicting gravitational trajectories near the surface of the Earth) are not actively equivariant to rotations, reflections, and translations, but they are all, in their data-generating processes, exactly coordinate free, and exactly (or almost exactly) agnostic to the choices made in data representation (for example centering and cropping).
+We are inspired in part by the success of message passing in graph neural networks (\hogg{CITE});
+message-passing algorithms exactly obey the passive symmetry corresponding to node relabelings.
+We are also inspired in part by the success of convolutional neural networks in image-analysis contexts (\hogg{CITE}) in which translation symmetry is not an active symmetry, but where the particular pixel locations of particular features are unimportant to the recognition task at hand.
+After all, most problems (like reading handwriting or predicting gravitational trajectories near the surface of the Earth) are not actively equivariant to rotations, reflections, and translations, but they are all, in their data-generating processes, exactly coordinate free, and almost exactly agnostic to particular data choices (for example centering and cropping).
 
 \section{Experiments and examples}\label{sec:experiments}
 
@@ -495,6 +499,7 @@ Even if interventions are not available (for $g$, for example), physicists tryin
 This is a form of qualitative \emph{transfer} that we expect will also become relevant for model transfer in ML \citep{RojSchTurPet18}.
 
 \hogg{Finally, we remark that causal language appeared above, HERE and HERE. Say more about those.}
+% HOGG's syntactical reference point
 
 \section{Connections to current ML practice}\label{sec:practice}
 Most ML implementations don't impose exact symmetries. Sometimes they approximate equivariances by means of data augmentation \citep{chen2020group, huang2022quantifying}.
