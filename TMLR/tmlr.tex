@@ -1,45 +1,40 @@
 %% NOTES TO SELVES
 %% ---------------
+
+%TODO:
 %% - HOGG: Adjust the description on how we got the magnitude of the missing constant in the black body problem.
-
-%%TODO items for revision
+%% HOGG: Comment about the fact that at exact precision the magnitude shouldn't matter but in practice it does.
+%% US: We will add a description of the experimental setup (dimensionless stuff) in the appendix.
 %% US: New experiment: covariance in data normalization
+%HOGG: write the appendix on the black body experiment
+%SOLE: write the experiment on data normalization
+% HOGG say, for the pendulum problem: In the same way that the g vector is critical for making the problem rotation invariant, the pivot position is critical for making the problem translation invariant, and the pivot velocity plus the two masses are critical for making the problem boost-invariant. All this flows from Weichi's normalization experiments.
 
-%% US: We will publish all the notebooks in a single github repository, so that they are very easy to run.
 
-%% HOGG SAYS THIS IS NOW DONE: To the list of contributions we give in the Introduction, we will add a specific bullet point about the circumstances in which an additional learned feature converts a covariant problem into an actively equivariant problem.
 
-%% US: We will add a description of the experimental setup in the appendix.
 
+
+
+%DONE ITEMS:
 %% REFEREE: In the abstract, the paper arguably translates between different languages of physics, mathematics, and machine learning. Although I see such traces in the glossary, these vocabularies are not fundamental in the later discussion.
 %% FIXED
 %% HOGG SAYS THIS IS NOW DONE: This point is fair; we will reduce the emphasis on this point in the abstract, move the glossary to the appendix, and take care to make translations in the text where they are useful.
-
-%% US: We will add a description of the different methods in the literature and experimental results in an appendix.
-%TODO: SOLEDAD
-
-%% REFEREE: The paper feels unnecessarily long, and (at least in the first 6 sections) somewhat redundant/repetative. I think that this paper could fit within the standard 12 page limits of a TMLR submission without needing to cut much content. 
-%% NEARLY FIXED
-
+%% HOGG SAYS THIS IS NOW DONE: To the list of contributions we give in the Introduction, we will add a specific bullet point about the circumstances in which an additional learned feature converts a covariant problem into an actively equivariant problem.
 %Move the glossary to the appendix (it is very helpful, but disrupts the reading flow) 
 %FIXED
-
-% REFEREE: Sections 3-5 seem to repeat many of the same ideas but with slight variation. It is possible that including the formal definitions of Section 5 before introducing the content in Section 3 could reduce the need to re-introduce passive and active symmetries multiple times.
-% WON'T FIX -- I THINK WE ARE CLOSE
-
-% HOGG SAYS THIS IS NOW NEARLY DONE: We will take all of these suggestions; these are all useful and reasonable. We agree that the paper can fit in the 12 pages with some reasonable changes.
-
-%We will write two new appendices, one on the experiment that’s there now, and one on the new experiment (described above).
-
-%HOGG: write the appendix on the black body experiment
-
+%Page 8 "The two approaches are theoretically eqiuvalent" <- should be "three" approaches
+%FIXED
 %Page 6 towards the bottom "sometimes Einstein summation notation, Einstein 1916" <- should this be "sometimes called Einstein summation notation"?
 %FIXED
 
-%Page 8 "The two approaches are theoretically eqiuvalent" <- should be "three" approaches
-%FIXED
-
-% HOGG say, for the pendulum problem: In the same way that the g vector is critical for making the problem rotation invariant, the pivot position is critical for making the problem translation invariant, and the pivot velocity plus the two masses are critical for making the problem boost-invariant. All this flows from Weichi's normalization experiments.
+%FINAL CHECK
+%% US: We will publish all the notebooks in a single github repository, so that they are very easy to run.
+%% REFEREE: The paper feels unnecessarily long, and (at least in the first 6 sections) somewhat redundant/repetative. I think that this paper could fit within the standard 12 page limits of a TMLR submission without needing to cut much content. 
+%% NEARLY FIXED
+% REFEREE: Sections 3-5 seem to repeat many of the same ideas but with slight variation. It is possible that including the formal definitions of Section 5 before introducing the content in Section 3 could reduce the need to re-introduce passive and active symmetries multiple times.
+% WON'T FIX -- I THINK WE ARE CLOSE
+% HOGG SAYS THIS IS NOW NEARLY DONE: We will take all of these suggestions; these are all useful and reasonable. We agree that the paper can fit in the 12 pages with some reasonable changes.
+%We will write two new appendices, one on the experiment that’s there now, and one on the new experiment (described above).
 
 \documentclass[]{article} % [preprint] for arXiv, [] for submission
 \usepackage{tmlr}
@@ -366,11 +361,11 @@ This is the problem that, classically, the black-body spectrum, or any thermal o
 Planck's solution seeded the development of quantum mechanics, which governs the behavior of all matter at small scales, and which cuts off the ultraviolet modes through quantization of energy.
 
 Planck's problem can be solved almost directly with the passive symmetry of units covariance.
-That is, the exponential cut-off of the intensity appears at a wavelength set by the temperature and a new constant, that must have units of action (or action times $c$, or action divided by $k$, or one equivalent in terms of the lattice of dimensional features, see Appendix \ref{app.dimensionless} and \citealt{villar2022dimensionless}).
+That is, the exponential cut-off of the intensity appears at a wavelength set by the temperature and a new constant, that must have units of action (or action times $c$, or action divided by $k$, or one equivalent in terms of the lattice of dimensional features, see Appendix \ref{app:dimensionless} and \citealt{villar2022dimensionless}).
 
 In \figref{fig:exps} (left) we perform the following toy experiment:
 We generate noisy samples of intensities as a function of wavelength and temperature according to \eqref{eq.planck}, and the learning task is to predict the intensity for different values of wavelengths and temperatures.
-We perform three experiments, described in Appendix \ref{app.dimensionless}
+We perform three experiments, described in Appendix~\ref{app:dimensionless}
 \textsl{(A)}~a units-covariant regression (employing the approach of \citealt{villar2022dimensionless}) using only $\lambda, T, c, k$; \textsl{(B)}~a units covariant regression with an extra dimensional constant found by cross-validation; and \textsl{(C)}~a standard multi-layer perceptron regression (MLP) with no units constraints.
 Our results show that no units-covariant regression for the intensity as a function of $\lambda, T, c, k$ can reproduce accurately the intensity $B_\lambda$.
 However when the regression is permitted to introduce a new dimensional constant (but enforce exact units-covariance given the new constant), it finds a constant with units (and, less precisely, magnitude) that is consistent with $h$ (or $h$ times a combination of $c$ and $k$).
@@ -386,7 +381,7 @@ Na\"ively this suggests that passive symmetry brings new capabilities.
     \includegraphics[width=0.99\textwidth]{pendulum}
     \includegraphics[width=0.99\textwidth]{table}
     \end{minipage}
-    \caption{\textsl{(Left panel)}~We predict the intensity of black body radiation as a function of wavelength and temperature. For all experiments, we use an MLP consisting of 3 layers with 20 hidden units each. The \emph{standard MLP} uses wavelength and temperature as features and it doesn't require the output to be dimensionally correct. The \emph{units covariant without extra constant} learns a scaling of the only dimensionally correct object one can construct with inputs $\lambda, T, c, k$ (see description main in text). The \emph{units covariant with extra dimensional constant} incorporates a constant with units $[\kg, \m, \s, \K]\in[-1,0,1]^4$ as an input feature, it performs a units covariant regression with the original features $\lambda, T, c, k$, and the extra constant. It then selects a constant with a low validation error and reports the results on the test set. The constant learned for the depicted plot is 1.61e52 $\kg^{-1}\m^{-1}\s^{-1}\K^{-1}$, which is the same units and similar magnitude to the valid physical combination $c\,k\,h^{-2}$.
+    \caption{\textsl{(Left panel)}~We predict the intensity of black body radiation as a function of wavelength and temperature. For all experiments, we use an MLP consisting of 3 layers with 20 hidden units each. The \emph{standard MLP} uses wavelength and temperature as features and it doesn't require the output to be dimensionally correct. The \emph{units covariant without extra constant} learns a scaling of the only dimensionally correct object one can construct with inputs $\lambda, T, c, k$ (see description main in text). The \emph{units covariant with extra dimensional constant} incorporates a constant with units $[\kg, \m, \s, \K]\in[-1,0,1]^4$ as an input feature, it performs a units covariant regression with the original features $\lambda, T, c, k$, and the extra constant. It then selects a constant with a low validation error and reports the results on the test set. The constant learned for the depicted plot is 1.61e52 $\kg^{-1}\m^{-1}\s^{-1}\K^{-1}$, which is the same units and similar magnitude to the valid physical combination $c\,k\,h^{-2}$. 
     \textsl{(Right panel)}~Performance of learning the dynamics of the springy double pendulum. We consider the three models (described in the main text): (Known-g) an $O(3)$-equivariant model where the gravity is an input to the model, (No-g) an $O(3)$-equivariant model where the gravity is not given, and (learned-g) an $O(3)$-equivariant model that uses the position and momenta as well as an unknown vector that the model learns. The results show that $O(3)$-equivariance permits the learning of the gravity vector from data with only minimal impact on performance. See \appref{app:pendulum} for a more detailed description of the experiment.}
     \label{fig:exps}
 \end{figure*}
@@ -402,13 +397,15 @@ The $O(2)$ symmetry is active, because it is an experimental fact that if the in
 The $O(2)$ active symmetry corresponds to the set of transformations in $O(3)$ that fix the gravity vector. 
 
 The passive $O(3)$ symmetry requires that the coordinates of all relevant vectors are transformed identically, the positions and momenta of both masses and the gravity vector.
-If the model doesn't have access to all relevant vectors as inputs then the predictions will not be apparently $O(3)$ equivariant.
+If the model doesn't have access to all relevant vectors as inputs then the predictions will not necessarily be $O(3)$ equivariant.
 We perform an experiment in which we predict the dynamics of the double pendulum using $O(3)$-equivariant models.
 The symmetries are implemented by converting the network inputs (scalars and components of vectors) into invariant scalar quantities according to the Ricci calculus (which explicitly encodes $O(3)$), building the model in the space of the invariant scalars (as per \citealt{villar2021scalars}).
 The models implemented here are \textsl{(Known-g)}---an $O(3)$-equivariant model that has the positions, momenta, and gravity vector all as features (similar to the models in \citealt{villar2021scalars, yao2021simple}); \textsl{(No-g)}---an $O(3)$-equivariant model that is missing the gravity vector as an input feature; and \textsl{(Learned-g)}\---an $O(3)$-equivariant model that has the position, momenta and an extra unknown vector as features.
 The latter model optimizes model weights along with the unknown vector. 
 In the right panel of \figref{fig:exps} we show the performance of the three models.
-We remark that in \textsl{(Learned-g)}, the learned vector in the performed experiments was nearly parallel to the true (but unknown) gravity vector $g$; the angle between the learned and true gravity vector ended up at 0.00016~radians.
+We remark that in \textsl{(Learned-g)}, the learned vector in the performed experiments was nearly parallel to the true (but unknown) gravity vector $g$; the angle between the learned and true gravity vector ended up at 0.00016~radians
+
+\paragraph{Non-covariant data normalization} 
 
 \section{Connections with causality}\label{sec:causality}
 There is nothing statistical about the notion of passive symmetries, and thus everything we have said above also applies to causal models \citep{PetJanSch17}.
@@ -700,8 +697,8 @@ any intrinsic property of  $X$ which causes it to remain invariant under certain
   A generic ordered list of $d$ features is not usually a vector according to this definition.
 \end{description}
 
-\section{Units covariance regression: the black body experiment}
-\label{app.dimensionless}
+\section{Units covariant regression: The black body experiment}\label{app:dimensionless}
+HOGG WRITE HERE
 
 \section{Springy double pendulum}\label{app:pendulum}
 We consider the dissipationless spherical double pendulum with springs, with a pivot $o$ and two masses connected by springs. The kinetic energy $\mathcal{T}$ and potential energy $\mathcal{U}$ of the system are given by
