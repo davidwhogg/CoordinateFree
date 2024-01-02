@@ -1,46 +1,19 @@
-%% NOTES TO SELVES
-%% ---------------
+% TODO:
+% -----
+%% - WEICHI: We will publish all the notebooks in a single github repository, so that they are very easy to run.
+%% - SOLE: Add "our anonymous referees" and whatever else you need to our Acknowledgements.
+%% - SOLE: resubmit final publishable version to arXiv.
 
-%TODO:
-%% - HOGG: Adjust the description on how we got the magnitude of the missing constant in the black body problem.
-%% HOGG: Comment about the fact that at exact precision the magnitude shouldn't matter but in practice it does.
-%% US: We will add a description of the experimental setup (dimensionless stuff) in the appendix.
-%% US: New experiment: covariance in data normalization
-%HOGG: write the appendix on the black body experiment
-%SOLE: write the experiment on data normalization
-% HOGG say, for the pendulum problem: In the same way that the g vector is critical for making the problem rotation invariant, the pivot position is critical for making the problem translation invariant, and the pivot velocity plus the two masses are critical for making the problem boost-invariant. All this flows from Weichi's normalization experiments.
-
-
-
-
-
-
-%DONE ITEMS:
-%% REFEREE: In the abstract, the paper arguably translates between different languages of physics, mathematics, and machine learning. Although I see such traces in the glossary, these vocabularies are not fundamental in the later discussion.
-%% FIXED
-%% HOGG SAYS THIS IS NOW DONE: This point is fair; we will reduce the emphasis on this point in the abstract, move the glossary to the appendix, and take care to make translations in the text where they are useful.
-%% HOGG SAYS THIS IS NOW DONE: To the list of contributions we give in the Introduction, we will add a specific bullet point about the circumstances in which an additional learned feature converts a covariant problem into an actively equivariant problem.
-%Move the glossary to the appendix (it is very helpful, but disrupts the reading flow) 
-%FIXED
-%Page 8 "The two approaches are theoretically eqiuvalent" <- should be "three" approaches
-%FIXED
-%Page 6 towards the bottom "sometimes Einstein summation notation, Einstein 1916" <- should this be "sometimes called Einstein summation notation"?
-%FIXED
-
-%FINAL CHECK
-%% US: We will publish all the notebooks in a single github repository, so that they are very easy to run.
-%% REFEREE: The paper feels unnecessarily long, and (at least in the first 6 sections) somewhat redundant/repetative. I think that this paper could fit within the standard 12 page limits of a TMLR submission without needing to cut much content. 
-%% NEARLY FIXED
-% REFEREE: Sections 3-5 seem to repeat many of the same ideas but with slight variation. It is possible that including the formal definitions of Section 5 before introducing the content in Section 3 could reduce the need to re-introduce passive and active symmetries multiple times.
-% WON'T FIX -- I THINK WE ARE CLOSE
-% HOGG SAYS THIS IS NOW NEARLY DONE: We will take all of these suggestions; these are all useful and reasonable. We agree that the paper can fit in the 12 pages with some reasonable changes.
-%We will write two new appendices, one on the experiment that’s there now, and one on the new experiment (described above).
-
-\documentclass[]{article} % [preprint] for arXiv, [] for submission
+\documentclass[accepted]{article}
 \usepackage{tmlr}
 \usepackage{microtype}
 \usepackage[colorlinks=true, allcolors=darkgray]{hyperref}
 \usepackage{graphicx}
+
+% required inputs for accepted version
+\def\month{01}
+\def\year{2024}
+\def\openreview{\url{https://openreview.net/forum?id=gllUnpYuXg}}
 
 % For math
 \usepackage{amsmath}
@@ -50,6 +23,7 @@
 \usepackage{mathtools}
 \usepackage{amsthm}
 \usepackage{tikz-cd}
+\usepackage{booktabs}
 
 % add our our own custom macros
 \tikzcdset{every label/.append style = {font = \normalsize}}
@@ -75,40 +49,31 @@
 \newcommand{\weichi}[1]{\textcolor{blue}{\textbf{Weichi says: #1}}}
 
 \title{Towards fully covariant machine learning}
-\rhead{Towards fully covariant machine learning}
 
 \author{\name Soledad Villar\footnotemark[1]{} \email soledad.villar@jhu.edu\\
       \addr Department of Applied Mathematics and Statistics, Johns Hopkins University\\
-            Baltimore MD, USA
+      \addr Mathematical Institute for Data Science, Johns Hopkins University
       \AND
       \name David W. Hogg\footnotemark[1]{} \email david.hogg@nyu.edu\\
       \addr Center for Cosmology and Particle Physics, Department of Physics, New York University\\
-            New York NY, USA\\[1ex]
-            Max Planck Institute for Astronomy\\
-            Heidelberg, Germany\\[1ex]
-            Flatiron Institute, a division of the Simons Foundation\\
-            New York NY, USA
+      \addr Max Planck Institute for Astronomy, Heidelberg\\
+      \addr Flatiron Institute, a division of the Simons Foundation
       \AND
       \name Weichi Yao \email wyao@stern.nyu.edu\\
-      \addr Department of Technology, Operations, and Statistics, Stern School of Business, New York University\\
-            New York NY, USA
+      \addr Michigan Institute for Data Science, University of Michigan
       \AND
       \name George A. Kevrekidis \email gkevrek1@jhu.edu\\
       \addr Department of Applied Mathematics and Statistics, Johns Hopkins University\\
-            Baltimore MD, USA\\[1ex]
-            Los Alamos National Laboratory\\
-            Los Alamos NM, USA
+      \addr Los Alamos National Laboratory
       \AND
       \name Bernhard Sch\"olkopf \email bs@tuebingen.mpg.de\\
-      \addr Max Planck Institute for Intelligent Systems\\ 
-      ELLIS Institute\\
-            T\"ubingen, Germany
+      \addr Max Planck Institute for Intelligent Systems and ELLIS Institute, T\"ubingen
      }
 
 \frenchspacing\sloppy\sloppypar\raggedbottom
 \begin{document}
 \maketitle%
-% \renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotetext[1]{joint first author}\renewcommand{\thefootnote}{\arabic{footnote}}\addtocounter{footnote}{-1}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}\footnotetext[1]{joint first author}\renewcommand{\thefootnote}{\arabic{footnote}}\addtocounter{footnote}{-1}
 
 \begin{abstract}
 Any representation of data involves arbitrary investigator choices.
@@ -117,10 +82,10 @@ These are the \emph{passive symmetries}; they include coordinate freedom, gauge 
 In machine learning, the most visible passive symmetry is the relabeling or permutation symmetry of graphs.
 The \emph{active symmetries} are those that must be established by observation and experiment.
 They include, for instance, translations invariances or rotation invariances of physical law. 
-These symmetries are the subjects of most of the equivariant machine learning literature.
+These symmetries are the subject of most of the equivariant machine learning literature.
 Our goal, in this conceptual contribution, is to understand the implications for machine learning of the many passive and active symmetries in play.
 We discuss \emph{dos and don'ts} for machine learning practice if passive symmetries are to be respected.
-We discuss links to causal modeling, and argue that the implementation of passive symmetries is particularly valuable when the goal of the learning problem is to generalize out of sample.
+We discuss links to causal modeling and argue that the implementation of passive symmetries is particularly valuable when the goal of the learning problem is to generalize out of sample.
 We conjecture that the implementation of passive symmetries might help machine learning in the same ways that it transformed physics in the twentieth century.
 \end{abstract}
 
@@ -145,7 +110,7 @@ We argue---in this purely conceptual contribution---that analogs of these symmet
 In natural science, there are two types of symmetries (see, for example, Section 4.1 of \citealt{rovelli2000loop}). 
 The first kind is \emph{passive}, arising from the arbitrariness of the mathematical representation described above.
 An example familiar in ML is the equivariance of functions on graphs to the relabeling of the graph nodes.
-This is an exact, passive symmetry; graph neural network architectures (GNNs) build this passive symmetry in by design \citep{bruna2013spectral, duvenaud2015convolutional, gilmer2017neural, hamilton2020graph}. 
+This is an exact, passive symmetry; graph neural network architectures (GNNs) build this passive symmetry in by design \citep{bruna2013spectral, duvenaud2015convolutional, gilmer2017neural, hamilton2020graph}. See \cite{huang2023approximately} for a recent work describing passive and active symmetries in GNNs.
 An example familiar to physicists is what we call \emph{units covariance}, which is the requirement that any correct description of the world has inputs and outputs with the correct units (and dimensions; see \appref{app:glossary} for definitions).
 This symmetry is extremely powerful (see \secref{sec:units}).
 
@@ -157,7 +122,7 @@ Both active and passive symmetries can be expressed in terms of group or groupoi
 
 In this contribution, we argue that passive symmetries apply to essentially all data analysis problems.
 They have implications for how we structure ML methods.
-While we provide some examples, most of our contributions are conceptual.
+Although we provide some examples, most of our contributions are conceptual.
 
 \paragraph{Our contributions:}
 \begin{itemize}
@@ -221,9 +186,9 @@ If the protein folds differently, we learn that the problem is not symmetric wit
 This identification of all necessary inputs to establish the passive symmetry is similar to the problem of performing interventions to learn the existence of confounding factors in causal inference (see \secref{sec:causality}).
 
 Once a passive symmetry---and all relevant contextual information---is identified, we want to write the data analysis problem or learned function such that it is exactly \emph{equivariant} with respect to the relevant group:
-If the representation or coordinate system of the inputs is changed, the representation or coordinate system of the output should change correspondingly.
+If the coordinate system of the inputs is changed, the coordinate system of the output should change correspondingly.
 ML methods that are not constrained to respect passive symmetries are doomed to make certain kinds of mistakes.
-We will provide some examples thereof in \secref{sec:dos} and \secref{sec:norm}.
+We will provide some examples in \secref{sec:dos} and \secref{sec:norm}.
 
 The most restrictive form of the Geometric Principle quoted in \secref{sec:intro} states that physical law must be written in terms of vectors, tensors, and (coordinate-invariant) scalars.
 These objects can only be combined by rules set out in the Ricci calculus (\citealt{ricci}; sometimes called Einstein summation notation, \citealt{einstein}).
@@ -246,8 +211,9 @@ If you rotate all of the initial conditions, you rotate all of the gravitational
 But this symmetry is also a passive symmetry:
 The law of gravity does not depend on the orientation (or handedness) of the coordinate system.
 
-If an active symmetry is in play, the physical law can often be written in terms of invariants such that the symmetry is true by construction or definition, thereby making it also a passive symmetry.
-The discovery of general relativity \citep{gr} can be seen as the discovery that active symmetries---the speed of light is the same for all observers, the gravitational mass equals the inertial mass---can be converted into passive symmetries, true by construction for all valid physical laws, provided that they are written in particular forms.
+If an active symmetry is in play, the physical law can often be written in terms of invariants such that the symmetry is enforced by construction or definition, thereby making it also a passive symmetry.
+The discovery of general relativity \citep{gr} can be seen as the discovery that active symmetries---the speed of light is the same for all observers, and the gravitational mass equals the inertial mass---can be converted into passive symmetries:
+When laws are written in a form consistent with the passive symmetries, they automatically enforce the corresponding active symmetries. 
 Indeed, the equations of general relativity were found by looking at every differential equation (to some degree) consistent with the passive symmetry of coordinate diffeomorphisms on curved spacetime manifolds until one was found that reduced to Newtonian gravity in the weak-field limit.
 
 We stress that these kinds of insights had a big impact on physics \citep{EARMAN1978251};
@@ -257,34 +223,34 @@ That evolution motivates this contribution; passive symmetries do not feature in
 Some valuable ML research has started recently along these directions \citep{weiler, bronstein2021geometric}.
 
 \section{Example: Units covariance}\label{sec:units}
-Perhaps the most universal passive symmetry is units covariance---the behavior of a system doesn't depend on the units system in which we write the measured quantities.
+Perhaps the most universal passive symmetry is units covariance---the behavior of a system does not depend on the units system in which we write the measured quantities.
 It is a passive symmetry with extremely useful consequences.
 
 Consider a mass $m$ near the surface of the Earth, close enough to the surface such that the gravitational field can be considered to be determined by a constant (not spatially varying) vector with magnitude $g$ and direction downwards.
 \textsl{Question~1:}~If this mass $m$ is dropped (released at rest) from a height $h$ from above the ground, how much time $T$ does it take to fall to the ground?
 \textsl{Question~2:}~If this mass $m$ is launched from the surface at a velocity of magnitude $v$ at an angle $\theta$ to the horizontal, how much horizontal distance $L$ will it fly before it hits the surface again?
-Assume that only $m, g, h$ come into the solution;\footnote{We will return to this seemingly innocuous point below. We note that it is an \emph{empirical} statement, which will turn out to have rather significant implications.} In particular, assume that the height $h$ and the velocity $v$ are both small enough that air resistance, say, can be ignored.
+Assume that only $m, g, h$ enters the solution;\footnote{We will return to this seemingly innocuous point below. We note that it is an \emph{empirical} statement, which will turn out to have rather significant implications.} In particular, assume that the height $h$ and the velocity $v$ are both small enough so that air resistance, say, can be ignored.
 
 The answers to these questions are almost completely determined by dimensional (or units-covariance) arguments (see \appref{app:glossary} for definitions).
 The mass $m$ has units of $\kg$, the gravitational acceleration magnitude $g$ has units of $\m\,\s^{-2}$, the velocity magnitude $v$ has units of $\m\,\s^{-1}$, the time $T$ has units of $\s$, and the lengths $h$ and $L$ have units of $\m$.
 The angle $\theta$ is dimensionless.
 The only possible combination of $m, g, h$ that has units of time is $\alpha\,\sqrt{h/g}$, where $\alpha$ is a dimensionless constant, which doesn't depend on any of the inputs.
-The only possible combination of $m, g, v, \theta$ that has units of length is $\beta(\theta)\,v^2/g$, where $\beta(\theta)$ is a dimensionless function of only one dimensionless input.
+The only possible combination of $m, g, v, \theta$ that has units of length is $\beta(\theta)\,v^2/g$, where $\beta(\theta)$ is a dimensionless function of a single dimensionless input.
 That is, both Question~1 and Question~2 can be answered up to a dimensionless prefactor without any training data.
 And both of those answers don't depend in any way on the input mass $m$ (which is the fundamental observation that leads to general relativity; \citealt{gr}).
 
 This shows that a function---and even a fundamental physical relationship---can sometimes be inferred from units covariance only, that is, from a purely passive symmetry, combined with the \emph{empirical} knowledge that the solution is \emph{independent} of all other observables (which itself is a causal assumption).
-Units covariance has been discussed in ML previously \citep{villar2022dimensionless, bakarji2022dimensionally, xie2022data}.
+Unit covariance is widely used in numerical methods, and it has been discussed in ML previously \citep{villar2022dimensionless, bakarji2022dimensionally, xie2022data}.
 It can help with training, predictive accuracy, and out-of-sample generalization.
 
 \section{Formal definition}\label{sec:definitions}
 Consider $\mathcal{X}$ to be space of all possible physical states of a specific system (for instance $x\in \mathcal X$ could be the positions, velocities, masses, spins, and charges of a set of particles, at a time or possibly at a set of times).
 We consider maps $\{\Phi_i: \mathcal{X} \to \mathcal{H}\}_{i\in \mathcal{I}}$ where $\mathcal{H}$ is the space of encodings (or representations) of the values of those positions, velocities, masses, and so on, in some units system and some coordinate system.
-That is, any element $z\in \mathcal{H}$ will be a list of real values of vector and tensor components, and scalars.
+That is, any element $z\in \mathcal{H}$ will be a list of real values of vector and tensor components and scalars.
 Different maps $\Phi_i$ will have (in general) different coordinate origins, different axis orientations, and different units of measurement.
 
 Provided that every $\Phi_i$ records all of the information necessary to describe the state $x\in \mathcal{X}$ (or, equivalently, every element $z\in \mathcal{H}$ contains all of the information necessary to describe the state),
-for any two encodings $\Phi_i$ and $\Phi_j$ there is an invertible morphism $\beta_j^i:\mathcal{H}\to\mathcal{H})$ that makes the diagram \eqref{eq.passive} commute.
+for any two encodings $\Phi_i$ and $\Phi_j$ there is an invertible morphism $\beta_j^i:\mathcal{H}\to\mathcal{H}$ that makes the diagram \eqref{eq.passive} commute.
 \begin{equation}\label{eq.passive}
 \begin{tikzcd}[every label/.append ]
   {\mathcal{X}}\arrow[r, "id"] \arrow[d,"\Phi_i",swap] & {\mathcal{X}}  \arrow[d,"\Phi_j"]\\
@@ -330,7 +296,7 @@ The alias vs alibi distinction (\secref{sec:informal}) maps onto the corresponde
 The active symmetries correspond to \emph{interventions} in the system, while passive symmetries are purely in the realm of representation.
 Most of the equivariant ML literature is focused on active symmetries.
 Projects begin with the question: What active symmetries are in play in this system?
-In what follows, we will reserve the word ``equivariance'' for active symmetries, and use the word ``covariance'' for passive symmetries, consistent with the use of the word ``covariance'' in physics contexts (and see \appref{app:glossary}).
+In what follows, we reserve the word ``equivariance'' for active symmetries and use the word ``covariance'' for passive symmetries, consistent with the use of the word ``covariance'' in physics contexts (see \appref{app:glossary}).
 
 %The passive symmetries are seemingly trivial statements about the world, but they led to important results in physics.
 %Imposing a passive symmetry on the structure of an ML model can permit the discovery of scalings, structures, or missing elements in the physical description of, or predictions about, the problem.
@@ -368,7 +334,7 @@ We generate noisy samples of intensities as a function of wavelength and tempera
 We perform three experiments, described in Appendix~\ref{app:dimensionless}
 \textsl{(A)}~a units-covariant regression (employing the approach of \citealt{villar2022dimensionless}) using only $\lambda, T, c, k$; \textsl{(B)}~a units covariant regression with an extra dimensional constant found by cross-validation; and \textsl{(C)}~a standard multi-layer perceptron regression (MLP) with no units constraints.
 Our results show that no units-covariant regression for the intensity as a function of $\lambda, T, c, k$ can reproduce accurately the intensity $B_\lambda$.
-However when the regression is permitted to introduce a new dimensional constant (but enforce exact units-covariance given the new constant), it finds a constant with units (and, less precisely, magnitude) that is consistent with $h$ (or $h$ times a combination of $c$ and $k$).
+However when the regression is permitted to introduce a new dimensional constant (but enforce exact units-covariance given the new constant), it finds a constant with units that is consistent with $h$ (or $h$ times a combination of $c$ and $k$).
 The units-covariant model with an extra constant outperforms the baseline MLP.
 Na\"ively this suggests that passive symmetry brings new capabilities.
 \begin{figure*}[t!]
@@ -381,7 +347,7 @@ Na\"ively this suggests that passive symmetry brings new capabilities.
     \includegraphics[width=0.99\textwidth]{pendulum}
     \includegraphics[width=0.99\textwidth]{table}
     \end{minipage}
-    \caption{\textsl{(Left panel)}~We predict the intensity of black body radiation as a function of wavelength and temperature. For all experiments, we use an MLP consisting of 3 layers with 20 hidden units each. The \emph{standard MLP} uses wavelength and temperature as features and it doesn't require the output to be dimensionally correct. The \emph{units covariant without extra constant} learns a scaling of the only dimensionally correct object one can construct with inputs $\lambda, T, c, k$ (see description main in text). The \emph{units covariant with extra dimensional constant} incorporates a constant with units $[\kg, \m, \s, \K]\in[-1,0,1]^4$ as an input feature, it performs a units covariant regression with the original features $\lambda, T, c, k$, and the extra constant. It then selects a constant with a low validation error and reports the results on the test set. The constant learned for the depicted plot is 1.61e52 $\kg^{-1}\m^{-1}\s^{-1}\K^{-1}$, which is the same units and similar magnitude to the valid physical combination $c\,k\,h^{-2}$. 
+    \caption{\textsl{(Left panel)}~We predict the intensity of black body radiation as a function of wavelength and temperature. For all experiments, we use an MLP consisting of 3 layers with 20 hidden units each. The \emph{standard MLP} uses wavelength and temperature as features and it doesn't require the output to be dimensionally correct. The \emph{units covariant without extra constant} learns a scaling of the only dimensionally correct object one can construct with inputs $\lambda, T, c, k$ (see description main in text). The \emph{units covariant with extra dimensional constant} incorporates a constant with units $[\kg, \m, \s, \K]\in\{-2,-1,0,1,2\}^4$ as an input feature, it performs a units covariant regression with the original features $\lambda, T, c, k$, and the extra constant. It then selects a constant with a low validation error and reports the results on the test set. The constant learned for the depicted plot is 1.61e52 $\kg^{-1}\m^{-1}\s^{-1}\K^{-1}$, which is the same units and similar magnitude to the valid physical combination $c\,k\,h^{-2}$. 
     \textsl{(Right panel)}~Performance of learning the dynamics of the springy double pendulum. We consider the three models (described in the main text): (Known-g) an $O(3)$-equivariant model where the gravity is an input to the model, (No-g) an $O(3)$-equivariant model where the gravity is not given, and (learned-g) an $O(3)$-equivariant model that uses the position and momenta as well as an unknown vector that the model learns. The results show that $O(3)$-equivariance permits the learning of the gravity vector from data with only minimal impact on performance. See \appref{app:pendulum} for a more detailed description of the experiment.}
     \label{fig:exps}
 \end{figure*}
@@ -391,21 +357,23 @@ The double pendulum connected by springs is a toy example often used in equivari
 The final conditions (position and velocities of both masses after elapsed time $T$) are related to the initial conditions (position and velocities of the masses at the initial time), and the dynamics is classically chaotic.
 This means that prediction accuracy, in the end, must be bounded by considerations of the fundamental mathematical properties of dynamical systems.
 
-The system is subject to a passive $O(3)$ symmetry (equivariance with respect to orthogonal coordinate transformations), and an active $O(2)$ symmetry (equivariance with respect to rotations and reflections in the 2D plane normal to the gravity). 
+The system is subject to a passive $O(3)$ symmetry (equivariance with respect to orthogonal coordinate transformations), an active $O(2)$ symmetry (equivariance with respect to rotations and reflections in the 2D plane normal to the gravity), and an active time-translation symmetry, arising from the fact that the total energy is conserved. 
 The $O(3)$ symmetry is passive, because it is guaranteed by the fact that all vectors must be described in a coordinate system; nothing physical can change as the vectors undergo passive transformations because of coordinate-system changes.
 The $O(2)$ symmetry is active, because it is an experimental fact that if the initial conditions are changed by an active or alibi rotation in the plane perpendicular to gravity, the dynamics and final state rotate accordingly.
 The $O(2)$ active symmetry corresponds to the set of transformations in $O(3)$ that fix the gravity vector. 
 
+
 The passive $O(3)$ symmetry requires that the coordinates of all relevant vectors are transformed identically, the positions and momenta of both masses and the gravity vector.
 If the model doesn't have access to all relevant vectors as inputs then the predictions will not necessarily be $O(3)$ equivariant.
 We perform an experiment in which we predict the dynamics of the double pendulum using $O(3)$-equivariant models.
-The symmetries are implemented by converting the network inputs (scalars and components of vectors) into invariant scalar quantities according to the Ricci calculus (which explicitly encodes $O(3)$), building the model in the space of the invariant scalars (as per \citealt{villar2021scalars}).
-The models implemented here are \textsl{(Known-g)}---an $O(3)$-equivariant model that has the positions, momenta, and gravity vector all as features (similar to the models in \citealt{villar2021scalars, yao2021simple}); \textsl{(No-g)}---an $O(3)$-equivariant model that is missing the gravity vector as an input feature; and \textsl{(Learned-g)}\---an $O(3)$-equivariant model that has the position, momenta and an extra unknown vector as features.
+The symmetries are implemented by converting the network inputs (scalars and components of vectors) into invariant scalar quantities according to the Ricci calculus (which explicitly encodes $O(3)$), building the model in the space of the invariant scalars (as per \citealt{villar2021scalars}). These $O(3)$-invariant scalars are used to parameterize an $O(3)$-invariant Hamiltonian, and the $O(3)$-equivariant dynamics are predicted by integrating the Hamiltonian using a symplectic integrator, as proposed by ~\cite{sanchez-gonzalez2019hamiltonian} and implemented in \cite{yao2019experimental}. More details are given in Appendix \ref{app:pendulum}.
+
+The models considered here are \textsl{(Known-g)}---an $O(3)$-equivariant model that has the positions, momenta, and gravity vector all as features (similar to the models in \citealt{villar2021scalars, yao2021simple}); \textsl{(No-g)}---an $O(3)$-equivariant model that is missing the gravity vector as an input feature; and \textsl{(Learned-g)}\---an $O(3)$-equivariant model that has the position, momenta and an extra unknown vector as features.
 The latter model optimizes model weights along with the unknown vector. 
 In the right panel of \figref{fig:exps} we show the performance of the three models.
 We remark that in \textsl{(Learned-g)}, the learned vector in the performed experiments was nearly parallel to the true (but unknown) gravity vector $g$; the angle between the learned and true gravity vector ended up at 0.00016~radians
 
-\paragraph{Non-covariant data normalization} 
+\paragraph{Non-covariant data normalization} In section \ref{sec:norm} we discuss covariant vs non-covariant data normalization procedures. In appendix \ref{app:pendulum} we provide experiments (in the springy double pendulum setting) that empirically show that non-covariant data normalization can hurt the performance significantly, whereas covariant data normalization does not.
 
 \section{Connections with causality}\label{sec:causality}
 There is nothing statistical about the notion of passive symmetries, and thus everything we have said above also applies to causal models \citep{PetJanSch17}.
@@ -432,18 +400,18 @@ The active symmetries are those that make predictions for experiments in which i
 \section{Connections to current ML practice}\label{sec:practice}
 %add something about GNNs
 Most present-day ML implementations don't impose exact symmetries. Sometimes they approximate equivariances by means of data augmentation \citep{chen2020group, huang2022quantifying}.
-In the present work we focus on exact symmetries: Given data spaces $X$ and $Y$ and a group $G$ acting on $X$ and $Y$, equivariant ML restricts the function space to those satisfying  $f(g\cdot x) = g \cdot f(x)$ for all $f\in \mathcal F$, $g\in G$, $x\in X$.
+In this work we mostly focus on exact symmetries: Given data spaces $X$ and $Y$ and a group $G$ acting on $X$ and $Y$, equivariant ML restricts the function space to those satisfying  $f(g\cdot x) = g \cdot f(x)$ for all $f\in \mathcal F$, $g\in G$, $x\in X$.
 There are three main approaches to perform optimization in the space of equivariant functions:
 \begin{itemize}
-    \item Parameterizing the space of equivariant functions by extending the notion of group convolutions or weight sharing \cite{kondor2018convolution, cohen2016group}.
-    \item Explicitly parameterizing the space of equivariant functions via equivariant layers (via irreducible representations \citep{thomas2018tensor, geiger2022e3nn, kondor2018n}, or otherwise \cite{finzi2020generalizing, finzi2021practical}).
-    \item Finding a set of invariant features and expressing the equivariant functions in terms of those features \citep{villar2021scalars,blum2022equivariant}.
+    \item Parameterizing the space of equivariant functions by extending the notion of group convolutions or weight sharing \citep{kondor2018convolution, cohen2016group, weiler2021coordinate}.
+    \item Explicitly parameterizing the space of equivariant functions via equivariant linear layers (via irreducible representations \citep{thomas2018tensor, geiger2022e3nn, kondor2018n}, or otherwise \citep{maron2018invariant, finzi2020generalizing, finzi2021practical}.
+    \item Finding a set of invariant features and expressing invariant/equivariant functions in terms of those features. Related ideas have been studied in differential geometry and invariant theory \citep{fels1998moving}, and recently have been used in machine learning \citep{villar2021scalars,blum2022equivariant, cahill2022group, dym2022low, pmlr-v202-kaba23a}. This can also be done by imposing symmetry as a soft constraint \citep{NEURIPS2022_dcd29769, gupta2023structuring}.
 \end{itemize}
-The three approaches achieve similar goals, but their practical implementation may be dramatically different. For example, efficiently computing a complete generating set of invariant/equivariant features may be prohibitive. On the other hand, in some cases, it may be hard to construct a perfectly invariant/equivariant layer (or family of approximating functions); more often, it may be possible to construct such a family, but we may lack proof that they are universal approximators of \textit{all} invariant/equivariant functions within some well-defined context, even in a limiting sense.
+The three approaches achieve similar goals, but their practical implementation may be dramatically different. For example, efficiently computing a complete generating set of invariant/equivariant features may be prohibitive, especially for large finite groups. On the other hand, in some cases, one needs to go to high-order tensors for the linear layers to be expressive enough, and this may be hard to construct. More often, it may be possible to construct such a family, but we may lack proof that they are universal approximators of \textit{all} invariant/equivariant functions within some well-defined context, even in a limiting sense.
 
-Aside from the previously mentioned results in Convolutional/Graph Neural Networks, another example of successful exact universal parametrization of a family of functions is the implementation of symplectic networks, which exactly preserve a differential 2-form, the symplectic form, on the associated manifolds \citep{sympnets,henonnets}. Their use most relevant in the study of Hamiltonian systems. Even the non-trivial diffeomorphism symmetries of general relativity have been considered for ML \citep{weiler}.
+Even the non-trivial diffeomorphism symmetries of general relativity have been considered for ML \citep{weiler}. And aside from the previously mentioned results in Convolutional/Graph Neural Networks, another example of successful exact universal parametrization of a family of functions is the implementation of symplectic networks, which exactly preserve a differential 2-form, the symplectic form, on the associated manifolds \citep{sympnets,henonnets}. Their use most relevant in the study of Hamiltonian systems. 
  
-Equivariant ML models can predict the properties and behaviour of physical systems (see \citealt{cheng2019covariance}), and have plenty of scientific applications \citep{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}. The implicit bias, generalization error, and sample complexity of equivariant ML models have been recently studied \citep{petrache2023approximation,lawrence2021implicit, bietti2021sample, elesedy2021provably, elesedy2021kernel, mei2021learning}.
+Overall, equivariant ML models can predict the properties and behaviour of physical systems (see \citealt{cheng2019covariance}), and have plenty of scientific applications \citep{batzner20223, musaelian2022learning, stark2022equibind, yu-physics, wang2022approximately}. Interesting theoretical developments analyze the implicit bias, generalization error, and sample complexity of equivariant ML models \citep{petrache2023approximation,lawrence2021implicit, bietti2021sample, elesedy2021provably, elesedy2021kernel, huang2023approximately, mei2021learning}.
 
 \section{Dos and Don'ts}\label{sec:dos}
 MacKay famously wrote (see \citealt{muldoonmedium})
@@ -500,7 +468,7 @@ This normalization usually involves shifting and scaling the features or latent 
 For our purposes here, let's focus on data normalization and assume that it works as follows:
 The training data contains features $X$ which are $N\times M$, where $N$ is the number of training data examples, and $M$ is the number of features per data point.
 In the simplest possible form, the training data $X$ are given a shift and scaling as
-\begin{equation}
+\begin{equation} \label{eq.data-normalization}
     X' \leftarrow \sigma^{-1}\,(X - \mu) ~,
 \end{equation}
 where $\sigma$ is some scale or list of $M$ scales derived from the features in the training data set, and $\mu$ is some shift or list of $M$ shifts derived from the features in $X$.
@@ -529,14 +497,14 @@ Once again, the shift applied cannot be a single number applied to all component
 These vector and tensor considerations suggest that data normalization needs to be substantially modified to achieve covariance, that is, to accommodate the passive symmetries of vectors and tensors.
 
 For yet another, elements of $X$ with different units must be treated differently.
-Imagine that some features in the data $X$ have units of length, some of time, some of velocity, and some of acceleration, and some of frequency.
-It does not make sense to learn or compute a scale $\sigma$ from features that have different units.
-Furthermore, in some cases it might not make sense to learn a scale that is independent for every different feature when many share the same units.
+%Imagine that some features in the data $X$ have units of length, some of time, some of velocity, and some of acceleration, and some of frequency.
+%It does not make sense to learn or compute a scale $\sigma$ from features that have different units.
+%Furthermore, in some cases it might not make sense to learn a scale that is independent for every different feature when many share the same units.
 For shifts, it makes sense to subtract from each quantity a shift $\mu$ that is computed from only those features that share units with the feature in question.
 For scales, it might make sense to find base-unit scales that make the range of scaled features as close as possible to having unit variance.
-That is, data normalization in this case turns into an optimization problem of finding a length scale $L$ and a time scale $T$ such that when the features with units of length are divided by $L$, the features with units of time are divided by $T$, the features with units of velocity are divided by $L\,T^{-1}$, the features with units of acceleration are divided by $L\,T^{-2}$, and so on, the resulting \emph{dimensionless features} have a distribution with unit width.
-This optimization might get difficult as the number of base units grows.
-This is very related to the ideas presented elsewhere in the subject of units-covariant ML (\citealt{villar2022dimensionless}).
+%That is, data normalization in this case turns into an optimization problem of finding a length scale $L$ and a time scale $T$ such that when the features with units of length are divided by $L$, the features with units of time are divided by $T$, the features with units of velocity are divided by $L\,T^{-1}$, the features with units of acceleration are divided by $L\,T^{-2}$, and so on, the resulting \emph{dimensionless features} have a distribution with unit width.
+%This optimization might get difficult as the number of base units grows.
+%This is very related to the ideas presented elsewhere in the subject of units-covariant ML (\citealt{villar2022dimensionless}).
 
 \section{Discussion}\label{sec:discussion}
 In this conceptual contribution,
@@ -572,13 +540,14 @@ It is a pleasure to thank
    Wilson Gregory (JHU),
    Nasim Rahaman (MPI-IS),
    and
-   Shubhendu Trivedi (MIT)
+   Shubhendu Trivedi
 for valuable comments and discussions.
 This project was started at the meeting \textit{Machine Learning for Science} at Schloss Dagstuhl, 2022 September 18--23.
 SV was partially supported by
    ONR N00014-22-1-2126, 
    the NSF–Simons Research Collaboration on the Mathematical and Scientific Foundations of Deep Learning (MoDL) (NSF DMS 2031985),
    NSF CISE 2212457,
+   NSF CAREER 2339682,
    and
    an AI2AI Amazon research award.
 This project made use of open-source software, including Python, jax, objax, jupyter, numpy, matplotlib, scikit-learn.
@@ -698,9 +667,39 @@ any intrinsic property of  $X$ which causes it to remain invariant under certain
 \end{description}
 
 \section{Units covariant regression: The black body experiment}\label{app:dimensionless}
-HOGG WRITE HERE
+For our first experiments, we consider the problem of black-body radiation, in which the intensity $B_\lambda(\lambda ;T)$ of radiation at wavelength $\lambda$ is a function of temperature $T$.
+The true relationship is given by \eqref{eq.planck}, and we use it to construct a toy inference problem in which the units of the input quantities are non-trivial.
+
+The training data are made by computing intensities $B_\lambda(\lambda ;T)$ according to \eqref{eq.planck} at five temperatures (300, 1000, 3000, 10000, and 30000\,K), and on a wavelength grid of 40 wavelengths on a logarithmically spaced grid from $10^{-8}$ to $10^{-4}$\,m.
+To each evaluation of intensity we add a draw of zero-mean Gaussian noise with root-variance $0.1$ times the true value of that intensity.
+The training data are cut on intensity, such that only data points with intensities above $10^6$ in SI units are retained.
+The remaining data points so constructed comprise the training data, with features $x$ being the wavelengths and temperatures, and labels $y$ being the noisy values of the intensity.
+In some cases we augment the features with copies of the speed of light $c$ and the thermal (Boltzmann's) constant $k$.
+At each of the training data points, there are two or four fundamental features (the first 2, or all, of the list $\lambda, T, c, k$), depending on the regression.
+
+The test data are similarly generated except that they are generated at temperatures of 6000, 20000, and 60000\,K.
+That is, the test data extend outside the temperature range of the training data, and the test and training data have no temperatures in common.
+Once the intensity cut is made, there are 126 data points in the training set and 108 in the test set.
+
+We perform three regressions, the output of which are shown in \figref{fig:exps}:
+In the first (dubbed ``standard MLP''), a 3-layer multi-layer perceptron from scikit-learn, with hidden-layer sizes of 20, 20, and 20 is trained on the logarithm of the first two training-set features (features $\lambda, T$) and the logarithm of the training-set labels.
+The trained MLP is used to predict the test-set labels.
+This model incorporates no explicit symmetries.
+
+In the second regression (dubbed ``units covariant without extra dimensional constant''), the same design of MLP is used, but instead of inputting the logarithms of the fundamental features, the input to the MLP is the set of logarithms of all the dimensionless combinations possible to make from the four features $\lambda, T, c, k$, following the approach of \cite{villar2022dimensionless}.
+This approach uses the Smith normal form \citep{stanley2016smithnormalform} to find products of integer powers of the input features that are dimensionless, and one product of integer powers of the inputs that has the same units as the label.
+The output of the MLP is multiplied by the combination of the input features with the correct units to be an intensity.
+In this case, there are no non-trivial dimensionless features, so the MLP sets one amplitude only, and the predictions are pure power laws (as is visible in \figref{fig:exps}).
+
+In the third regression (dubbed ``units covariant with extra dimensional constant''), the features are augmented with one dimensional quantity $q$, and then the same procedure is followed as for the previous units-covariant case.
+If the quantity $q$ has units that are independent (in the appropriate sense) from the units of the four fundamental features, then a new dimensionless constant becomes possible and the regression becomes non-trivial.
+The units of $q$ are chosen from an exhaustive list of all possible units that involve powers between $-2$ and $2$ of kg, m, s, and K.
+The value of $q$ is chosen, at each of these units choices, to be such that the range of dimensionless features in the training data has unit median.
+Again the MLP input is logarithms of dimensionless features and the output is multiplied by the Smith normal form returned combination with the correct units to be an intensity.
+Many choices for the units and value of $q$ lead to good regression accuracy; all of them make $q$ close to some combination of $h, c, k$, necessarily including $h$.
 
 \section{Springy double pendulum}\label{app:pendulum}
+\paragraph{Setting.}
 We consider the dissipationless spherical double pendulum with springs, with a pivot $o$ and two masses connected by springs. The kinetic energy $\mathcal{T}$ and potential energy $\mathcal{U}$ of the system are given by
 \begin{align}
     KE =&\;\frac{|\mathbf{p}_1|^2}{2m_1} +\frac{|\mathbf{p}_2|^2}{2m_2}, \label{eq:energy_T}\\
@@ -708,7 +707,7 @@ We consider the dissipationless spherical double pendulum with springs, with a p
     -m_1\,\mathbf{g}\cdot (\mathbf{q}_1-\mathbf{q}_o)- m_2 \,\mathbf{g}\cdot  (\mathbf{q}_2-\mathbf{q}_o), \label{eq:energy_U}
 \end{align}
 where $\mathbf{q}_1, \mathbf{p}_1$ are the position and momentum vectors for mass $m_1$, similarly $\mathbf{q}_2, \mathbf{p}_2$ for mass $m_2$, and a position $\mathbf{q}_o$ for the pivot. The springs have scalar spring constants $k_1$, $k_2$, and natural lengths $l_1$, $l_2$. The gravitational acceleration vector is $\mathbf{g}$. 
-In this work, we fix $\mathbf{q}_o$ with values $(0,0,0)$ in base length units and $\mathbf{g}$ with $(0,0,-1)$ in base acceleration units, as well as $(m_1, m_2, k_1, k_2, l_1, l_2)$ set to $(1,1,1,1,1,1)$, but with each element of that list having appropriate base units. 
+In this work, we fix $\mathbf{q}_o$ with values $(0,0,0)$ in base length units and $\mathbf{g}$ with $(0,0,-1)$ in base acceleration units, as well as $(m_1, m_2, k_1, k_2, l_1, l_2)$ set to $(1,1,1,1,1,1)$, where each element of the list has appropriate base units. 
 
 The prediction task is to learn the positions and momenta over a set of $T$ later times $t$ given the initializations of the pendulum positions and momenta at $t_0$,
 \begin{equation}
@@ -717,6 +716,7 @@ The prediction task is to learn the positions and momenta over a set of $T$ late
 The training inputs consist of $N=500$ different initializations of the pendulum positions and momenta $\{\mathbf{z}^{(i)}(t_0^{(i)})\}_{i=1}^N$, and the labels are the set of positions and momenta $\{\mathbf{z}^{(i)}(t_1^{(i)}),\mathbf{z}^{(i)}(t_2^{(i)}),\ldots,\mathbf{z}^{(i)}(t_T^{(i)})\}_{i=1}^N$ with $T=5$.
 The model is evaluated on a test data set with $T=150$ and $t_0=0$. 
 
+\paragraph{Variants.}
 For the same prediction task, we consider three different $O(3)$-equivariant models, $f_{\textsf{Known-g}}$, $f_{\textsf{Learned-g}}$ and $f_{\textsf{No-g}}$, depending how the gravitational acceleration vector $\mathbf{g}$ is involved. 
 \paragraph{Known-g} The model $f_{\textsf{Known-g}}$ is a function that predicts the dynamics: 
 \begin{equation}
@@ -734,7 +734,7 @@ where $\mathbf{g}$ is known as $(0,0,-1)$ in the base acceleration units and use
     (\mathbf{z}(0),\mathbf{q}_o, \Delta t) &\mapsto  \mathbf{\hat z}(\Delta t) 
 \end{aligned}\label{eq:goal_F_learn-g}
 \end{equation}
-where $\mathbf{g}$ is unknown but set as an learnable variable and used with positions and momenta as input features.   
+where $\mathbf{g}$ is unknown but set as a learnable variable and used with positions and momenta as input features.   
 
 \paragraph{No-g} The model $f_{\textsf{No-g}}$ is a function that predicts the dynamics: 
 \begin{equation}
@@ -751,5 +751,52 @@ We evaluate the performance of the three predictive models based on the state re
 \end{align}
 where $\hat{\mathbf{z}}(t)$ denotes the predicted positions and momenta at time $t$ and $\mathbf{z}(t)$ the ground truth.
 
+
+\paragraph{Model.} In all the variants of the experiment, the learned function $f$ is implemented by a Hamiltonian neural network \citep{sanchez-gonzalez2019hamiltonian}. The model learns an scalar $O(3)$-invariant function $\mathcal H$ of the input vectors, and uses a symplectic integrator to predict the dynamics:
+\begin{equation}
+    \frac{\mathrm{d}\mathbf q_s}{\mathrm{d}t} = \frac{\partial \mathcal H}{\partial \mathbf p_s}, \quad \quad \frac{\mathrm{d}\mathbf p_s}{\mathrm{d}t} = - \frac{\partial \mathcal H}{\partial \mathbf q_s}, \quad\quad s=1,2.
+\end{equation}
+We implement $\mathcal H$ to be $O(3)$-invariant by simply restricting $\mathcal H$ to be a function of the inner products of the possible input vectors $\mathbf q_1, \mathbf q_2, \mathbf p_1, \mathbf p_1, \mathbf q_o $ and possibly $\mathbf g$, following the fundamental theorem for invariant theory for $O(d)$ (see \citealt{weyl} for the theory, and \citealt{villar2021scalars} for a discussion on machine learning implications). Namely,
+\begin{equation}\mathcal H_\textsf{variant} (\mathbf q_1, \mathbf q_2, \mathbf p_1, \mathbf p_2) = h((\mathbf v^\top \mathbf w)_{\mathbf v, \mathbf w \in \mathcal V_\textsf{variant}})
+\end{equation}
+where $\mathcal V_\textsf{Known-g} = \{\mathbf q_1, \mathbf q_2, \mathbf p_1, \mathbf p_2, \mathbf g=(0,0,1)\}$; $\mathcal V_\textsf{Learned-g} =\{\mathbf q_1, \mathbf q_2, \mathbf p_1, \mathbf p_2, \mathbf g\}$ where $\mathbf g$ is a variable that is jointly optimized with the parameters that define $\mathcal H$;  $\mathcal V_\textsf{No-g} = \{\mathbf q_1, \mathbf q_2, \mathbf p_1, \mathbf p_2\}$.
+Note that $\mathbf q_o=0$ so all the corresponding inner products are zero and therefore dropped from the model.
+The model predictions are computed as
+\begin{equation} \label{eq:model_pendulum}
+f_{\textsf{variant}} = \text{symplectic-integration}(\mathcal H_\textsf{variant} (\mathbf q_1, \mathbf q_2, \mathbf p_1, \mathbf p_2), \Delta_t).
+\end{equation}
+Note that this model is time-translation-equivariant, can be $O(3)$-equivariant (depending on the variant), but it isn't units-covariant. 
+
+Our experiments show that the $O(3)$-equivariant variant with known gravity has the best performance, closely followed by the model with learned gravity. We note that the model learns a vector very close to the ground-truth gravity vector, and therefore learns an equivariant model. The non equivariant model with no gravity vector performs quite poorly, as expected. The results are presented in Figure \ref{fig:exps}.
+
+\paragraph{Data normalization} 
+\begin{table}[t!]
+    \centering
+    \begin{tabular}{lccc}
+         \toprule
+            & Training MSE & Test MSE  & Test rollout error\\
+         \midrule
+         No normalization  & $0.0000\pm0.0000$    & $0.0028\pm 0.0013$  & $0.0029\pm 0.0001$\\
+         Non-equivariant normalization & $0.0184\pm 0.0006$ & $0.2587\pm 0.0233$ & $0.1177\pm 0.0043$\\
+         Equivariant normalization & $0.0000\pm0.0000$ & $0.0070\pm 0.0011$ & $0.0053\pm 0.0007$\\
+         \bottomrule
+    \end{tabular}
+    \caption{Empirical performance of the different data normalization procedures. \label{table.normalization}}
+    \label{tbl:double_pendulumn}
+\end{table} 
+For the data normalization experiment, we consider the standard variant where the gravity vector is known. We normalize the inputs of $\mathcal H$ in \eqref{eq:model_pendulum} before computing the inner products. 
+We consider the input data matrix with rows indexed by $i=1,\ldots, N$ and columns of the form  
+\begin{equation}(\mathbf q_1^{(i)}(t), \mathbf q_2^{(i)}(t), \mathbf p_1^{(i)}(t), \mathbf p_2^{(i)}(t), \mathbf g=(0,0,-1))_{t=t_0, \ldots, t_{150}} \label{eq.pendulum.data}
+\end{equation}
+
+\textbf{Non-equivariant data normalization}
+For the naive data normalization we consider the data matrix with $N$ rows and $3\times 4\times 150$ columns (the first 4 columns of \eqref{eq.pendulum.data}) and we normalize it by columns. Namely, for each entry of the matrix we subtracts the mean of its column and divide by the standard deviation of the column. This operation does not respect any of the symmetries of the problem, therefore when we feed this normalized data to our standard model \eqref{eq:model_pendulum}, the performance is bad, as shown in Table \ref{table.normalization}.
+
+\textbf{Equivariant data normalization}
+The equivariant data normalization takes all the vectors $\{\mathbf q_1^{(i)}(t), \mathbf q_2^{(i)}(t)\}_{i,t}$ and computes their $3\times 3$ empirical covariance matrix $C_{\mathbf q}$. Similarly it computes $C_{\mathbf p}$. The normalized model uses the formulation \eqref{eq:model_pendulum} with 
+\begin{equation}
+    \mathcal V_\textsf{normalized} = \left\{\frac{\mathbf q_1}{\sqrt{(1/3)\operatorname{tr}(C_{\mathbf q})}}, \frac{\mathbf q_2}{\sqrt{{1/3}\operatorname{tr}(C_{\mathbf q})}}, \frac{\mathbf p_1}{\sqrt{(1/3)\operatorname{tr}(C_{\mathbf p})}}, \frac{\mathbf p_2}{\sqrt{(1/3)\operatorname{tr}(C_{\mathbf p})}}, \mathbf g=(0,0,-1)\right\}.
+\end{equation}
+The performance is comparable to the one with no normalization, and several orders of margnitude better than the performance of the non-equivariant data normalization method.
 
 \end{document}
